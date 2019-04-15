@@ -20,18 +20,19 @@ Applied nomenclature:
 class summaryStatsFolders(object):
 
     # This query will return all studies with summary stats:
-    extractStudySql = '''SELECT DISTINCT S.ID, REPLACE(A.FULLNAME_STANDARD, ' ', '') AS AUTHOR,
-                            P.PUBMED_ID, S.ACCESSION_ID, H.IS_PUBLISHED
+    extractStudySql = '''SELECT DISTINCT S.ID, REPLACE(A.FULLNAME_STANDARD, ' ', '') AS AUTHOR, 
+                            P.PUBMED_ID, S.ACCESSION_ID, H.IS_PUBLISHED 
                         FROM STUDY S, PUBLICATION P, HOUSEKEEPING H, AUTHOR A 
-                        WHERE S.PUBLICATION_ID = P.ID and P.FIRST_AUTHOR_ID = A.ID 
-                            and S.HOUSEKEEPING_ID = H.ID 
-                            and S.FULL_PVALUE_SET = 1 
+                        WHERE S.PUBLICATION_ID = P.ID 
+                            AND P.FIRST_AUTHOR_ID = A.ID 
+                            AND S.HOUSEKEEPING_ID = H.ID 
+                            AND S.FULL_PVALUE_SET = 1 
+                            AND H.IS_PUBLISHED = 1 
                       '''
 
     stagingFoldersToRename = [] # folders with study IDs in the staging area that will be renamed
     stagingNotExpectedFolders = [] # Folders in the staging area that are not expected to be there
     stagingMissingFolders = [] # Folders missing from the staging area based on the database
-    stagingNotYetPublished = [] # Folders in the staging area that are not yet publised
     ftpFoldersToRemove = [] # Folders in the ftp area that needs to be removed
     ftpExpectedFolders = [] # Expected folders in the ftp area
     foldersToCopy = [] # Folders that will be copied from the staging area to the ftp area
@@ -57,8 +58,7 @@ class summaryStatsFolders(object):
         df['oldFolderName'] = df[['AUTHOR','PUBMED_ID', 'ID']].apply(_generateFolder, axis = 1)
         
         # Print out report:
-        print('[Info] Based on the database {} studies have summary stats from {} publication'.format(len(df), len(df.PUBMED_ID.unique())))
-        print('[Info] Currently {} studies not yet published.'.format(len(df.loc[ df.IS_PUBLISHED == 0])))
+        print('[Info] Based on the release database ({}) {} studies have summary stats from {} publication'.format(database, len(df), len(df.PUBMED_ID.unique())))
         
         self.DBstudies = df
 
@@ -70,27 +70,18 @@ class summaryStatsFolders(object):
         # Find out which folders needs to be renamed or unexpected: folders with accession ID could not be found
         for problematicFolder in stagingFolders[~stagingFolders.isin(self.DBstudies.newFolderName)]:
             
-            # Folders with study ID could be found and study is published -> to rename then copy
-            if (self.DBstudies.oldFolderName.isin([problematicFolder]).any() and
-              self.DBstudies.loc[self.DBstudies.oldFolderName == problematicFolder,'IS_PUBLISHED'].any() != 0):
+            # Folders with study ID could be found -> to rename then copy
+            if self.DBstudies.oldFolderName.isin([problematicFolder]).any():
                 self.stagingFoldersToRename.append((problematicFolder, self.DBstudies.loc[self.DBstudies.oldFolderName == problematicFolder,'newFolderName'].any()))
                 self.ftpExpectedFolders.append(self.DBstudies.loc[self.DBstudies.oldFolderName == problematicFolder,'newFolderName'].any())
 
-            # Folders with study ID could be found but study is not published -> not yet published
-            elif self.DBstudies.oldFolderName.isin([problematicFolder]).any():
-                self.stagingNotYetPublished.append(problematicFolder)
-            
-            # Folders cannot be found anywhere -> not expected folder or file.
+            # Folders cannot be found -> not expected folder or file.
             else:
                 self.stagingNotExpectedFolders.append(problematicFolder)
 
         # Folders we don't see but expect:
-        expectedStudies = self.DBstudies.loc[self.DBstudies.IS_PUBLISHED == 1]
-        for missingFolder in expectedStudies.newFolderName[~expectedStudies.newFolderName.isin(stagingFolders)]:
-            
-            # The folder is not named with study ID -> missing folder:
-            if not stagingFolders.isin(expectedStudies.loc[expectedStudies.newFolderName == missingFolder, 'oldFolderName']).any():
-                self.stagingMissingFolders.append(missingFolder)
+        self.stagingMissingFolders = self.DBstudies.newFolderName[(~self.DBstudies.newFolderName.isin(stagingFolders) & 
+                                                                   ~self.DBstudies.oldFolderName.isin(stagingFolders))].tolist()
                 
     def checkFtpArea(self, ftpFolders):
 
@@ -121,21 +112,26 @@ class summaryStatsFolders(object):
         reportString += '\n'.join(map(lambda x:'\t{} -> {}'.format(*x), summaryStatsFoldersObj.stagingFoldersToRename))
 
         # Missing folders from the staging area:
-        reportString += '\n\n[Info] The following folders were missing from the staging area:\n'
-        reportString += "\n".join(map('\t{}'.format,self.stagingMissingFolders))
-        
-        # Not yet published studies:
-        reportString += '\n\n[Info] The following {} folders in the staging area are not yet published:\n'.format(len(self.stagingNotYetPublished))
-        reportString += "\n".join(map('\t{}'.format,self.stagingNotYetPublished))
+        if len(self.stagingMissingFolders):
+            reportString += '\n\n[Info] The following folders were missing from the staging area:\n'
+            reportString += "\n".join(map('\t{}'.format,self.stagingMissingFolders))
+        else:
+            reportString += '\n\n[Info] No folder is missing from the stagin directory.\n'
         
         # Unexpected folders in the staging area:
-        reportString += '\n\n[Info] The following folders in the staging area are unexpected:\n'
-        reportString += "\n".join(map('\t{}'.format,self.stagingNotExpectedFolders))
-        
+        if len(self.stagingNotExpectedFolders):
+            reportString += '\n\n[Info] The following folders in the staging area are unexpected or not yet published:\n'
+            reportString += "\n".join(map('\t{}'.format,self.stagingNotExpectedFolders))
+        else:
+            reportString += '\n\n[Info] No unexpected folder is found in the stagin directory.\n'
+
         # Removed folders in the ftp area:
-        reportString += '\n\n[Info] The following folders were removed from the ftp area:\n'
-        reportString += "\n".join(map('\t{}'.format,self.ftpFoldersToRemove))
-        
+        if len(self.ftpFoldersToRemove):
+            reportString += '\n\n[Info] The following folders were removed from the ftp area:\n'
+            reportString += "\n".join(map('\t{}'.format,self.ftpFoldersToRemove))
+        else:
+            reportString += '\n\n[Info] No folder was removed from the ftp directory.\n'
+
         return(reportString)
 
 def renameFolders(folders,stagingDir):
@@ -189,13 +185,13 @@ if __name__ == '__main__':
 
     # Parsing command line arguments:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--database', type=str, help='Name of the database for extracting study data.')
+    parser.add_argument('--releaseDB', type=str, help='Name of the database for extracting study data.')
     parser.add_argument('--stagingDir', type=str, help='Path to staging directory.')
     parser.add_argument('--ftpDir', type=str, help='Path to ftp directory.')
     parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
     args = parser.parse_args()
 
-    database = args.database
+    database = args.releaseDB
     stagingDir = args.stagingDir
     ftpDir = args.ftpDir
     emailRecipient = args.emailRecipient
@@ -234,13 +230,13 @@ if __name__ == '__main__':
     ##
 
     # Rename folders where study ID is given instead of accession ID
-    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
-    # Copy folders to ftp:
-    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    # # Copy folders to ftp:
+    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
-    # Remove folders from ftp:
-    retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
+    # # Remove folders from ftp:
+    # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
 
     ##
     ## When all done generate report and send email:
