@@ -211,7 +211,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Open connection:
-    db_object = DBConnection.gwasCatalogDbConnector('SPOTPRO')
+    db_object = DBConnection.gwasCatalogDbConnector(database)
     connection = db_object.connection
 
     # Get folders from the staging area:
