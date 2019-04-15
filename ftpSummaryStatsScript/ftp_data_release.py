@@ -6,7 +6,6 @@ import subprocess
 from subprocess import Popen, PIPE
 from datetime import date
 
-import gwas_data_sources
 import DBConnection
 
 '''
@@ -230,13 +229,13 @@ if __name__ == '__main__':
     ##
 
     # Rename folders where study ID is given instead of accession ID
-    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
     # # Copy folders to ftp:
-    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
     # # Remove folders from ftp:
-    # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
+    retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
 
     ##
     ## When all done generate report and send email:
