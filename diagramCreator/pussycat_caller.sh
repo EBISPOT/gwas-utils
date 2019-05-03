@@ -2,16 +2,16 @@
 
 today=$( date '+%Y-%m-%d')
 
-# Tomcat credentials:
-tcUser=tomcat
-tcPw=tomcat
-
 # The following parameters will be submitted via command line parameters:
 host=${1} # Fisrt command line option
 port=${2} # Second command line option
 
 # Data folder:
 dataFolder=${3} # Third command line option
+
+# Reading tomcat credentials from command line:
+tcUser=${4}
+tcPw=${5}
 
 # The file name is built in:
 # fileName=4FF04FDA193DF9FBCB6333FD8AEC0BD6F29EA0D4.svg
