@@ -1,5 +1,5 @@
 import pandas as pd
-from gwas_data_sources_v2 import get_db_properties
+from gwas_data_sources import get_db_properties
 import DBConnection
 
 class getDataFromDB(object):

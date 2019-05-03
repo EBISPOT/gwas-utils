@@ -8,9 +8,9 @@ class getDataFromSolr(object):
         self.__core__ = core
         self.__verbose__ = verbose
         self.__address__ = solrAddress
-        self.__URL__ = 'http://%s/solr/%s' % (solrAddress, core)
+        self.__URL__ = 'http://{}/solr/{}'.format(solrAddress, core)
 
-        print('[INFO] Extracting data from: %s' % solrAddress)
+        print('[INFO] Extracting data from: {}'.format(solrAddress))
         
     def getStudies(self):
         URL = self.__URL__ + '/select?q=resourcename:study&wt=json&indent=true&fl=pubmedId,id,accessionId,title,associationCount&from=0&rows=10000'
@@ -26,7 +26,7 @@ class getDataFromSolr(object):
         return(lastDate)
 
     def getNewStudies(self, lastDate):
-        URL = self.__URL__ + ('/select?q=resourcename%%3Astudy+AND+catalogPublishDate%%3A%%5B%s+TO+*%%5D&rows=10000&&fl=pubmedId,id,accessionId,title,associationCount&wt=json&indent=true' % lastDate)
+        URL = self.__URL__ + ('/select?q=resourcename%%3Astudy+AND+catalogPublishDate%%3A%%5B{}+TO+*%%5D&rows=10000&&fl=pubmedId,id,accessionId,title,associationCount&wt=json&indent=true'.format(lastDate))
         response = self.__submitRequest__(URL)
         data = response['response']['docs']
         return(pd.DataFrame(data))
@@ -43,6 +43,6 @@ class getDataFromSolr(object):
         if r.status_code == 200:
             return (r.json())
         else:
-            print("[Warning] The requested URL (%s) failed to retrieve." % URL)
+            print("[Warning] The requested URL ({}) failed to retrieve.".format(URL))
             return ({"response": "Request failed.", "responseCode" : r.status_code, "resopnse" : r.content })
 

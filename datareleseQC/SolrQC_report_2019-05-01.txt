@@ -1,0 +1,187 @@
+Reporting post datarelease QC.
+
+[Info] Date: 2019-05-01
+[Info] URL of the old solr index: oldHost:8983
+[Info] URL of the new solr index: newHost:8983
+
+
+All studies from the database was exported to the solr index.
+
+[Info] GCST007253 (PMID: 30626913) was unpublised on 2019-04-18 (originally publised on: 2019-03-04)
+
+[Info] Number of associations in the solr: 136287
+[Info] Number of associations in release database: 136287
+
+[Info] In the new datarelease there are 34 new publications consisting of 77 new studies having 1590 associations.
+
+[Info] List of new publications and studies in the release:
+  * Paper: "The molecular genetics of hand preference revisite..."
+    Pubmed ID: 30980028
+    Study count: 3, association count: 6
+    Studies: GCST007592,GCST007593,GCST007594
+
+  * Paper: "Genetic overlap of chronic obstructive pulmonary d..."
+    Pubmed ID: 30940143
+    Study count: 5, association count: 25
+    Studies: GCST007609,GCST007613,GCST007612,GCST007611,GCST007610
+
+  * Paper: "Genome-wide association study identifies genetic l..."
+    Pubmed ID: 30846698
+    Study count: 3, association count: 107
+    Studies: GCST007559,GCST007561,GCST007560
+
+  * Paper: "A genome-wide association analysis identifies 16 n..."
+    Pubmed ID: 30833571
+    Study count: 1, association count: 16
+    Studies: GCST007581
+
+  * Paper: "Genetic Markers of ADHD-Related Variations in Intr..."
+    Pubmed ID: 30818988
+    Study count: 10, association count: 20
+    Studies: GCST007587,GCST007584,GCST007585,GCST007588,GCST007582,GCST007586,GCST007589,GCST007590,GCST007591,GCST007583
+
+  * Paper: "Genome-Wide Association Scan of Serum Urea in Euro..."
+    Pubmed ID: 30808845
+    Study count: 1, association count: 6
+    Studies: GCST007536
+
+  * Paper: "Genome-wide meta-analysis identifies genetic locus..."
+    Pubmed ID: 30808802
+    Study count: 1, association count: 10
+    Studies: GCST007537
+
+  * Paper: "Identification of common genetic risk variants for..."
+    Pubmed ID: 30804558
+    Study count: 4, association count: 62
+    Studies: GCST007554,GCST007555,GCST007553,GCST007556
+
+  * Paper: "A meta-analysis of genome-wide association studies..."
+    Pubmed ID: 30779856
+    Study count: 1, association count: 3
+    Studies: GCST007616
+
+  * Paper: "Genetic risk score combining six genetic variants ..."
+    Pubmed ID: 30767168
+    Study count: 1, association count: 6
+    Studies: GCST007538
+
+  * Paper: "The 2018 Otto Aufranc Award: How Does Genome-wide ..."
+    Pubmed ID: 30794219
+    Study count: 2, association count: 16
+    Studies: GCST007549,GCST007550
+
+  * Paper: "Genome-wide association analyses of chronotype in ..."
+    Pubmed ID: 30696823
+    Study count: 2, association count: 653
+    Studies: GCST007565,GCST007576
+
+  * Paper: "Genetic Determinants of Glycated Hemoglobin in Typ..."
+    Pubmed ID: 30674623
+    Study count: 1, association count: 1
+    Studies: GCST007605
+
+  * Paper: "Drug-induced injury due to flucloxacillin: relevan..."
+    Pubmed ID: 30661239
+    Study count: 3, association count: 11
+    Studies: GCST007606,GCST007607,GCST007608
+
+  * Paper: "Longitudinal analysis to better characterize Asthm..."
+    Pubmed ID: 30657218
+    Study count: 3, association count: 7
+    Studies: GCST007521,GCST007520,GCST007519
+
+  * Paper: "Genome-wide analysis of genetic predisposition to ..."
+    Pubmed ID: 30636644
+    Study count: 1, association count: 91
+    Studies: GCST007600
+
+  * Paper: "Meta-analysis of up to 622,409 individuals identif..."
+    Pubmed ID: 30617275
+    Study count: 4, association count: 50
+    Studies: GCST007603,GCST007604,GCST007601,GCST007602
+
+  * Paper: "Large-scale, multi-ethnic genome-wide association ..."
+    Pubmed ID: 30578877
+    Study count: 4, association count: 3
+    Studies: GCST007596,GCST007597,GCST007598,GCST007599
+
+  * Paper: "Large-scale Genome-wide Association Study of East ..."
+    Pubmed ID: 30529582
+    Study count: 1, association count: 40
+    Studies: GCST007552
+
+  * Paper: "Bivariate Genome-Wide Association Scan Identifies ..."
+    Pubmed ID: 30525989
+    Study count: 4, association count: 7
+    Studies: GCST007544,GCST007545,GCST007546,GCST007547
+
+  * Paper: "Discovery of the first genome-wide significant ris..."
+    Pubmed ID: 30478444
+    Study count: 1, association count: 15
+    Studies: GCST007543
+
+  * Paper: "Genetic predisposition to PEG-asparaginase hyperse..."
+    Pubmed ID: 30450575
+    Study count: 3, association count: 11
+    Studies: GCST007540,GCST007541,GCST007539
+
+  * Paper: "Genetic association and differential expression of..."
+    Pubmed ID: 30392061
+    Study count: 1, association count: 1
+    Studies: GCST007595
+
+  * Paper: "Genome Analyses of >200,000 Individuals Identify 5..."
+    Pubmed ID: 30388399
+    Study count: 2, association count: 136
+    Studies: GCST007615,GCST007614
+
+  * Paper: "Genomics and response to long-term oxygen therapy ..."
+    Pubmed ID: 30353303
+    Study count: 1, association count: 14
+    Studies: GCST007558
+
+  * Paper: "The 677C→T variant of MTHFR is the major genetic m..."
+    Pubmed ID: 30339177
+    Study count: 3, association count: 9
+    Studies: GCST007578,GCST007579,GCST007580
+
+  * Paper: "Genetic predisposition to uterine leiomyoma is det..."
+    Pubmed ID: 30226466
+    Study count: 1, association count: 0
+    Studies: GCST007548
+
+  * Paper: "Polygenic approaches to detect gene-environment in..."
+    Pubmed ID: 30219835
+    Study count: 2, association count: 0
+    Studies: GCST007618,GCST007617
+
+  * Paper: "GWAS for Interleukin-1β levels in gingival crevicu..."
+    Pubmed ID: 30206230
+    Study count: 1, association count: 178
+    Studies: GCST007542
+
+  * Paper: "A genome-wide cross-trait analysis from UK Biobank..."
+    Pubmed ID: 29785011
+    Study count: 3, association count: 77
+    Studies: GCST007562,GCST007564,GCST007563
+
+  * Paper: "Genome-wide associations for birth weight and corr..."
+    Pubmed ID: 27680694
+    Study count: 1, association count: 2
+    Studies: GCST007557
+
+  * Paper: "Genetic Analysis with the Immunochip Platform in B..."
+    Pubmed ID: 27548383
+    Study count: 1, association count: 3
+    Studies: GCST007551
+
+  * Paper: "Genome-Wide Association Study of the Modified Stum..."
+    Pubmed ID: 27416945
+    Study count: 1, association count: 4
+    Studies: GCST003658
+
+  * Paper: "Parental and offspring contribution of genetic mar..."
+    Pubmed ID: 29045471
+    Study count: 1, association count: 0
+    Studies: GCST007577
+
