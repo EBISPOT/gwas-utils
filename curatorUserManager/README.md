@@ -1,6 +1,6 @@
 # GWAS Catalog curator user management
 
-A small wrapper to add or inactivate curator in a specified database. 
+A small wrapper to add or inactivate curator in a specified database. Use with Python 3.
 
 
 ### Usage:
