@@ -1,5 +1,4 @@
 import pandas as pd
-from gwas_data_sources import get_db_properties
 import DBConnection
 import argparse
 
@@ -130,11 +129,11 @@ def createUser(dbManager):
 
     # Asking for the parameters:
     userinput = {}
-    userinput['firstName'] = raw_input("Specify first name: ")
-    userinput['lastName'] = raw_input("Specify last name: ")
-    userinput['emailAddress'] = raw_input("Specify email address: ")
-    userinput['role'] = raw_input("Specify role (admin/curator): ")
-    userinput['passwordHash'] = raw_input("Specify password hash: ")
+    userinput['firstName'] = input("Specify first name: ")
+    userinput['lastName'] = input("Specify last name: ")
+    userinput['emailAddress'] = input("Specify email address: ")
+    userinput['role'] = input("Specify role (admin/curator): ")
+    userinput['passwordHash'] = input("Specify password hash: ")
 
     # Adding role ID:
     userinput['roleid'] = '10057973' if userinput['role'] == 'curator' else '10057972'
@@ -151,8 +150,8 @@ def inactivateUser(dbManager):
 
     # Asking for the parameters:
     userinput = {}
-    userinput['userEmail'] = raw_input("Specify e-mail of the user to be inactivated: ")
-    userinput['adminEmail'] = raw_input("Specify e-mail of a admin user: ")
+    userinput['userEmail'] = input("Specify e-mail of the user to be inactivated: ")
+    userinput['adminEmail'] = input("Specify e-mail of a admin user: ")
 
     # Adding user:
     dbManager.inactivateUser(userinput)
