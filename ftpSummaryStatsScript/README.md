@@ -23,5 +23,8 @@ python ftp_data_release.py --releaseDB ${database} --stagingDir ${stagingDir} --
 * *stagingDir* : directory where curators copy summary stats files until the corresponding study is published
 * *ftpDir* : directory where the released data will be copyied
 
-### More information:
+### More information
+
+For more information see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/ftpSummaryStatsScript).
+
 

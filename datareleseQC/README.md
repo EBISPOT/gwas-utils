@@ -25,3 +25,7 @@ Where solr address is specified like: `localhost:8983`
 ### Behavior:
 
 The script compares study data in release (`releaseDB`), production (`productionDB`) databases with studies already indexed in the old (`oldSolrAddress`) and new (`newSolrAddress`) solr indicies. The results are sent to the specified email address and also saved in a text file (eg. `SolrQC_report_2019-05-01.txt`)
+
+### More information
+
+For more information see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/dataFeleaseQC+tool).

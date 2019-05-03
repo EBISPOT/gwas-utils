@@ -39,3 +39,7 @@ Specify e-mail of a admin user: <email2>
 ```
 
 To ensure consistency and tracking, curator accounts are not deleted but inactivated. Upon inactivating the account the password hash is updated with an other user's hash, so the inactivated user's email address can be used to log in with the other user's password. 
+
+### More information
+
+See documentation on [confluence](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/Curator+user+manager).
