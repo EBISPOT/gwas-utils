@@ -3,23 +3,23 @@
 today=$( date '+%Y-%m-%d')
 
 # The following parameters will be submitted via command line parameters:
-host=${1} # Fisrt command line option
-port=${2} # Second command line option
+host=${1} # tomcat host on which pussycat is running. 
+port=${2} # tomcat port eg. 80 
 
 # Data folder:
-dataFolder=${3} # Third command line option
+dataFolder=${3} # Path where the diagram svg is saved. 
 
 # Reading tomcat credentials from command line:
 tcUser=${4}
 tcPw=${5}
 
 # The file name is built in:
-# fileName=4FF04FDA193DF9FBCB6333FD8AEC0BD6F29EA0D4.svg
-# query='pvaluemax=5e-8'
+fileName=4FF04FDA193DF9FBCB6333FD8AEC0BD6F29EA0D4.svg
+query='pvaluemax=5e-8'
 
 # Smaller diagram for testing purposes:
-fileName=A7A915BBF3302F0673B0FE592668F480CC84CCE5.svg
-query="pvaluemax=5e-8&datemax=2012-01-01"
+# fileName=A7A915BBF3302F0673B0FE592668F480CC84CCE5.svg
+# query="pvaluemax=5e-8&datemax=2012-01-01"
 
 # Report input options:
 echo "[Info] Calling pussycat application."
