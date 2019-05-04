@@ -3,11 +3,13 @@
 Collection of scripts to generate various plots based on the data stored in the GWAS Catalog.
 
 
-## SumStats_wrapper.sh
+## SumStats_plotter.R
 
-This script fetches a table from the production database containing the number of studies and publications published in each year. Also studies and publications with summary statistics (`SumStats_fetch_table.py`). The extracted table is saved in a comma separated format eg.: `SummaryStats_table.2019-05-05.csv`. 
+`SumStats_fetch_table.py` fetches a table from the production database containing the number of studies and publications published in each year. Also studies and publications with summary statistics. The extracted table is saved in a comma separated format eg.: `examples/SummaryStats_table.2019-05-05.csv`.
 
-**The data looks like this:**
+**Usage:** `python ./SumStats_fetch_table.py --filename  ${filename}`
+
+The resulting data looks like this:
 
 | year | studies | studiesSS | publication | publicationSS |
 | :---- | :---- | :---- | :---- | :---- |
@@ -27,9 +29,12 @@ This script fetches a table from the production database containing the number o
 | 2018 | 1338 | 322.0 | 481 | 76.0 |
 | 2019 | 263 | 70.0 | 92 | 23.0 |
 
-Then this table is read by `SumStats_plotter.R` and a series of barplots are saved with the current date in their name. Example:
+Then this table is read by `SumStats_plotter.R` and a series of barplots are generated with the current date in their name. 
+
+**Usage:** `Rscript --vanilla ./SumStats_plotter.R "${startYear}" "${dataTable}"` Where the year is the first year to include in the plot, the table is the output of the previous sript.
+
+Example:
 
 ![Summary stats yearly](./examples/all_plots_2019-05-05.png)
 
-**Usage:** `./SumStats_wrapper.sh -y ${year}` Where the year is the first year to include in the plot.
 
