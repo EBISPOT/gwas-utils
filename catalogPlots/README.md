@@ -29,7 +29,7 @@ This script fetches a table from the production database containing the number o
 
 Then this table is read by `SumStats_plotter.R` and a series of barplots are saved with the current date in their name. Example:
 
-![Summary stats yearly](https://octodex.github.com/images/yaktocat.png)
+![Summary stats yearly](./examples/all_plots_2019-05-05.png)
 
 **Usage:** `./SumStats_wrapper.sh -y ${year}` Where the year is the first year to include in the plot.
 
