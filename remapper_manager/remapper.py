@@ -62,7 +62,7 @@ def triggerRemapping(dbInstance, progressData, rowCount):
     databaseObject.closeConnection()
 
     # Updating the progress file:
-    return([firstToRemap, lastToRemap])
+    return([int(firstToRemap), int(lastToRemap)])
 
 if __name__ == '__main__':
 
@@ -82,9 +82,13 @@ if __name__ == '__main__':
     dbInstanceName = args.dbInstanceName
     progressFileName = args.progressFileName
     
-    # Reaing progress json
-    with open(progressFileName) as f:
-        progressData = json.load(f)
+    # Reading progress json
+    try:
+        with open(progressFileName) as f:
+            progressData = json.load(f)
+    except:
+        print('[Info] The progress file could not be opened, so starting a new one.')
+        progressData = restartRemapping(getEnsemblRelease())
 
     # If the newest release is not the same, a new remapping is started:
     if (progressData['ensemblVersion'] != ensemblRelease ):
@@ -104,5 +108,5 @@ if __name__ == '__main__':
 
     # Saving progress:
     with open(progressFileName, 'w') as f:  # writing JSON object
-       json.dump(progressData, f)
+       json.dump(progressData, f, indent=4)
 
