@@ -35,6 +35,6 @@ Then this table is read by `SumStats_plotter.R` and a series of barplots are gen
 
 Example:
 
-![Summary stats yearly](./examples/all_plots_2019-05-05.png)
+![Summary stats yearly](./examples/all_plots_2019-05-09.png)
 
 
