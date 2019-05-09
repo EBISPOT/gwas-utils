@@ -1,5 +1,7 @@
 #/usr/bin/env Rscript
 
+library("stringr")
+
 # Required column names:
 requiredColumns = c("year", "studies", "studiesSS", "publication", "publicationSS")
 currentDate = format(Sys.time(), "%Y-%m-%d")
@@ -10,7 +12,10 @@ args = commandArgs(trailingOnly=TRUE)
 startYear = args[1]
 inputFile = args[2]
 
-# Reading input file:
+##
+## Reading and testing input file:
+##
+
 summaryStatsDf = read.table(inputFile, header = TRUE, as.is = TRUE, sep = ",")
 
 # Checking if all the required columns are present in the dataframe:
@@ -22,6 +27,22 @@ for( req in requiredColumns ){
 }
 
 cat("[Info] Data loaded. Data looks good.\n")
+
+##
+## Extract date from input file name:
+##
+
+fileDate = str_extract(inputFile, "\\d{4}-\\d{2}-\\d{2}")
+fileDate = format(Sys.time(), "%h %Y")
+
+# If the date cannot be extracted from the input filename, we assume the file was generated on the same day:
+if ( ! is.na(fileDate) ){
+    format(as.POSIXct(fileDate,format="%Y-%m-%d"), "%h %Y")
+}
+
+studyMain = paste("Publication with summary statistics\nas of ", fileDate)
+publicationMain = paste("Publication with summary statistics\nas of ", fileDate)
+cumulativeMain = paste("All data as of\n", fileDate)
 
 # Plotting functions:
 # Get cumulative data:
@@ -52,7 +73,7 @@ drawBars = function(inputMatrix, mainLabel){
             col=c(nossColor,ssColor),
             ylim = c(0,maxHeight), cex.axis = 2.1,
             las = 2, xaxt='n', ann=FALSE,
-           main = mainLabel, cex.main=1.5
+           main = mainLabel, cex.main=2
     )
     
     # Adding axis:
@@ -85,7 +106,7 @@ colnames(studyMatrix) = summaryStatsDf[summaryStatsDf$year >= startYear,'year']
 
 # Saving data:
 png(sprintf("studies_%s.png", currentDate), width = 600, height = 600)
-drawBars(studyMatrix, "Studies with summary statistics")
+drawBars(studyMatrix, studyMain)
 dev.off()
 
 ## Filter publication:
@@ -94,7 +115,7 @@ colnames(publicationMatrix) = summaryStatsDf[summaryStatsDf$year >= startYear,'y
 
 # Saving plot into file:
 png(sprintf("publications_%s.png", currentDate), width = 600, height = 600)
-drawBars(publicationMatrix, "Publication with summary statistics")
+drawBars(publicationMatrix, publicationMain)
 dev.off()
 
 ## Prepare cumulative data:
@@ -102,7 +123,7 @@ cumultiveMatrix = getCumulativeData(summaryStatsDf)
 
 # Saving plot into file:
 png(sprintf("cumulative_%s.png", currentDate), width = 400, height = 600)
-drawBars(cumultiveMatrix, "All data as of March 2019")
+drawBars(cumultiveMatrix, cumulativeMain)
 dev.off()
 
 ##
@@ -114,9 +135,9 @@ png(sprintf("all_plots_%s.png", currentDate), width = 1300, height = 500)
 layout(matrix(c(1,1,2,2,3), nrow = 1, ncol = 5, byrow = TRUE))
 
 par(mar=c(4.1,6.1,4.1,2.1))
-drawBars(studyMatrix, "Studies with summary statistics")
-drawBars(publicationMatrix, "Publication with summary statistics")
-drawBars(cumultiveMatrix, "All data as of March 2019")
+drawBars(studyMatrix, studyMain)
+drawBars(publicationMatrix, publicationMain)
+drawBars(cumultiveMatrix, cumulativeMain)
 
 dev.off()
 
