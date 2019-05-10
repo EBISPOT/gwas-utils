@@ -43,7 +43,7 @@ This script creates a plot showing how the lenght of the data release increases 
 
 Where the csv file contains the Date column in `YYYY/MM/DD` format, length of the release process in minutes (Minutes) and the number of associations (assocCount).
 
-Example table (`dataRelese.csv`):
+Example table (`dataRelease.csv`):
 
 | Date | Minutes | assocCount |
 |:------|:------|:------|
