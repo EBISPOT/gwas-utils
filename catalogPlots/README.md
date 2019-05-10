@@ -33,8 +33,34 @@ Then this table is read by `SumStats_plotter.R` and a series of barplots are gen
 
 **Usage:** `Rscript --vanilla ./SumStats_plotter.R "${startYear}" "${dataTable}"` Where the year is the first year to include in the plot, the table is the output of the previous sript.
 
-Example:
-
 ![Summary stats yearly](./examples/all_plots_2019-05-09.png)
+
+## dataReleaseTimer.R
+
+This script creates a plot showing how the lenght of the data release increases as the number of associations in the GWAS Catalog increases.
+
+**Usage:** `Rscript --vanilla ./dataReleaseTimer.R examples/dataRelese.csv YYYY/MM/DD_mmmmm_cccccc`
+
+Where the csv file contains the Date column in `YYYY/MM/DD` format, length of the release process in minutes (Minutes) and the number of associations (assocCount).
+
+Example table (`dataRelese.csv`):
+
+| Date | Minutes | assocCount |
+|:------|:------|:------|
+| 2018/09/18 | 4312 | 87602 |
+| 2018/10/26 | 5717 | 90429 |
+| 2018/11/03 | 6767 | 90509 |
+| 2018/11/25 | 8612 | 101440 |
+| 2018/12/02 | 8782 | 101509 |
+| 2018/12/13 | 8458 | 103843 |
+| 2018/12/27 | 8222 | 104480 |
+| 2019/01/17 | 8736 | 104768 |
+| 2019/02/14 | 8630 | 107785 |
+| 2019/03/10 | 13719 | 126603 |
+| 2019/04/03 | 14251 | 130397 |
+| 2019/04/16 | 15796 | 134704 |
+| 2019/05/03 | 16063 | 136287 |
+
+![Data release](./examples/dataRelease_length.png)
 
 
