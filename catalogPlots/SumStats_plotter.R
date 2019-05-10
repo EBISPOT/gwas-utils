@@ -37,14 +37,17 @@ fileDate = format(Sys.time(), "%h %Y")
 
 # If the date cannot be extracted from the input filename, we assume the file was generated on the same day:
 if ( ! is.na(fileDate) ){
-    format(as.POSIXct(fileDate,format="%Y-%m-%d"), "%h %Y")
+    fileDate = format(as.POSIXct(fileDate,format="%Y-%m-%d"), "%h %Y")
 }
 
 studyMain = paste("Publication with summary statistics\nas of ", fileDate)
 publicationMain = paste("Publication with summary statistics\nas of ", fileDate)
 cumulativeMain = paste("All data as of\n", fileDate)
 
-# Plotting functions:
+##
+## Plotting functions:
+##
+
 # Get cumulative data:
 getCumulativeData = function(summaryStatsDf){
     cumultiveMatrix = matrix(c(sum(summaryStatsDf$studies) - sum(summaryStatsDf$studiesSS), 
