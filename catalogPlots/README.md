@@ -63,4 +63,30 @@ Example table (`dataRelease.csv`):
 
 ![Data release](./examples/dataRelease_length.png)
 
+## TA_vs_GWAS_publication.R
 
+This script creates a plot showing the cumulative number of publication in the catalog highlighting the targeted array publications. 
+
+**Usage:** `Rscript --vanilla ./TA_vs_GWAS_publication.R examples/TA_vs_GWAS.csv`
+
+Input data looks like this (`examples/TA_vs_GWAS.csv`):
+
+| Year | TA | GWAS |
+|:------|:------|:------|
+| 2005 | 0 | 2 |
+| 2006 | 0 | 8 |
+| 2007 | 0 | 89 |
+| 2008 | 0 | 147 |
+| 2009 | 1 | 237 |
+| 2010 | 0 | 330 |
+| 2011 | 1 | 393 |
+| 2012 | 16 | 389 |
+| 2013 | 32 | 382 |
+| 2014 | 34 | 338 |
+| 2015 | 61 | 334 |
+| 2016 | 61 | 339 |
+| 2017 | 28 | 413 |
+| 2018 | 10 | 489 |
+| 2019 | 20 | 117 |
+
+![TA vs GWAS](./examples/TA_vs_GWAS.png)
