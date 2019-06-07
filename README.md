@@ -6,7 +6,7 @@ For detailed description of the content of this repository see the individual re
 
 ## Contents
 
-### [Curator user manager](https://github.com/EBISPOT/gwas-utils/tree/master/catalogPlots)
+### [Curator user manager](https://github.com/EBISPOT/gwas-utils/tree/master/curatorUserManager)
 
 A tool to add, change, remove curator user in the database.
 
