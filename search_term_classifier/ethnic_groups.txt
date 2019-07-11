@@ -1,0 +1,510 @@
+Name	Primary homeland	Subgroups
+abkhazians	abkhazia	abazins
+acehnese	aceh 	aneuk Jamee
+acholi	acholil, 	
+afar	afaria 	
+afemai	Edo State 	
+african americans	american South 	Gullah , Samana americans
+afrikaners	South africa , Namibia	Boers, White Namibians, White Botswanans
+afro-Bahamians	 Bahamas	Bahamian americans
+afro-Barbadians	Barbados	 , Brazil,  United Kingdom, , Canada
+afro-Brazilians	Brazil 	
+afro-Dominicans	Dominican Republic	Spain ,  
+afro-Haitians	Haiti	 Dominican Republic, France, ,  
+afro-Saint Lucians	Saint Lucia	
+afro-Trinbagonians	Trinidad , Tobago	
+agaw	Horn of africa 	Bilen, Ximre, awi, Qemant
+ahom	assam 	
+aimaq	afghanistan	aimaq Hazara, Firozkohi, Jamshidi, Kipchak, Timuri, Taymani
+aja	Benin, Togo	
+akan	Gold Coast 	Twi , Fante, abbe, abidji, adjoukrou, ahafo, ahanta, akwamu, akyem, anyi, aowin, assin, attie, avatime, avikam, Baoule, Brong, Chakosi, Evalue, MeBato, Nzema, Sefwi, Tchaman, Wassa, abure, alladian, Ghanaians, , antiguans , Barbudans , Curacaoans
+akha	Yunnan 	akeu
+akhdam	Yemen	
+albanians	albania, Kosovo, North Macedonia	Ghegs, Tosks , Kosovars, Cham albanians, Macedonian albanians, , Turkey, Germany, Switzerl, ,  
+alur	West Nile sub-region, ituri 	
+ambonese	ambon isl, 	
+ambundu	angola	angolares , Curacaoans
+americo-Liberians	Liberia	
+amhara	amharia 	
+amis	Taiwan 	
+anaang	akwa ibom State 	
+anglo-indians	india	
+antaifasy	Farafangana 	
+antaisaka	Farafangana 	
+antankarana	Diana 	
+antanosy	anosy 	
+antemoro	Vatovavy-Fitovinany	
+anuak	anuakia , Boma	
+apache	apacheria 	Chiricahua, Jicarilla, Lipan, Mescalero, Salinero, Plains apache, Western apache
+arabs	arabia 	Bedouins, Druze, Shirazis , Baggara), arab-Berbers , Bahrainis, Sudanese, iraqis , Jordanians, Lebanese, Kuwaitis, Omanis , Qataris, Saudis , Syrians , Emiratis, Yemenis , , Brazil, indonesia, iran, Turkey, Pakistan , Venezuela, afghanistan, ,  
+argobba	Ethiopia 	
+armenians	Greater armenia 	Turkish armenians , Cherkesogai, armeno-Tats, Hayhurum Karabakhis, , Russia,  , France, Georgia , Lebanon, , Germany
+aromanians	Balkans 	Greece, albania, , Macedonia
+assyrians	assyria 	Chaldeans, Tyari, Mandaeans, iraqis , Syrians , Rem, ,  , Sweden, , israel
+atoni	West Timor , Oecusse 	amarasi
+atyap	Kaduna State 	
+austrians	austria	South Tyroleans, , United States, Canada, , australia
+avars	avaristan 	
+awadhis	awadh 	Barhai
+aymara	Bolivia, Peru, Chile	Mestizos, Bolivians
+azerbaijanis	azerbaijan, iranian azerbaijan 	ayrums, Bayat, Karadaghis, Qajars, Kuresunni, Qarapapaqs, Shahsevan, Terekeme, Yeraz, afshar, iranian azerbaijanis, , Georgia , Russia
+Bahnar	Central Highlands 	
+Bai	Dali Bai autonomous Prefecture 	
+Bakossi	Bakossi Mountains	
+Balanta	Guinea-Bissau, Senegal,  Gambia	
+Balinese	Bali 	Bali aga
+Balkars	Kabardino-Balkaria 	
+Balochs	Balochistan 	askani, Bajkani, Bangulzai, Barazani, Bhurgari, Bugti, Buledi, Chandio, Darzada, Dehwar, Dodai, Dombki, Gabol, Ghazini, Jamali, Jatoi, Kalmati, Khetran, Kunara, Langhani, Lango, Lashkrani, Loharani, Lund, Marri, Mazari, Mengal, Mirali, Mugheri, Muhammad Shahi, Mullazai, Nothazai, Pitafi, Qaisrani, Rind, Sadozai, Sethwi, Shaikhzadah, Talpur, Tauki, Umrani, Yarahmadzai, Zardari, Makrani, ,  United arab Emirates  , Turkmenistan
+Balti	Gilgit-Baltistan 	
+Bamars	Myanmar	Taungyo, Yaw, intha, Danu, anglo-Burmese
+Bambara	Mali	Haratin
+Bamileke	Cameroon 	Mengaka, Ngiemboon, Ngombale, Ngomba, Ngwe, Yemba, Feefee, Ghomalae, Kwae, Ndaendae, Medumba
+Bamum	West Region 	
+Banda	Central african Republic, South Sudan, Democratic Republic of  Congo	Central Banda, South Banda, West Banda
+Banjarese	South Kalimantan	
+Bara	ibara 	
+Bari	Central Equatoria , Uganda	Pojulu, Kakwa, Nyangwara, Mandari, Kuku
+Bariba	Borgu 	
+Bashkirs	Bashkortostan 	
+Basques	Basque Country 	argentina, Chile, Colombia, Mexico, Venezuela, , Uruguay
+Bassa	Bassal, 	
+Batak	North Sumatra 	angkola, Karo, Mandailing, Pakpak, Simalungun, Toba, alas, Kluet, Singkil
+Beja	Sudan, Egypt, Eritrea	Bishari, ababda, Hadendoa, Hedareb, amarar, Beni-amer
+Belarusians	Belarus	 , Ukraine, , Russia
+Belizean Creoles	Belize	
+Bemba	Zambia , Katanga Province	
+Bembe	Democratic Republic of  Congo, Tanzania	
+Bengalis	Bengal 	Bangal, Bhadralok, Ghoti, aguri, Bagdi, Baidya, Baishya Kapali, Baishya Saha, Barujibi, Bauris, Bengali Brahmins, Chunaru, Doms, Gandhabanik, Suvarna Banik, Haris, Jalia Kaibarta, Kansabanik, Karmakar, Mahishya, Mal, Bengali Kayastha, Namasudra, Sadgop, Shunri, Yogi Nath, Bangladeshis, , Saudi arabia, United arab Emirates, Malaysia,  United Kingdom, ,  
+Berbers	Maghreb 	Brabers, Chaouis, Chenouas, Ghomaras, Houara, Jerbis, Kabyle, Matmatas, Mozabite, Nafusis, Rifian, Sanhaja de Srair, Shilha, Siwi, Tuaregs, awjila, arab-Berbers , , France, Belgium, ,  Netherlands
+Berom	Plateau State 	
+Berta	Benishangul-Gumuz Region, South Sudan	
+Betawis	Jakarta 	
+Beti	Cameroon	Ewondo, Eton
+Betsimisaraka	Madagascar 	
+Bhils	india 	Barda, Bhagalia, Bhilala, Bhil Gametia, Bhil Garasia, Bhil Kataria, Bhil Mama, Bhil Mavchi, Dholi Bhil, Dungri Bhil, Damor, Dungri Garasia, Mewasi Bhil, Nirdhi Bhil, Rawal Bhil, Tadvi Bhil, Vasava, Bhil Meena, Chaudhri
+Bhojpuris	Bhojpur 	Paswan
+Bhumij	india 	
+Bicolanos	Bicolandia 	Central Bikol, Sorsoganons, Catandunganons, Rinconada, albayanon
+Bidayuh	Sarawak 	Kendayan, Selako, Bakatie, Sara Bakatie, Larae, Bukar Sadong, Biatah, Tringgus, Jagoi, Jangkang, Kembayan, Semandang, Ribun, Nyadue, Sanggau
+Bilala	Lake Fitri 	
+Bishnupriya Manipuris	Manipur , Bangladesh	
+Bissa	Burkina Faso	
+Blaan	Soccsksargen 	
+Boa	Bas-Uele 	
+Bodo	Bodol, 	Mech
+Bosniaks	Bosnia , Herzegovina, Sandeak 	Serbia, Turkey, austria, Germany,  
+Bouyei	Guizhou 	Giay
+Bozo	Mali	
+Brahuis	Balochistan 	Raisani, Jhalawan, Sarawan, Mengal , Sasoli
+Bretons	Brittany 	
+Bru	Savannakhet Province, Vietnam 	
+Budu	Wamba Territory	
+Buduma	Lake Chad 	
+Buginese	South Sulawesi 	
+Bulgarians	Bulgaria	Pomaks, , Turkey, Ukraine , Moldova, Romania , Serbia, Germany, Spain ,  
+Burusho	Gilgit-Baltistan 	
+Butonese	Buton 	
+Bwa	Burkina Faso, Mali	
+Catalans	Catalan Countries 	Valencians, Balearics, andorrans
+Chakmas	Chittagong Hill Tracts	
+Chamorro	Mariana islands 	
+Chams	Champa 	
+Chechens	Chechnya 	Kists
+Cherokee	United States 	Cherokee Nation, Eastern Band, United Keetoowah Band
+Chewa	Malawi, Zambia, Zimbabwe, Mozambique	
+Chin	Chin State 	Thadou, Paite, Simte, Zou, Lamkang, Kom, Lushai, Hmar, Koireng, Mizo, aimol, Mru, Mrucha , Bawm, Biate, asho
+Choctaw	United States 	
+Chokwe	angola, Democratic Republic of  Congo, Zambia	
+Chuanqing	Guizhou 	Tunbao
+Chutiya	assam 	Deori
+Chuukese	Chuuk Lagoon 	
+Chuvash	Chuvashia 	Virjal, anatri
+Circassians	Circassia 	adygeans, Kabardians, Cherkess, Shapsugs
+Coloureds	South africa , Namibia	Cape Coloureds, Griqua, Basters, Oorlam, Goffal
+Cornish	Cornwall 	  , australia
+Corsicans	Corsica 	
+Cree	Canada 	innu, Naskapi, atikamekw, James Bay Cree, Moose Cree, Swampy Cree, Woods Cree, Plains Cree, Metis , Oji-Cree
+Croats	Croatia, Federation of Bosnia , Herzegovina	Bunjevci, Krashovani, Janjevci, Sokci, Bosnian Croats, , italy , austria, United States, Chile, argentina, Germany, australia, Canada
+Cuyunon	Cuyo archipelago	
+Czechs	Czech Republic	Bohemians, Moravians, Silesians, , United States , Canada
+Dagaaba	Ghana, Burkina Faso	
+Dagombas	Kingdom of Dagbon	
+Damara	Damaral, 	
+Danes	Denmark	 , Canada, Greenland, , Germany.
+Dargins	Dagestan 	Kajtak, Kubachi, itsari, Chirag
+Dinka	South Sudan	
+Dogon	Bandiagara Escarpment	ampari Dogon
+Dogra	Jammu Division 	
+Dongxiangs	Hezhou 	
+Dubla	Gujarat 	
+Dutch	Netherlands	Gronings, arubans, Bonairians, Curacaoans, Sabans, St. Maarteners, St. Eustatians, Surinamese, Mennonites, indos, Dutch Burghers, ,  , Canada, australia, , New Zealand
+Dyula	Burkina Faso, ivory Coast, Mali	
+Ebira	Kogi State 	
+Edo	Edo State 	ika, Emai
+Efik	Cross River State 	
+Egyptians	Egypt	Saeidis, Copts, Waeete
+Ekoi	Nigeria, Cameroon	
+Embera	Choco Department, Panama	
+English	Engl, 	 americans, Canadians, australians, New Zealanders, White Bahamians, White Barbadians, Cayman islanders, White Dominiquais, White Jamaicans, White Botswanans, White Kenyans, White Saint Helenians, White Zambians, White Zimbabweans, anglo-Burmese, British Hongkongers, , White Pakistanis
+Esan	Esanl, 	
+Estonians	Estonia	Voros, Setos
+Ewe	Togo, Ghana	anlo Ewe, Waci
+Fang	Rio Muni , Gabon	
+Fijians	Fiji	
+Finns	Finland	Kvens, Forest Finns, Tornedalians, ingrian Finns, , Sweden, United States, , Canada.
+Flemings	Flanders 	
+Fon	Dahomey 	Egun
+French	France, Romandy, aosta Valley	arpitans, Waldensians, Saint-Pierrais, Burgundians, Champenois, Free Countians, Gallo, Lorrainers, Normans, Picards, Poitevins , Barthelemoise, Saint-Martinois, French Guianese, Caldoche, Reunionese , Pieds-Noirs, French Canadians , Louisianians , French Haitians, French Malagasy, Franco-Mauritians, , Franco-Seychellois
+Frisians	Frisia 	West Frisians, East Frisians, North Frisians
+Friulians	Friuli 	
+Fula	West africa 	Wodaabe, Haratin, Fula Jalon, Fulakunda, Maasina Fulfulde
+Fur	Darfur 	
+Ga-adangbe	Greater accra 	Ga, adangbe
+Gagauz	Gagauzia , Budjak	
+Galicians	Galicia 	
+Ganda	Buganda 	abayudaya
+Garifuna	Saint Vincent ,  Grenadines	Black Caribs
+Garos	Garo Hills 	
+Gayonese	indonesia 	
+Gbagyi	Nigeria	
+Gbaya	Central african Republic, Cameroon	Bokoto, Kara, Buli , ali, Mandja, Gbaya-Bossangoa, Bozom, Mbodomo, Gbanu, Bangandu
+Gedeo	Gedeo Zone 	
+Gelao	Guizhou 	
+Georgians	Georgia	adjarians, Mingrelians, Svans, Tushetians , Meskhetians
+Germans	Germany, Switzerland, Liechtenstein	Bavarians, Franconians, Hessians, Hunsriks, Upper Saxons, Lower Saxons, Swabians , Rhinelanders , alsatians, German Swiss, Liechtensteiners, Pomeranians, Volga Germans, Baltic Germans, Silesian Germans, Carpathian Germans, North Schleswig Germans, Eastern Belgians, Transylvanian Saxons, amish , Hutterites, Mennonites , ,   , Brazil, Mexico, argentina, Canada, Chile, Kazakhstan, australia, , New Zealand.
+Gola	Liberia, Sierra Leone	
+Gonds	Gondwana 	Godha, Madia Gonds, Muria, Koya
+Gorontaloans	Gorontalo 	
+Greeks	Greece, Cyprus	Greek Cypriots, Pontic Greeks, Cappadocian Greeks, Sarakatsani, Urums, Griko, Macedonian Greeks, , albania , Ukraine, Georgia,  ,  United Kingdom, Germany, australia, , Canada
+Guan	Ghana 	Gonja, Kyode, Cherepon, Efutu, anyanga, Larteh, Chumburung, Krache, anum-Boso
+Guarani	Paraguay, Misiones, Bolivia	Chiriguanos, , Mestizos, Paraguayans
+Gujarati	Gujarat 	Koli, Bharwad, Khoja, Patidar, Sunni Bohra, Lohana, Vagri, Kharva, Charan, Baria, Momna, Ghanchi, Shenva, Bhambi Khalpa, Zarabes, Bhoi, Luso-indians, Gujarati americans
+Gumuz	Benishangul-Gumuz Region	
+Gurage	Guragia 	Kistane, Zay, inor, Mesqan, Sebat Bet 
+Gurma	Gurmal, 	Ntcham, Bimoba
+Gurunsi	Burkina Faso, Ghana, Togo	Lukpa, Kabye, Tem, Lamba, Delo, Bago-Kusuntu, Chala, Lyele, Nuna, Kalamse, Pana, Kassena, Winye, Deg, Puguli, Paasaal, Sisaala, Chakali, Siti, Tamprusi, Vagla
+Hadiya	Hadiya 	
+Han	China	Subei, Cantonese , Fujianese , Gaoshan Han, Gan, Hakka , Hebei, Hunanese, Jianghuai, Shandong, Sichuanese, Wu , Han Taiwanese, ,  , Malaysia , Singapore, Thailand, indonesia, Myanmar, Canada,  Philippines , Peru, australia, Vietnam, Japan, Russia, France,  United Kingdom, South africa, italy, Germany, Korea, Spain, india, Laos, Brazil,  Netherlands, Panama, , New Zealand
+Hani	Yunnan 	
+Harari	Hararia 	
+Hausa	Hausal, 	
+Hawaiians	Hawaii 	
+Hazaras	Hazarajat 	aimaq Hazara, Hazara australians
+Herero	Hererol, , angola	OvaHimba, Ovambanderu
+Hmong	Guizhou 	a-Hmao, Gha-Mu, Xong, Pa-Hng, Hmong americans
+Hui	Northwest China 	Dungan, Panthays
+Huli	Southern Highlands Province 	
+Hungarians	Hungary, Szekely Land, Felvidek	Jasz, Paloc, , Romania, Slovakia, Serbia, Ukraine, Croatia, Slovenia, Germany,  , , Canada
+Hutu	Rwanda, Burundi, Kivu	
+iban	Sarawak 	Mualang
+ibanag	Philippines 	
+ibibio	akwa ibom State 	Eket, aro
+icelanders	iceland	
+idoma	Benue State 	agatu, alago, Yala
+igbo	igbol, 	anioma, aro, Edda, Ekpeye, Etche, Ezaa, ika, ikwerre, ikwo, isu, izzi, Mbaise, Mgbo, Ngwa, Nri-igbo, Ogba, Ohafia, Ohuhu, Onitsha-ado, Ukwuani, Waawa, antiguans , Barbudans
+igede	Benue State 	
+igorot	Cordillera administrative Region 	Balangao, Bontoc, ibaloi, ifugao , isnag, Kalinga, Kankanaey
+ijaw	Nigeria 	Bille, Engenni, ibani, Kalabari, Kula, Nkoro, Nkoroo, Obolo
+ilocano	ilocos Region 	
+ingush	ingushetia 	
+inuit	Greenl, , Canada , alaska	Greenlandics , inupiat, inuktitut, inuvialuit
+iranun	Mindanao 	
+irish	irel, 	irish Travellers, Ulster irish, , significant populationsin  , australia, Canada, argentina, Mexico, New Zealand
+iroquois	United States, Canada	Mohawk, Oneida, Onondaga, Cayuga, Seneca, Tuscarora
+isan	isan 	
+isoko	isoko region 	
+italians	italy, Ticino 	Sicilians, Waldensians, Lazians, Marchigianos, Tuscans, Umbrians, Emilian, Romagnol , Trentinis, Ligurians , Lombards, Piedmontese, apulians, Calabrians, Neapolitans , Venetians , argentina, Brazil,  , Venezuela, Canada, France, Peru, Uruguay, australia, Germany, Chile ,  United Kingdom
+itawes	Cagayan Valley 	
+Japanese	Japan	Kante, Kansai, Hokkaido, Tehoku, Henichi, Satsuge, Chegoku, Echigo, Tekai, Shinshuu, Hokuriku, Hachije, , Brazil,   ,  Philippines.
+Jarai	Central Highlands 	
+Javanese	Java 	Cirebonese, Osing, Tenggerese, Boyanese, Samin, Banyumasan, , Malaysia, Suriname, China, , Saudi arabia
+Jews	israel	ashkenazim, Sephardim , Mizrahim , Teimanim, Beta israel, italkim, Romaniotes, Juhurim, Krymchaks, Bene israel, Cochin, Lishanid Noshan, israelis, ,  , France, Canada,  United Kingdom, argentina, Russia, Germany, , australia
+Jingpo	Kachin State , Yunnan 	
+Jola	Jolal, 	Banjaal, Bayot, Fogni, Gusilay, Karon, Kasa, Kuwaataay, Mlomp
+Jukun	Wukari 	Wannu
+Kadazan-Dusun	Sabah 	Kadazan, Dusun, Dumpas, idaean, Kwijau, Lotud, Mangkaeak, Maragang, Minokok, Orang Sungai, Rumanau, Rungus, Tambanuo
+Kalanga	Zimbabwe, Botswana	Nambya
+Kalenjin	Rift Valley Province 	Keiyo, Tugen, Marakwet, Nandi, Kipsigis, Sabaot, Pokoot, Okiek, Terik
+Kamba	Ukambani 	afro-Paraguayans
+Kanaks	Kanakia 	Haveke, ajie, arha, Xaragure, Haeke
+Kannadigas	Karnataka 	Vokkaliga
+Kanuri	Kanuril, 	Kanembu, Yerwa Kanuri
+Kapampangans	Pampanga 	
+Kapsiki	Mandara Mountains	
+Karachays	Karachay-Cherkessia	
+Karakalpaks	Karakalpakstan	
+Karbi	Karbi anglong district 	amri
+Karen	Karen State , Thailand	Segaw Karen, Pwo Karen, Karenni 
+Kashmiris	Kashmir 	Kashmiri Pandits, Kashmiris of Punjab
+Kashubians	Kashubia 	
+Kazakhs	Kazakhstan	China, , Russia
+Khas	Nepal, Uttarakh, 	Chhetri, Bahun, Kami, Damai, Sarki, Gandarbha, Thakuri, Badi
+Khmer	Cambodia	  , Vietnam
+Khonds	Kandhamal 	
+Khorasani Turks	Khorasan 	
+Kikuyu	Kenya	
+Kilba	Hong 	
+Kirati	Eastern Development Region 	Limbu, Sunuwar, Yakkha , Rai 
+Kissi	Guinea, Sierra Leone	
+Kofyar	Plateau State 	
+Komi	Russia 	Komi-Zyrians, Komi-Permyaks, izhma Komi
+Kongo	Kongol, 	Lari, Vili, Mayombe, Suundi, Dominicans
+Konjo	Rwenzori Mountains	Nande
+Konkani	Goa 	Luso-indians
+Konso	Konso 	
+Koreans	Korea 	Jeju islanders, ,  , China, Russia, Japan, Canada, australia, Vietnam, ,  Philippines
+Kpelle	Liberia, Guinea	
+Kposo	Plateaux , Ghana	
+Kru	Liberia 	aizi, Bete, Bakwe, Grebo, Krahn , Kuwaa
+Kumyks	Dagestan 	
+Kunama	Eritrea, Ethiopia	
+Kurds	Kurdistan 	Bajalan, Kurmanjis, Sorans, Zazas, Feylis, iranian Laks, Yazidis, Shabak, , France, Germany
+Kurukh	Chota Nagpur Plateau	Kisan
+Kuteb	Taraba State 	
+Kyrgyz	Kyrgyzstan	
+Laks	Lakia 	
+Lamaholot	Solor 	
+Lampungs	Lampung 	
+Lao	Laos	
+Latvians	Latvia	Latgalians, Kursenieki, Selonians
+Laz	Lazistan 	Turkish Laz, Georgian Laz
+Lega	Democratic Republic of  Congo	
+Lezgins	Lezgistan 	
+Li	Hainan 	
+Limba	Sierra Leone 	
+Lisu	China, Myanmar	Lipo
+Lithuanians	Lithuania	Samogitians, aukstaitians, Lietuvninkai
+Luba	Lubal, 	Luba-Kasai, Luba-Katanga, Hemba , Songe, Lulua
+Luhya	Western Province 	Bukusu, idakho, isukha, Kabras, Khayo, Kisa, Marachi, Maragoli, Marama, Nyole, Samia, Tachoni, Tiriki, Tsotso, Wanga,
+Luo	Kenya	
+Lurs	iran 	Bakhtiari, iranian Laks
+Luxembourgers	Luxembourg, arelerland	Brazil ,  
+Maasai	Maasail, 	Samburu, arusha, Kwavi
+Macedonians	North Macedonia	Torbesh, Mijaks, , australia, Greece
+Madi	Democratic Republic of  Congo, South Sudan, Uganda	
+Madurese	Madura 	Boyanese
+Mafa	Cameroon	
+Magahi	Magadha 	
+Magars	Nepal	
+Maguindanao	Maguindanao 	
+Maithils	Mithila 	Karan Kayastha
+Makassarese	South Sulawesi 	
+Makonde	Tanzania, Mueda Plateau	Machinga
+Makua	Mozambique	Lomwe, Chuwabu, Moniga, Koti, Nathembo
+Malayali	Kerala 	ambalavasi, Dheevara, Nair, Paravar, Saint Thomas Christians , Mappilas, Ezhava, ,  United arab Emirates, Saudi arabia, Oman, Qatar, Kuwait , Bahrain
+Malays	Malay world 	Bruneians, Kedahans, Pattani, Pahang, Terengganuarians, Kelantanese, Perakians, Berau, Proto-Malay , Lubu, Palembangnese, Cape Malays, Cocos Malays, Bangka Malays
+Maldivians	Maldives	Mahls
+Maltese	Malta	Gozitans
+Mambila	Mambilla Plateau 	Somyev
+Manchu	Manchuria 	
+Mandarese	West Sulawesi 	
+Mandinka	Mali,  Gambia, Guinea, Senegal	Bolon, Montserratians, Cape Verdeans, , Martinicans
+Manggarai	Manggarai 	
+Manjak	Guinea-Bissau, Senegal	
+Mapuche	araucania 	Huilliche, , Mestizos, Chileans
+Maranao	Lanao 	
+Marathi	Maharashtra 	Mahar, Maratha, Kunbi, Dhangar, Bhoi
+Mari	Mari El 	Meadow Mari, Hill Mari
+Masa	Cameroon, Chad	
+Masalit	Sudan, Chad	
+Maya	Guatemala, Belize, Mexico	Maya, achi, Chuj, Cheortie, itza, Keichee, Qeeqchie, Xinca, Tektitek, Huastecan, Mopan, Lacandon, Chontal, akatek, Jakaltek, Qeanjobeal, Tzeltal, Mochoe, Tojolabeal, Mam, ixil, Tzotzil, Poqomam, Yucatecan Maya, Motozintlecos, awakatek, Kaqchikel, Sakapultek, Sipakapense, Uspantek, Cheol, Tzeutujil, , Mestizos , Guatemalans , Mexicans
+Mazahua	State of Mexico 	
+Mazatec	Oaxaca 	ayautla
+Mbaka	Central african Republic, Democratic Republic of  Congo	
+Mehri	Mahra 	Soqotri
+Meitei	Manipur 	Loi
+Melanau	Sarawak 	
+Mende	Sierra Leone 	
+Merina	antananarivo Province	
+Mien	China , Vietnam	iu Mien, Kim Mun, Dzao Min, Biao Min, Bunu, Lakkia, Biao Mon
+Mijikenda	Coast Province 	Chonyi, Giriama, Digo, Segeju
+Minahasan	Minahassa Peninsula	Tonsawang, Tontemboan, Tondano, Tombulu, Tonsea
+Minangkabau	Minangkabau Highlands	aneuk Jamee
+Mising	india 	
+Miskito	Mosquito Coast 	
+Mixe	Oaxaca 	
+Mixtec	La Mixteca 	Trique, Cuicatecs, amoltepec
+Miekmaq	Miekmaeki 	
+Mon	Mon State 	
+Mongo	Democratic Republic of  Congo 	Bolia, Ntomba, Ngando, iyaelima, Mbole, Mpama, Nkutu, Sengele, Hendo, Dengese, Tetela
+Mongols	inner Mongolia , Mongolia	Buryats, Barga, Oirats, Kalmyks, Daur, Moghols, Hamnigan, Monguor, Yugur, Khatso, Bonan, Sart Kalmyks, Soyot, Sichuan Mongols, Sogwo arig, altai Uriankhai, Ordos, Kanja, Sogwo arig, Mughals
+Mongondow	Mongondowia 	
+Montenegrins	Montenegro	Serbia ,  
+Mordvins	Mordovia 	Erzyas, Mokshas, Qaratays
+Mossi	Mossil, 	
+Mumuye	Taraba State 	
+Munanese	Muna 	
+Mundas	india 	Sabar, Mahali
+Murut	Murutia 	Okolod, Keningau, Tagal, Paluan, Selungai, Timugon, Serudung, Sembakung, Tidong, Kalabakan, Bulungan, Bookan
+Muscogee	United States 	Coushatta, alibamu, Hitchiti, Natchez, Seminoles , Yuchi, Shawnee, Creoles of color, Miccosukee
+Musgum	Far North Region, Chad 	
+Mwera	Tanzania 	
+Meori	New Zealand	Cook islanders
+Naga	india , Myanmar	angami, ao, Sangtam, Yimchunger, Lotha, Chakhesang, Mao, Pochury, Rengma, Tangkhul, Maring, Zemi, Liangmei, Kabui, Maram, Konyak, Chang, Wancho, Phom, Khiemnungan, Tangsa, Nocte
+Nagpuri	Chota Nagpur Plateau	Chik Baraik
+Nahuas	Mexico	Huasteca Nahuas, Mexicaneros, Sierra Puebla Nahuas, Guerrero Nahuas, Orizaba Nahuas, Southeastern Puebla Nahuas, Central Nahuas, Pipil, , Mestizos , Mexicans
+Nama	Namal, , South africa	
+Navajo	Navajo Nation 	
+Newar	Kathmandu Valley 	Chitrakar
+Ngaju	Central Kalimantan	Bakumpai, Meratus
+Ngalop	Bhutan	Kheng, Bumthang
+Ngbandi	Democratic Republic of  Congo, Central african Republic	Yakoma
+Nias	Nias 	
+Nogais	Russia 	ak Nogai, Karagash
+Norwegians	Norway	 , , Norwegian Canadians
+Nubians	Nubia 	Nobiin, Mattokki, Dongolawi, Midob, Hill Nubians , Birgid, Jaealin , Shaigiya
+Nuer	Nuerl, 	
+Nuristanis	Nuristan 	Safed-Posh Kaffirs , Kamkata-viris
+Nyishi	arunachal Pradesh 	
+Nung	Vietnam, Guangxi 	
+Occitans	Occitania 	aranese, auvergnats, Provencals, Languedociens, Gascons
+Odia	Odisha 	Utkala Brahmins, Khandayat
+Ogoni	Ogonil, 	Baan, Eleme, Gokana, Tee
+Ojibwe	anishinaabel, 	Oji-Cree, Odawa, Potawatomi, Mississaugas
+Oromo	Oromia , Kenya	Boran, Barentoo, Salale, Macha, arsi, Wollo
+Ossetians	South Ossetia, North Ossetia-alania 	iron, Digor
+Ot Danum	indonesia 	Lawangan, Maeanyan
+Otomi	Mexico 	
+Ovambo	Ovambol, , angola	
+Ovimbundu	angola	
+PaeO	Shan State 	
+Palestinians	State of Palestine, israel	arab israelis, , Syria, Jordan, Lebanon, , Chile
+Pamiris	Pamir Mountains 	Shughni, Sarikoli , Yazghulami, Munji, Yidgha, Sanglechi, ishkashimi, Wakhi
+Pangasinese	Pangasinan 	
+Papel	Biombo Region 	
+Pare	Pare Mountains 	
+Pashayi	afghanistan 	
+Pashtuns	Pashtunistan 	Pashtun americans, Kakar
+Pedi	Limpopo 	
+Pende	Democratic Republic of  Congo	
+Persians	iran	Tat, ,  ,  United arab Emirates, Canada, Germany,  United Kingdom, Bahrain, australia, , Sweden
+Poles	Poland	 , Brazil, Germany, Canada, iceland, Sweden, France,  United Kingdom, argentina, Belarus, Russia, australia, Lithuania, Ukraine, ireland, , Norway
+Portuguese	Portugal	azoreans, Madeirans, Brazilians , Cape Verdeans, Portuguese angolans, Portuguese Mozambicans, Luso-indians, Macanese, Kristangs, , Portuguese Burghers
+Punjabis	Punjab 	Sikhs, Jat, Khatris, arain, awan, ,  United Kingdom, Canada, ,  .
+Purepecha	Michoacan 	
+Qashqai	Fars Province 	
+Qiang	Ngawa Tibetan , Qiang autonomous Prefecture	
+Quechua	Peru, Bolivia, Ecuador	Yaru, Cusco, ayacucho, , Mestizos , Peruvians, Ecuadorians, , Bolivians
+Rade	Central Highlands 	
+Rajasthanis	Rajasthan 	Banjara, Gurjars, Rajputs , Marwari, Charan, Kachhi, Meena
+Rajbongshi	india , Bangladesh	
+Rakhine	Rakhine State 	Marma
+Rejangese	Rejang Lebong Regency	
+Rohingyas	Rakhine State 	
+Roma	Europe 	Roma , iberian Kale, Finnish Kale, Welsh Kale, Romanichal, Sinti, Manush, Romanisael, ashkali , Balkan Egyptians, Boyash, Lom, Dom , ,  , , Brazil.
+Romanians	Romania, Moldova	Moldovans, , italy, Germany, Spain, Ukraine,  United Kingdom, , France.
+Russians	Russia	Cossacks, Pomors, Lipovans, , Ukraine, Kazakhstan, Germany,  , Uzbekistan, israel, Brazil, Belarus, Canada, Latvia, Kyrgyzstan, Moldova, Estonia, Turkmenistan, France, Lithuania , azerbaijan.
+Rusyns	Carpathian Ruthenia	Pannonian Rusyns, Lemkos, Hutsuls, Boykos
+Ryukyuans	Ryukyu islands 	amami , Okinawan  Miyako, Yaeyama, Yonaguni
+Saho	Eritrea	
+Sahrawi	Western Sahara , Sahrawi arab Democratic Republic, Mauritania	Reguibat, Tajakant, Tekna
+Salar	China 	
+Sama-Bajau	Maritime Southeast asia	Sama , Bajaw, abaknon
+Sambal	Zambales 	Bolinao, Botolan 
+Samoans	Samoan islands 	american Samoans
+Sangirese	Sangihe islands 	
+Santal	india 	
+Sara	Chad, Central african Republic	Ngambay, Doba, Laka, Kabba, Sar, Mbay, Ngam, Dagba, Gulay
+Sardinians	Sardinia 	
+Sasak	Lombok 	
+Savu	Savu 	
+Scots	Scotl, 	Ulster Scots, Orcadians, Shetlanders, Highlanders, Lowlanders, ,   , Canada, australia, argentina, ,  Bahamas
+Senufo	Mali, ivory Coast, Burkina Faso	Nafana, Minyanka
+Serbs	Serbia, Republika Srpska	Kosovo Serbs, Triestine Serbs, , Croatia, Germany, austria, France, , Sweden
+Serer	Senegal	Laalaa, Ndut, Niominka, Serer-Noon, Palor, Saafi
+Shan	Shan State 	
+Sharchops	Bhutan 	
+Sherbro	Sherbro isl, 	
+Shilluk	South Sudan	Gule
+Shona	Mashonal, 	Manyika, Ndau
+Sibe	China 	
+Sidama	Sidamia 	
+Siddi	Pakistan , india 	
+Sika	Sikka Regency 	
+Silesians	Silesia , Czech Silesia 	Cieszyn Vlachs, Silesian Gorals
+Siltee	Siltia 	
+Sindhis	Sindh 	Jat, Memon, arain, indian Sindhis
+Sinhalese	Sri Lanka	Dewa, British Sri Lankans, Burghers 
+Sioux	Lakotah 	Lakota, Dakota, Nakota 
+Slovaks	Slovakia	Czech Republic, Serbia, Hungary, United States , Canada
+Slovenes	Slovenia	Carinthian Slovenes, italy Slovenes
+Soga	Busoga 	
+Somalis	Greater Somalia 	Hawiye, Darod , isaaq, Dir, Rahanweyn, Madhiban, Yibir, ajuran ,  ,  United Kingdom, Sweden, , Canada
+Songhai	Mali, Niger	Zarma
+Soninke	Mali	Haratin
+Sotho	Free State , Lesotho	
+Spaniards	Spain	Castilians, andalusians, asturians, Leonese, Cantabrians, aragonese, Extremadurans, Mirandese, Canary islanders, Hispanos , Mexicans, Guatemalans , Salvadorans, Hondurans, Nicaraguans, Costa Ricans, Panamanians, Colombians, Venezuelans, Ecuadorians, Peruvians, Bolivians, Paraguayans, Chileans, argentines, Uruguayans, Cubans, Dominicans, Puerto Ricans, Fernandinos, , Spanish Filipinos
+Sui	Sandu Shui autonomous County 	
+Sukuma	Tanzania	
+Sumba	Sumba 	anakalangu, East Sumbanese, Kodi, Lamboya, West Sumbanese, Mamboru, Wanukaka
+Sumbawa	Sumbawa 	
+Sundanese	Java 	Bantenese, Baduy, Cirebonese
+Surma	Ethiopia, South Sudan	Meeen, Mursi, Kichepo
+Susu	Guinea, Kambia 	
+Swahili	Swahili coast 	Shirazi 
+Swazi	Mpumalanga , Eswatini	
+Swedes	Sweden	Scanians, Jamtish, Gutnish, , significant populationsin Finl, ,  , Canada, argentina ,  United Kingdom
+Sylhetis	Sylhet Division, Barak Valley	
+Sami	Sapmi 	inari Sami, Kildin Sami, Lule Sami, Northern Sami, Pite Sami, Skolt Sami, Southern Sami, Ter Sami, Ume Sami
+Tabasaran	Tabasaranstan 	
+Tagalogs	Philippines	Filipino americans
+Tahitians	Tahiti 	
+Tajiks	afghanistan, Tajikistan, Uzbekistan	Chagatai
+Talysh	azerbaijan, iran	
+Tama	Chad, Sudan	
+Tamils	Tamil Nadu , Sri Lanka 	indian Tamils , Sri Lankan Tamils , Paravar, , Malaysia, South africa,  , Singapore, Canada,  United Kingdom, , France .
+Tandroy	androy 	
+Tankas	China 	Fuzhou Tankas
+Tarok	Plateau State 	
+Tatars	Tatarstan 	Volga Tatars, Crimean Tatars, Lipka Tatars, Siberian Tatars, Mishar Tatars, Finnish Tatars, Dobruja Tatars, Chinese Tatars, Nagaybak, Kryashens
+Tauseg	Sulu archipelago	
+Tboli	South Cotabato 	
+Telugu	india 	Kamma, Reddy, Velama, Kapu, Raju, Madiga, Mala
+Temne	Northern Sierra Leone	
+Thais	Thailand	Southern Thai, Khorat, Lanna, Tai Lu, Thai americans
+Tibetans	Tibet 	amdolese , Khams, u-Tsang, Changpa, Baima
+Tigrayans	Eritrean Highlands , Tigrayia 	
+Tigre	Eritrea	
+Tiv	Benue State 	
+Tiwa	india 	
+Tlapanec	Guerrero 	
+Toraja	Tana Toraja 	
+Toubou	Touboul, 	Daza, Teda
+Toucouleur	Futa Tooro 	
+Tripuri	Tripura 	Jamatia, Murasing
+Tsonga	Mozambique , South africa	
+Tswana	Botswana, South Tswanal, 	Balete, Mangwato, Bangwaketse, Rolong
+Tujia	Wuling Mountains 	
+Tupuri	Far North Region, Mayo-Kebbi	
+Turkana	Turkanal, 	
+Turkmens	Turkmenistan	
+Turks	Turkey	Turkish Cypriots, Meskhetian Turks, Yoruks, , Bulgaria, Greece, Macedonia, Germany, France,  United Kingdom,  Netherlands, austria, Belgium, Sweden,  , Syria, , iraq
+Tutsi	Rwanda, Burundi, Kivu	Banyamulenge
+Tuvans	Tuva 	Tozhu Tuvans
+Udmurts	Udmurtia 	Besermyan
+Ukrainians	Ukraine	Poleshuks, Cossacks, ,  , Brazil, Kazakhstan, Germany, Canada, italy, argentina,  Czech Republic, , Romania
+Urhobos	Delta State 	
+Uyghurs	Uyghuristan 	Uyghurs in Kazakhstan
+Uzbeks	Uzbekistan	Uzbeks in Russia
+Venda	Vendal, 	
+Vietnamese	Vietnam	Muong, Gin, Phen, Chut, The, Nung, Giay, ,  , Cambodia, France, australia, Canada, Taiwan, Japan, Korea, Germany, Laos
+Visayans	Visayas 	aklanon, Butuanon, Cebuano , Caluyanon, Capiznons, Hiligaynon, Karay-a, Masbatenos, Negrense, Porohanon, Romblomanon , Waray
+Wa	Wa State 	
+Walloons	Wallonia 	
+Waxiang	Hunan 	
+Welayta	Wolayitia 	
+Welsh	Wales 	argentina , Canada, , australia.
+Wolof	Senegambia 	Lebu, Haratins , Martinicans
+Xhosa	Xhosal, 	
+Yakan	Basilan 	
+Yakuts	Yakutia 	
+Yako	Yakurr Local Government	
+Yao	Malawi, Mozambique, Tanzania 	
+Yi	China 	Phu La, azha
+Yoruba	Yorubal, 	Egun, ijesha, Egba, Yewa, igbomina, awori, akoko, Okun, ana, Ekiti, ilaje, Oku
+Zaghawa	Chad, Sudan	
+Zamboanguenos	Zamboanga City	
+Zande	Democratic Republic of  Congo, Central african Republic, South Sudan	Barambu
+Zapotecs	Oaxaca 	ixtlan
+Zhuang	Zhuangia 	
+Zulu	KwaZulu-Natal 	Northern Ndebele

@@ -1,0 +1,60 @@
+60	epicure consortium	consortia
+41	the tobacco and genetics consortium	consortia
+29	uk biobank	consortia
+12	coronary artery disease (c4d) genetics consortium	consortia
+9	biobank	consortia
+8	uk biobank	consortia
+6	ukbiobank	consortia
+6	uk biobank	consortia
+3	wellcome trust case control consortium	consortia
+2	early growth genetics (egg) consortium	consortia
+2	uk biobank	consortia
+2	giant consortium	consortia
+2	international lung cancer consortium	consortia
+2	the tobacco and genetics consortium	consortia
+1	gabriel consortium	consortia
+1	uk biobank, triglyceride	consortia
+1	diagram consortium	consortia
+1	giant consortium	consortia
+1	epicure consortium	consortia
+1	uk biobank smoking	consortia
+1	uk biobank, tryglicerides	consortia
+1	giant consortium	consortia
+1	eczema uk biobank	consortia
+1	magnetic consortium	consortia
+1	uk biobank, triglycerides	consortia
+1	cardiogramplusc4d consortium	consortia
+1	ukb biobank	consortia
+1	tobacco and genetics consortium	consortia
+1	height giant consortium	consortia
+1	alzheimer's disease genetics consortium	consortia
+1	uk biobank risk	consortia
+1	global lipids genetics consortium	consortia
+1	trans-national asthma genetic consortium	consortia
+1	uk biobank, risk	consortia
+1	cardiomyopathy uk biobank	consortia
+1	asia breast cancer consortium	consortia
+1	uk biobank depression	consortia
+1	uk biobank	consortia
+1	psychiatric genome consortium	consortia
+1	consortium	consortia
+1	myocardial infarction genetics consortium	consortia
+1	global  lipids  genetics  consortium	consortia
+1	global lipids genetics consortium	consortia
+1	autism consortium	consortia
+1	epicure%20consortium	consortia
+1	polygenic scores for uk biobank scale data	consortia
+1	psychiatric genomics consortium	consortia
+1	uk biobank liver	consortia
+1	ukbiobank	consortia
+1	uk biobank khera	consortia
+1	charge consortium	consortia
+1	eve consortium	consortia
+1	uk biobank 22127	consortia
+1	uk biobank cancer	consortia
+1	psychiatric genomic consortium	consortia
+1	bmi ukbiobank	consortia
+1	uk biobank risk	consortia
+1	global lipids genetic consortium	consortia
+1	cardiomyopathies uk biobank	consortia
+1	uk biobank heart failure	consortia

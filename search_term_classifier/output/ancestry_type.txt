@@ -1,0 +1,85 @@
+47	gan	gene, ancestry
+19	arsi	gene, ancestry
+19	tat	gene, ancestry
+19	japanese	ancestry
+18	nama	gene, ancestry
+13	chad	gene, ancestry
+9	mafa	gene, ancestry
+9	european	ancestry
+9	naga	gene, ancestry
+5	tat	gene, ancestry
+5	iceland	ancestry
+5	japanese	ancestry
+4	east asian	ancestry
+4	european	ancestry
+4	brazil	ancestry
+4	china	ancestry
+3	mal	gene, ancestry
+3	indonesia	ancestry
+3	iran	ancestry
+3	african americans	ancestry
+3	native american	ancestry
+3	finland	ancestry
+2	british	ancestry
+2	mao	ancestry
+2	mal	gene, ancestry
+2	dutch	ancestry
+2	jews	ancestry
+2	korea	ancestry
+2	ethiopia	ancestry
+2	mao	ancestry
+2	india	ancestry
+2	japan	ancestry
+2	east asian	ancestry
+2	chin	ancestry
+2	mao	ancestry
+1	sub-saharan african	ancestry
+1	japan	ancestry
+1	sudan	ancestry
+1	mexico	ancestry
+1	ukraine	ancestry
+1	philippines	ancestry
+1	chin	ancestry
+1	tunisia	ancestry
+1	ali	ancestry, trait
+1	east asian	ancestry
+1	zambia	ancestry
+1	han	ancestry
+1	barbados	ancestry
+1	iran	ancestry
+1	canada	ancestry
+1	south asian	ancestry
+1	lebanon	ancestry
+1	south asian	ancestry
+1	bangladesh	ancestry
+1	alas	gene, ancestry
+1	scotland	ancestry
+1	arsi	gene, ancestry
+1	irish	ancestry
+1	alas	gene, ancestry
+1	singapore	ancestry
+1	pakistan	ancestry
+1	honduras	ancestry
+1	mozambique	ancestry
+1	argentina	ancestry
+1	yoruba	ancestry
+1	gan	gene, ancestry
+1	fon	gene, ancestry
+1	angola	ancestry
+1	india	ancestry
+1	tanzania	ancestry
+1	finland	ancestry
+1	ashkenazim	ancestry
+1	mafa	gene, ancestry
+1	kom	ancestry
+1	south africa	ancestry
+1	armenia	ancestry
+1	scottish	ancestry
+1	haiti	ancestry
+1	paloc	ancestry
+1	iraq	ancestry
+1	african americans	ancestry
+1	netherlands	ancestry
+1	south east asian	ancestry
+1	iceland	ancestry
+1	bai	ancestry

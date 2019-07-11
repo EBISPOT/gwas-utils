@@ -1,0 +1,1762 @@
+75	davies g	author
+66	hinds da	author
+55	kettunen j	author
+51	rice jp	author
+51	kennedy rb	author
+51	kibriya mg	author
+47	dehghan a	author
+46	stahl ea	author
+45	guo y	author
+45	cooke bailey jn	author
+45	michailidou k	author
+45	lambert jc	author
+44	simon-sanchez j	author
+41	sofer t	author
+37	liu x	author
+37	horne bd	author
+36	teerlink cc	author
+35	yoon ka	author
+34	almoguera b	author
+34	willer cj	author
+34	cade be	author
+33	tonjes a	author
+33	scharf jm	author
+33	nagy r	author
+33	strange a	author
+33	prins bp	author
+32	astle wj	author
+32	berndt si	author
+31	lindgren cm	author
+30	okbay a	author
+29	trampush jw	author
+29	herold c	author
+29	raelson jv	author
+28	spracklen cn	author
+28	kanai m	author
+28	de lange km	author
+28	mcclay jl	author
+26	hoffmann tj	author
+26	speliotes ek	author
+25	medina-gomez c	author
+25	de boer ra	author
+25	taal hr	author
+24	kichaev g	author
+23	whitcomb dc	author
+23	pickrell jk	author
+23	ferrari r	author
+23	ahmetov i	author
+23	van der harst p	author
+22	kato n	author
+22	lee jj	author
+22	zhu y	author
+22	lane jm	author
+22	locke ae	author
+22	ashley-koch ae	author
+21	pattaro c	author
+21	nishida n	author
+21	liu jz	author
+21	jostins l	author
+21	fritsche lg	author
+21	postel-vinay s	author
+21	yu h	author
+20	teumer a	author
+20	tamm r	author
+20	suhre k	author
+20	pare g	author
+20	pirastu n	author
+20	barban n	author
+20	buch s	author
+20	hibar dp	author
+19	jones se	author
+19	kullo ij	author
+19	manning ak	author
+19	shin sy	author
+19	dashti hs	author
+19	parra ej	author
+19	rivadeneira f	author
+19	prescott j	author
+19	li m	author
+19	kenny ee	author
+19	plant d	author
+19	sulem p	author
+18	mcgue m	author
+18	pulit sl	author
+18	shungin d	author
+18	cook mb	author
+18	malone sm	author
+18	wood ar	author
+18	gharahkhani p	author
+17	hunt ka	author
+17	warren hr	author
+17	vasan rs	author
+17	gudbjartsson df	author
+17	krumsiek j	author
+17	niu n	author
+17	van es ma	author
+17	bis jc	author
+17	smoller jw	author
+17	alonso a	author
+17	clarke tk	author
+17	hafler da	author
+17	hwang jy	author
+17	cornelis mc	author
+17	hirokawa m	author
+17	kuchenbaecker kb	author
+17	pilling lc	author
+16	nikpay m	author
+16	akiyama m	author
+16	al-tassan na	author
+16	slavin tp	author
+16	goes fs	author
+16	duncan el	author
+16	cheng cy	author
+16	hayes mg	author
+16	haiman ca	author
+16	leger pd	author
+16	cha pc	author
+16	neale bm	author
+16	hunter dj	author
+16	hammerschlag ar	author
+16	coon kd	author
+16	tian c	author
+15	de moor mh	author
+15	agopian aj	author
+15	below je	author
+15	ripke s	author
+15	stergiakouli e	author
+15	kurano m	author
+15	sherva r	author
+15	park sl	author
+15	urabe y	author
+15	sabater-lleal m	author
+15	law pj	author
+15	aulchenko ys	author
+15	he m	author
+15	codd v	author
+15	byrne em	author
+15	landi mt	author
+15	schunkert h	author
+15	david sp	author
+15	ellinor pt	author
+15	chauhan g	author
+15	anderson ca	author
+15	ferreira ma	author
+14	danik js	author
+14	levine dm	author
+14	den hoed m	author
+14	weiss la	author
+14	kitamoto t	author
+14	rankinen t	author
+14	christophersen ie	author
+14	su z	author
+14	yang hc	author
+14	coram ma	author
+14	chesi a	author
+14	fernandez-rozadilla c	author
+14	franceschini n	author
+14	verhaaren bf	author
+14	law mh	author
+14	couch fj	author
+14	zhao w	author
+14	he j	author
+14	kosova g	author
+14	houlston rs	author
+14	rubicz r	author
+14	li j	author
+14	shatunov a	author
+14	verweij n	author
+14	rautanen a	author
+14	adkins de	author
+14	kapoor m	author
+14	evans dm	author
+14	deelen j	author
+14	sawcer s	author
+14	persad pj	author
+14	domarkiene i	author
+14	strawbridge rj	author
+14	weidinger s	author
+14	hinney a	author
+14	kawaguchi t	author
+13	le clerc s	author
+13	litchfield k	author
+13	quillen ee	author
+13	greenwood ta	author
+13	ellinghaus d	author
+13	dupuis j	author
+13	alkelai a	author
+13	gharavi ag	author
+13	uhl gr	author
+13	kasperaviciute d	author
+13	larson mg	author
+13	amos ci	author
+13	fox cs	author
+13	sniekers s	author
+13	eppinga rn	author
+13	deters kd	author
+13	hazra a	author
+13	hamza th	author
+13	verweij kj	author
+13	matsuo h	author
+13	bezzina cr	author
+13	ludwig ku	author
+13	menzel s	author
+13	rotroff dm	author
+13	hirschfield gm	author
+13	hong sn	author
+13	allen rj	author
+13	maraganore dm	author
+13	frazier-wood ac	author
+13	hodonsky cj	author
+13	fehringer g	author
+13	wade td	author
+13	betz rc	author
+13	holm h	author
+13	keller mf	author
+13	torgerson dg	author
+13	fellay j	author
+13	yu b	author
+13	houlihan lm	author
+13	jacobs lc	author
+13	bustamante m	author
+13	ahola-olli av	author
+13	painter jn	author
+13	unoki h	author
+13	shi m	author
+13	ehret gb	author
+13	hill-burns em	author
+13	gaj p	author
+12	rafnar t	author
+12	reed dr	author
+12	ransohoff kj	author
+12	burri a	author
+12	tosto g	author
+12	reiner ap	author
+12	gudmundsson j	author
+12	paternoster l	author
+12	siitonen a	author
+12	mondul am	author
+12	prokopenko i	author
+12	croteau-chonka dc	author
+12	hollingworth p	author
+12	luykx jj	author
+12	mozaffarian d	author
+12	tapper w	author
+12	lyons pa	author
+12	song c	author
+12	onouchi y	author
+12	simino j	author
+12	hivert mf	author
+12	ombrello mj	author
+12	remmers ef	author
+12	postmus i	author
+12	hsiung ca	author
+12	coviello ad	author
+12	qayyum r	author
+12	parsa a	author
+12	nan h	author
+12	elks ce	author
+12	dewan at	author
+12	pfeufer a	author
+12	okada y	author
+12	schaarschmidt h	author
+12	thorgeirsson te	author
+12	ganesh sk	author
+12	hertz dl	author
+12	davis os	author
+12	campo c	author
+12	kamatani y	author
+12	palmer nd	author
+12	tsai fj	author
+12	landers je	author
+12	matteini am	author
+12	hoehn r	author
+12	lauc g	author
+12	ostrowski j	author
+12	lee jc	author
+12	zhang fr	author
+12	wang z	author
+12	ong ba	author
+12	hu y	author
+12	hong kw	author
+12	soranzo n	author
+12	ramanan vk	author
+12	moyer am	author
+12	zhang ck	author
+12	namjou b	author
+12	thanassoulis g	author
+12	ding l	author
+12	gorlova o	author
+12	tsoi lc	author
+12	patsopoulos na	author
+12	meyer te	author
+12	jung es	author
+12	rocanin-arjo a	author
+12	goldstein ji	author
+12	israel e	author
+12	pino-yanes m	author
+12	kiel dp	author
+12	lu x	author
+12	dastani z	author
+12	zhao sx	author
+12	goris a	author
+11	bolton kl	author
+11	hoglinger gu	author
+11	quan c	author
+11	anttila v	author
+11	connolly jj	author
+11	andiappan ak	author
+11	garcia-barcelo mm	author
+11	martinelli-boneschi f	author
+11	jones gt	author
+11	perez-palma e	author
+11	kiyotani k	author
+11	li c	author
+11	gormley p	author
+11	meder b	author
+11	xie t	author
+11	ferreira rc	author
+11	garner c	author
+11	gelernter j	author
+11	zeng z	author
+11	sung yj	author
+11	charles ba	author
+11	wain lv	author
+11	albertsen hm	author
+11	mclaren ce	author
+11	han j	author
+11	aschebrook-kilfoy b	author
+11	antunez c	author
+11	cordell hj	author
+11	figueiredo jc	author
+11	brown km	author
+11	de boer ys	author
+11	geller f	author
+11	desch kc	author
+11	phelan cm	author
+11	loo sk	author
+11	nievergelt cm	author
+11	hou l	author
+11	gusareva es	author
+11	bronson pg	author
+11	weiss fu	author
+11	kuo ph	author
+11	ligthart s	author
+11	surakka i	author
+11	renteria me	author
+11	rothenberg me	author
+11	aouizerat be	author
+11	barrett jc	author
+11	liang j	author
+11	whiffin n	author
+11	carty cl	author
+11	legge se	author
+11	melin bs	author
+11	giri a	author
+11	cho ys	author
+11	seppala i	author
+11	yashin ai	author
+11	diekstra fp	author
+11	kohli ma	author
+11	fernandez-navarro p	author
+11	dubinsky mc	author
+10	baranzini se	author
+10	moy ka	author
+10	leandro-garcia lj	author
+10	julia a	author
+10	walsh km	author
+10	chasman di	author
+10	winkelmann j	author
+10	xiong dh	author
+10	he l	author
+10	ulveling d	author
+10	smith dj	author
+10	urbanek m	author
+10	williams fm	author
+10	wuttke m	author
+10	yang l	author
+10	murea m	author
+10	crosslin dr	author
+10	chalasani n	author
+10	solouki am	author
+10	baron-cohen s	author
+10	warrington nm	author
+10	patin e	author
+10	rawofi l	author
+10	nakajima m	author
+10	maruthur nm	author
+10	wojczynski mk	author
+10	chen p	author
+10	kendler ks	author
+10	lasky-su j	author
+10	mattheisen m	author
+10	lin bd	author
+10	wang w	author
+10	sabatti c	author
+10	french jd	author
+10	boraska v	author
+10	chambers jc	author
+10	ovsyannikova ig	author
+10	gottlieb dj	author
+10	leblanc m	author
+10	mather ka	author
+10	cheng yc	author
+10	de vries ps	author
+10	nakayama a	author
+10	choi sh	author
+10	birlea sa	author
+10	zhao l	author
+10	png e	author
+10	raffield lm	author
+10	walford ga	author
+10	foo jn	author
+10	ibrahim-verbaas ca	author
+10	do cb	author
+10	kramer pl	author
+10	schott jm	author
+10	sotoodehnia n	author
+10	garcia-etxebarria k	author
+10	kim hj	author
+10	gialluisi a	author
+10	ward-caviness ck	author
+10	denny jc	author
+10	feenstra b	author
+10	senapati s	author
+10	wen w	author
+10	baik i	author
+10	reilly mp	author
+10	qu ls	author
+10	alemany s	author
+10	sun ld	author
+10	westerlind h	author
+10	mccormack m	author
+10	hsu yh	author
+9	zhang h	author
+9	bolton jl	author
+9	band g	author
+9	tabassum r	author
+9	schmit sl	author
+9	park ym	author
+9	schymick jc	author
+9	osman w	author
+9	radstake tr	author
+9	hanson rl	author
+9	chubb d	author
+9	morris ap	author
+9	behrens em	author
+9	martin nw	author
+9	tanaka t	author
+9	honne k	author
+9	scott lj	author
+9	elliott p	author
+9	yau ms	author
+9	mcardle pf	author
+9	styrkarsdottir u	author
+9	kou i	author
+9	musani sk	author
+9	wolpin bm	author
+9	edwards ac	author
+9	tin a	author
+9	lu y	author
+9	bierut lj	author
+9	sladek r	author
+9	tenesa a	author
+9	al safar hs	author
+9	hu q	author
+9	satake w	author
+9	kaplan rc	author
+9	lopez lm	author
+9	logue mw	author
+9	volpi s	author
+9	eyre s	author
+9	kim jj	author
+9	vacic v	author
+9	nanayakkara s	author
+9	yao sl	author
+9	aung t	author
+9	kumar v	author
+8	malik r	author
+8	sapkota y	author
+8	middelberg rp	author
+8	ritchie md	author
+8	fingerlin te	author
+8	fuchs o	author
+8	fridley bl	author
+8	kung aw	author
+8	wattacheril j	author
+8	uimari o	author
+8	barbalic m	author
+8	candille si	author
+8	klarin d	author
+8	jylhava j	author
+8	colodro-conde l	author
+8	vinayagamoorthy n	author
+8	sasayama d	author
+8	hatemi pk	author
+8	rudolph a	author
+8	endo c	author
+8	ong kk	author
+8	ridker pm	author
+8	palomba g	author
+8	van heel da	author
+8	davies g	author
+8	rasmussen-torvik lj	author
+8	mancikova v	author
+8	mahajan a	author
+8	ghassibe-sabbagh m	author
+8	butcher lm	author
+8	gieger c	author
+8	williams al	author
+8	porcu e	author
+8	van laarhoven a	author
+8	rajaraman p	author
+8	timpson nj	author
+7	springelkamp h	author
+7	kang tw	author
+7	chu ay	author
+7	debette s	author
+7	onengut-gumuscu s	author
+7	ji sg	author
+7	van hulzen kj	author
+7	lee jh	author
+7	abnet cc	author
+7	kim yj	author
+7	wang h	author
+7	bentham j	author
+7	hyperlipoproteinemia type ii	author, trait
+7	sucheston-campbell le	author
+7	adachi s	author
+7	pan l	author
+7	yamazaki k	author
+7	lopez s	author
+7	fernandez ca	author
+7	li q	author
+7	saxena r	author
+7	low sk	author
+7	oddsson a	author
+7	zeggini e	author
+7	cheong ka	author
+7	nagel m	author
+7	van den oord ej	author
+7	fan q	author
+7	davenport er	author
+7	swaminathan b	author
+7	hirota t	author
+7	traglia m	author
+7	kadalayil l	author
+7	kumasaka n	author
+7	argos m	author
+7	wolber le	author
+7	sim x	author
+7	dina c	author
+7	wang ks	author
+7	deming y	author
+7	easton df	author
+7	ferrucci l	author
+6	peters u	author
+6	jones av	author
+6	kulminski am	author
+6	burdon kp	author
+6	rietveld ca	author
+6	reveille jd	author
+6	arnaud-lopez l	author
+6	shu xo	author
+6	scerri ts	author
+6	pottier c	author
+6	ko a	author
+6	harold d	author
+6	noth i	author
+6	lill cm	author
+6	hu z	author
+6	waage j	author
+6	mcdaniel ld	author
+6	lee jy	author
+6	vaidyanathan u	author
+6	beaty th	author
+6	shiraishi k	author
+6	gao xr	author
+6	yu y	author
+6	kathiresan s	author
+6	cox dg	author
+6	plenge rm	author
+6	zheng hf	author
+6	weissglas-volkov d	author
+6	offenbacher s	author
+6	roselli c	author
+6	zhang xj	author
+6	graff m	author
+6	kim k	author
+6	schumacher fr	author
+6	dubois pc	author
+6	hromatka bs	author
+6	li x	author
+6	perry jr	author
+6	huang j	author
+6	hallberg p	author
+6	morris dl	author
+6	chung s	author
+6	macgregor s	author
+6	jain d	author
+6	tielbeek jj	author
+5	fornage m	author
+5	speed d	author
+5	power ra	author
+5	freedman bi	author
+5	chromosome x	author
+5	demirci fy	author
+5	su wh	author
+5	orr n	author
+5	zai cc	author
+5	malhotra ak	author
+5	ozel ab	author
+5	imamura m	author
+5	dewan at	author
+5	sun bb	author
+5	hinks a	author
+5	horikoshi m	author
+5	serie dj	author
+5	morgan md	author
+5	evangelou e	author
+5	brockschmidt ff	author
+5	burkhardt r	author
+5	kanai m	author
+5	iles mm	author
+5	monda kl	author
+5	milne rl	author
+5	scheetz te	author
+5	dudenkov tm	author
+5	liu h	author
+5	emilsson v	author
+5	distefano jk	author
+5	seshadri s	author
+5	sano m	author
+5	pardiñas af	author
+5	kemp jp	author
+5	verma ss	author
+5	cheng th	author
+5	todd ja	author
+5	lowe jk	author
+5	gu j	author
+5	langefeld cd	author
+5	metabolic syndrome x	author, trait
+5	ramsuran v	author
+4	cui r	author
+4	protein c	author
+4	rs2440154 e	author, variant
+4	rung j	author
+4	tang s	author
+4	savage je	author
+4	manousaki d	author
+4	yang jj	author
+4	chu x	author
+4	liu f	author
+4	del greco m f	author
+4	chromosome x	author
+4	briggs fb	author
+4	hill wd	author
+4	mangino m	author
+4	ahsan h	author
+4	kim sk	author
+4	haralambieva ih	author
+4	franklin cs	author
+4	ding k	author
+4	chen l	author
+4	brandl ej	author
+4	takeuchi f	author
+4	inouye m	author
+4	cortes a	author
+4	khor cc	author
+4	qi g	author
+4	protein s	author
+4	hohman tj	author
+4	demirkan a	author
+4	arnett dk	author
+4	timmann c	author
+4	fletcher o	author
+4	cousminer dl	author
+4	guffanti g	author
+4	pei yf	author
+4	michailidou k	author
+4	estrada k	author
+4	curtis j	author
+4	li yr	author
+4	cai dc	author
+4	athanasiadis g	author
+4	bonder mj	author
+4	coleman ea	author
+4	sun bb	author
+4	liu w	author
+4	van der valk rj	author
+4	shrestha s	author
+4	ruth ks	author
+4	justice ae	author
+4	lee m	author
+4	fogh i	author
+4	eriksson n	author
+4	sleiman p	author
+4	raychaudhuri s	author
+4	grallert h	author
+4	almli lm	author
+4	arking de	author
+4	kong m	author
+4	purcell sm	author
+4	sebastiani p	author
+4	ling h	author
+4	meyre d	author
+4	nelson d	author
+4	van der harst p	author
+4	naj ac	author
+4	ostrom qt	author
+4	tantisira kg	author
+4	long j	author
+4	ramdas wd	author
+4	kettunen j	author
+4	purrington ks	author
+4	turley p	author
+4	nicolas a	author
+3	pyun ja	author
+3	asgari mm	author
+3	feitosa mf	author
+3	nakamura m	author
+3	hayes mg	author
+3	cruchaga c	author
+3	brevik ej	author
+3	wu y	author
+3	pankratz n	author
+3	li h	author
+3	fragile x	author
+3	kolz m	author
+3	kong a	author
+3	yellin jl	author
+3	petukhova l	author
+3	scott ra	author
+3	zhang q	author
+3	nelson pt	author
+3	tapper w	author
+3	ng e	author
+3	williams sr	author
+3	galanter jm	author
+3	loth dw	author
+3	suchindran s	author
+3	strange a	author
+3	zhou l	author
+3	kristiansson k	author
+3	baurecht h	author
+3	waterworth dm	author
+3	khor ss	author
+3	nyholt dr	author
+3	figueroa jd	author
+3	kawashima m	author
+3	thorleifsson g	author
+3	nalls ma	author
+3	miki d	author
+3	choquet h	author
+3	jiang x	author
+3	domarkiene i	author
+3	gondalia r	author
+3	petukhova l	author
+3	grassi ma	author
+3	meng w	author
+3	guan w	author
+3	dai x	author
+3	bacchelli e	author
+3	kamboh mi	author
+3	protein s	author
+3	wu c	author
+3	de moor mh	author
+3	zhong xl	author
+3	tardif jc	author
+3	surendran p	author
+3	kwak sh	author
+3	tereshchenko lg	author
+3	ng mc	author
+3	cooper gm	author
+3	perez-andreu v	author
+3	lencer r	author
+3	cipriani v	author
+3	horinouchi m	author
+3	zhou y	author
+3	sun et al	author
+3	n'diaye a	author
+3	mcgovern dp	author
+3	carmona fd	author
+3	allen nb	author
+3	jing j	author
+3	oncostatin m	author
+3	oexle k	author
+3	tang xf	author
+3	delorenze gn	author
+3	winkler tw	author
+3	stacey sn	author
+3	voruganti vs	author
+3	astle wj	author
+3	wang m	author
+3	ehret gb	author
+3	yeo a	author
+3	schneider bp	author
+3	wheeler e	author
+3	ikram ma	author
+3	khan s	author
+3	zheng hf	author
+3	tanaka t	author
+3	mckay jd	author
+3	fung hc	author
+3	gorski m	author
+3	germain m	author
+3	wanga v	author
+3	duncan l	author
+3	repulsive guidance molecule b	author
+3	hor h	author
+3	hobbs bd	author
+3	treviño lr	author
+3	jun g	author
+3	pharoah pd	author
+3	yan q	author
+3	lunetta kl	author
+3	chang d	author
+3	benyamin b	author
+3	cerhan jr	author
+3	barber mj	author
+3	hosoda y	author
+3	vishal m	author
+3	ramírez j	author
+3	lam m	author
+3	fu yp	author
+3	luciano m	author
+3	sandhu ms	author
+3	galesloot te	author
+3	edwards tl	author
+3	jacobs lc	author
+3	soler artigas m	author
+3	nielsen jb	author
+3	xu h	author
+3	spada j	author
+3	merkel pa	author
+3	factor ix	author
+2	pereyra f	author
+2	parham lr	author
+2	kugathasan s	author
+2	moore cb	author
+2	hysi pg	author
+2	pande m	author
+2	broce i	author
+2	garcia-closas m	author
+2	erickson sw	author
+2	dehghan a	author
+2	teichert m	author
+2	protein z	author
+2	granada m	author
+2	li z	author
+2	aponte jl	author
+2	shiga y	author
+2	franke a	author
+2	höglinger gu	author
+2	vijai j	author
+2	selenoprotein p	author
+2	levy d	author
+2	gao x	author
+2	song iw	author
+2	köhler a	author
+2	ebejer jl	author
+2	child iq	author
+2	diabetes mellitus type i	author, trait
+2	heap ga	author
+2	conde l	author
+2	cook jp	author
+2	tao s	author
+2	syndrome, metabolic x	author, trait
+2	chang lc	author
+2	beecham ah	author
+2	sun j	author
+2	moayyeri a	author
+2	haas me	author
+2	sanna s	author
+2	kikuchi m	author
+2	reaven syndrome x	author, trait
+2	demenais f	author
+2	erdmann j	author
+2	cirulli et	author
+2	scelsi ma	author
+2	van loon j	author
+2	han y	author
+2	tikkanen e	author
+2	schormair b	author
+2	morris ja	author
+2	liao j	author
+2	sniekers s	author
+2	matsukura m	author
+2	furney sj	author
+2	seldin mf	author
+2	hou s	author
+2	stahl ea	author
+2	yang w	author
+2	substance p	author
+2	dube mp	author
+2	insulin resistance syndrome x	author, trait
+2	han jw	author
+2	liu c	author
+2	lambert jc	author
+2	de jager pl	author
+2	cooper jd	author
+2	lutz sm	author
+2	aslibekyan s	author
+2	phospholipase c	author
+2	hoffman tj	author
+2	keene kl	author
+2	tedja ms	author
+2	shameer k	author
+2	seielstad m	author
+2	li y	author
+2	wang l.	author
+2	chan ky	author
+2	mero il	author
+2	zhernakova a	author
+2	elliott lt	author
+2	liang y	author
+2	zhang s	author
+2	otowa t	author
+2	hirata t	author
+2	steinthorsdottir v	author
+2	jiang x	author
+2	lango allen h	author
+2	stevens kn	author
+2	schauberger em	author
+2	andlauer tf	author
+2	jiang dk	author
+2	scott ra	author
+2	bahlo m	author
+2	pankow js	author
+2	southam l	author
+2	fejerman l	author
+2	irvin mr	author
+2	chan y	author
+2	zhang l	author
+2	lan q	author
+2	jahanshad n	author
+2	rueedi r	author
+2	van rheenen w	author
+2	liu jz	author
+2	hom g	author
+2	lessard cj	author
+2	liao sy	author
+2	kottyan lc	author
+2	ellinor pt	author
+2	milton jn	author
+2	chen h	author
+2	astle wj	author
+2	mosaic loss of chromosome y	author, trait
+2	elmore jr	author
+2	kraja at	author
+2	mitchell ja	author
+2	diabetes mellitus, type i	author, trait
+2	lee mk	author
+2	ruamviboonsuk p	author
+2	heparin cofactor ii	author
+2	boueiz a	author
+2	corvol h	author
+2	clark sl	author
+2	yang b	author
+2	solovieff n	author
+2	kong m	author
+2	marioni re	author
+2	idiopathic pd	author, trait
+2	zengini e	author
+2	hagenaars sp	author
+2	chromogranin a	author
+2	simón-sánchez j	author
+2	barnett gc	author
+2	xu c	author
+2	hakonarson h	author
+2	lipoprotein a	author
+2	complex i	author
+2	zhang r	author
+2	dysmetabolic syndrome x	author, trait
+2	naitza s	author
+2	cui q	author
+2	hofer p	author
+2	figueiredo jc	author
+2	moffat et al	author
+2	kiryluk k	author
+2	wang q	author
+2	finkel th	author
+2	mayerle j	author
+2	ilboudo y	author
+2	lee j	author
+2	hu l	author
+2	keller m	author
+2	lindström s	author
+2	willer cj	author
+2	stuart pe	author
+2	wray nr	author
+2	dorajoo r	author
+2	nicoletti p	author
+2	astrocytomas, grade iv	author, trait
+2	scott lj	author
+2	davis jp	author
+2	weizman a	author
+2	neuromedin u	author
+2	vit c	author
+2	steri m	author
+2	gu j	author
+2	cathepsin a	author
+2	type ii	author
+2	tgfbr3 .	author
+2	cui b	author
+2	kopplin lj	author
+2	yang q	author
+2	kubo ra	author
+2	velez edwards dr	author
+2	germain m	author
+2	goyal rk	author
+2	xu w	author
+2	springelkamp h	author
+2	chung cm	author
+2	márquez a	author
+2	arking de	author
+2	laville v	author
+2	alarcón-riquelme me	author
+2	hebbar p	author
+2	dong j	author
+2	oryoji d	author
+2	medici m	author
+2	yang sk	author
+2	liu c	author
+2	wang tj	author
+2	chen z	author
+2	stanne tm	author
+2	kouri n	author
+2	song yq	author
+2	an atlas of	author
+2	go mj	author
+2	mather ka	author
+2	yu xq	author
+2	response to	author
+2	rüeger s	author
+2	chahal hs	author
+2	yasuda k	author
+2	corvol h	author
+2	samani nj	author
+2	fischer a	author
+2	huo d	author
+2	myers ra	author
+2	alloimmunization response to pregnancy (hla class i)	author, trait
+2	liu y	author
+2	wang j	author
+2	ochi h	author
+2	wild ps	author
+2	lemaitre rn	author
+2	anderson d	author
+2	aminkeng f	author
+2	serum troponin i	author
+2	factor x	author
+2	beecham gw	author
+2	reyes-gibby cc	author
+2	chan jp	author
+2	wijsman em	author
+2	diabetes mellitus, type ii	author, trait
+2	rs1483898 a	author, variant
+2	shen x	author
+2	lee jc	author
+2	thomas g	author
+2	vijayakrishnan j	author
+2	ruderfer dm	author
+2	kerns sl	author
+2	davies g	author
+2	jia x	author
+2	chen y	author
+2	kamatani y	author
+2	serum amyloid p	author
+2	dichgans m	author
+2	long qt	author
+2	harris se	author
+2	comuzzie ag	author
+2	factor v	author
+2	klimentidis yc	author
+2	sprooten e	author
+2	trajanoska k	author
+2	yang j	author
+2	tomer y	author
+2	hatzikotoulas k	author
+2	turnbull c	author
+2	lee yc	author
+2	li d	author
+2	plagnol v	author
+1	freilinger t	author
+1	glp-1 ra	author
+1	winham sj	author
+1	cathepsin e	author
+1	hnrnp u	author
+1	spain sl	author
+1	hiura y	author
+1	coagulation factor xi	author
+1	barbalic m	author
+1	granular corneal dystrophy type ii	author
+1	malik r	author
+1	loc400706 :	author
+1	pitch m	author
+1	arterial ph	author
+1	qiongshi lu	author
+1	allepe c	author
+1	kariuki sn	author
+1	bouatia-naji n	author
+1	clifford rj	author
+1	webster ja	author
+1	rs34971514  *	author, variant
+1	urban tj	author
+1	knockout mice and protein x	author
+1	coagulation factor v	author
+1	yucesoy b	author
+1	jin g	author
+1	wain lv	author
+1	rs7964241 e	author, variant
+1	keller mf	author
+1	activin a	author
+1	poirier jg	author
+1	chronic my	author
+1	glaucoma aung t	author
+1	ache rs id	author
+1	bradfield jp	author
+1	zhang w.	author
+1	kuhnisch j	author
+1	bipolar type ii	author
+1	il-6 r	author
+1	compound k	author
+1	jiao h	author
+1	beta-hexosaminidase a	author
+1	sha q	author
+1	need ac	author
+1	prostaglandin d	author
+1	de vivo i	author
+1	src homology 2 domain containing e	author
+1	teslovich tm	author
+1	kottgen a	author
+1	psoriatic arthritis il 12 r	author
+1	clark la	author
+1	stage i	author
+1	emilsson v	author
+1	immunoglobulin a	author
+1	neuropeptide y	author
+1	lin x	author
+1	zlojutro m	author
+1	leslie ej	author
+1	davis s	author
+1	akerblom a	author
+1	influenza a	author
+1	nakanishi h	author
+1	broderick p	author
+1	choe ek	author
+1	"protein x"	author
+1	astle w	author
+1	il1rapl1 **	author
+1	ampa r	author
+1	christopher l	author
+1	rs16953002 i	author, variant
+1	van setten j	author
+1	liang x	author
+1	nudel r	author
+1	wells qs	author
+1	neuromedin u	author
+1	lee yj	author
+1	persad pj	author
+1	phipps ai	author
+1	nakada ta	author
+1	chio a	author
+1	ozeki t	author
+1	rs9536314 ù	author, variant
+1	chinese bd	author
+1	mosley jd	author
+1	traylor m	author
+1	breast cancer a	author
+1	selenoprotein p	author
+1	chenoweth mj	author
+1	chen w	author
+1	integrin subunit alpha l	author
+1	joshi ad	author
+1	henrion my	author
+1	cha pc	author
+1	genotype cc	author
+1	myostatin m	author
+1	adams jn	author
+1	breast cancer rs	author
+1	minster rl	author
+1	koster r	author
+1	major jm	author
+1	manning k	author
+1	evangelou ε	author
+1	loos rj	author
+1	muscle hypertroph y	author
+1	luminal a	author
+1	kirkpatrick rm	author
+1	down sy	author
+1	coagulation factor xa	author
+1	filamin c	author
+1	lesseur c	author
+1	moffatt mf	author
+1	vascular endothelial growth factor a	author
+1	lópez-mejías r	author
+1	uno s	author
+1	gaudet mm	author
+1	lovely rs	author
+1	chu m	author
+1	adult-onset citrullinemia type ii	author
+1	ollila hm	author
+1	mack s	author
+1	filter results by	author
+1	lu at	author
+1	lpa a	author
+1	ikram mk	author
+1	hobbs bd	author
+1	ueta m	author
+1	liu jz	author
+1	beta or	author
+1	liou yj	author
+1	wood ar	author
+1	beall cm	author
+1	salonen jt	author
+1	chu a	author
+1	obesity rs	author
+1	mhc class i	author
+1	neuropeptide y	author
+1	atpase h  transporting v1 subunit a	author
+1	dunlop mg	author
+1	chromosome x	author
+1	jiang dk	author
+1	deng c	author
+1	davies rw	author
+1	link e	author
+1	almgren p	author
+1	kanazawa t	author
+1	cathepsin d	author
+1	chen dt	author
+1	lee et al	author
+1	genetics of rheumatoid arthritis co	author
+1	age onset ad	author
+1	cd2ap epigenetic ad	author
+1	timpson nj	author
+1	onishi h	author
+1	heart attac k	author
+1	cholesterol a	author
+1	o'brien t.	author
+1	nucks1 and pd	author
+1	larsson m	author
+1	transforming growth factor beta 1 i	author
+1	benke ks	author
+1	ace id	author
+1	get list of snps by gene id	author
+1	ablim1 x nr	author
+1	ace dd	author
+1	oh jh	author
+1	pezzolesi mg	author
+1	rhodes cj	author
+1	voight bf	author
+1	coagulation factor xi	author
+1	montgomery g	author
+1	coagulation factor x	author
+1	creatine kinase m	author
+1	mucopolysaccharidosis type i	author
+1	meguro a	author
+1	chen pl	author
+1	*hoffmann tj	author
+1	chauhan l	author
+1	xiao y	author
+1	eitel i	author
+1	barrett jh	author
+1	hla dq	author
+1	avery cl	author
+1	warrier v	author
+1	mega-analysis of	author
+1	lee jk	author
+1	pillas d	author
+1	zhang m	author
+1	gregson cl	author
+1	trynka g	author
+1	ng cc	author
+1	family with sequence similarity 237 member a	author
+1	howard dm	author
+1	lipid ms	author
+1	pardinas af	author
+1	hiv-1, resistance to	author
+1	pasman ja	author
+1	kim t	author
+1	diabetes mellitus type i	author, trait
+1	troponin t	author
+1	hinch ag	author
+1	hager j	author
+1	nuinoon m	author
+1	17658951 scuteri a	author, pmid
+1	age at onset ad	author
+1	hardin m	author
+1	gao b	author
+1	low qi	author
+1	shaffer jr	author
+1	hu z	author
+1	pkhd1 \	author
+1	waist-to-hip ratio adjusted for body mass index (whradjbmi )	author
+1	zhagn w	author
+1	skewed x	author
+1	byrne em	author
+1	mangold e	author
+1	vıtamın a	author
+1	tumor necrosis factor-like weak inducer of apoptosis (	author
+1	van der meer d	author
+1	indian telugu from the uk	author
+1	renauer pa	author
+1	factor  xi	author
+1	chung sa	author
+1	kelly tn	author
+1	lam m	author
+1	grch37.p13 chr x	author
+1	laufer va	author
+1	pare g	author
+1	han b	author
+1	han chinese t	author
+1	componunt k	author
+1	tang e	author
+1	kim sk	author
+1	vdr rs731236 tt	author, variant
+1	rivera nv	author
+1	hyde cl	author
+1	manning k	author
+1	dunstan sj	author
+1	nolte im	author
+1	nair rp	author
+1	lange em	author
+1	yengo l	author
+1	lipid storage my	author
+1	wei q	author
+1	schuh-huerta sm	author
+1	saito t	author
+1	shan j	author
+1	schumann g	author
+1	parkes m	author
+1	guggenheim ja	author
+1	danik js	author
+1	moore kn	author
+1	frayling tm	author
+1	jiang j	author
+1	lu w	author
+1	fars2 \	author
+1	fox er	author
+1	minica cc	author
+1	nebel a	author
+1	freudenberg j	author
+1	rs1483898 a	author, variant
+1	teupser d	author
+1	tang et al	author
+1	wiemels jl	author
+1	o'mara ta	author
+1	bonfiglio f	author
+1	cd6 ms	author
+1	hemoglobin s	author
+1	cathepsin k	author
+1	sobrin l	author
+1	matesanz f	author
+1	rs3790844 (	author, variant
+1	bergen se	author
+1	juvenile rheumatoid a.	author, trait
+1	emilsson v et al	author
+1	myc a	author
+1	collagen iv	author
+1	kim s	author
+1	konte b	author
+1	ma y	author
+1	rs34445878 \	author, variant
+1	il-1-related r	author
+1	clancy rm	author
+1	jallow m	author
+1	bishop dt	author
+1	aberg k	author
+1	ravenhall m	author
+1	verma ss	author
+1	ahola-olli av	author
+1	complement factor d	author
+1	jin y	author
+1	watch tv	author
+1	getting up	author
+1	location chromosome 1: 186,311,652-186,375,693 r	region, author, variant
+1	lee jy	author
+1	thye t	author
+1	zeng c	author
+1	drake ka	author
+1	raf nr	author
+1	allele c	author
+1	lohmann k	author
+1	barrett et al	author
+1	newton-cheh c	author
+1	ruark e	author
+1	dahlin a	author
+1	earp ma	author
+1	hemophilia b	author
+1	broer et al	author
+1	zbtb40 aa	author
+1	factor x	author
+1	integrin alpha l	author
+1	armstrong dl	author
+1	inhba x nr	author
+1	day fr	author
+1	zhang ce	author
+1	kunkle bw	author
+1	dantsev is	author
+1	rothwell s	author
+1	pajewski nm	author
+1	genome-wide association and functional studies identify 46 novel loci for alcohol consumption and suggest common genetic mechanisms with neuropsychiatric disorders (ppr:ppr60357)  this article is a preprint: it has not been peer-reviewed.  abstract citations related articles data bioentities external links evangelou e	author
+1	castaño-betancourt mc	author
+1	factor v	author
+1	*okbay a	author
+1	phospholipase d	author
+1	46 x	author
+1	Östensson m	author
+1	daya m	author
+1	van koolwijk lm	author
+1	mezzavilla m	author
+1	blood rh	author
+1	scuteri a	author
+1	environmental tobacco smoke (	author
+1	michailidou k orcid profile, lindström s, dennis j, beesley j, hui s, kar s, lemaçon a, soucy p, glubb d, rostamianfar a, bolla mk, wang q, tyrer j, dicks e, lee a, wang z, allen j, keeman r, eilber u, french jd, qing chen x, fachal l, mccue k, mccart reed ae orcid profile, ghoussaini m, carroll js, jiang x, finucane h, adams m, adank ma, ahsan h, aittomäki k, anton-culver h, antonenkova nn, arndt v, aronson kj, arun b, auer pl, bacot f, barrdahl m, baynes c, beckmann mw, behrens s, benitez j, bermisheva m, bernstein l, blomqvist c, bogdanova nv, bojesen se, bonanni b, børresen-dale al, brand js orcid profile, brauch h, brennan p, brenner h orcid profile, brinton l, broberg p, brock iw, broeks a, brooks-wilson a, brucker sy, brüning t, burwinkel b, butterbach k, cai q, cai h, caldés t, canzian f orcid profile, carracedo a, carter bd, castelao je, chan tl, david cheng ty, seng chia k, choi jy, christiansen h, clarke cl, nbcs collaborators, collée m, conroy dm, cordina-duverger e, cornelissen s, cox dg, cox a, cross ss, cunningham jm, czene k, daly mb, devilee p orcid profile, doheny kf, dörk t, dos-santos-silva i, dumont m, durcan l, dwek m, eccles dm, ekici ab, eliassen ah, ellberg c orcid profile, elvira m, engel c, eriksson m, fasching pa, figueroa j, flesch-janys d, fletcher o, flyger h, fritschi l, gaborieau v, gabrielson m orcid profile, gago-dominguez m, gao yt, gapstur sm, garcía-sáenz ja orcid profile, gaudet mm, georgoulias v, giles gg, glendon g, goldberg ms, goldgar de, gonzález-neira a, grenaker alnæs gi, grip m, gronwald j, grundy a, guénel p, haeberle l, hahnen e, haiman ca, håkansson n, hamann u, hamel n, hankinson s, harrington p, hart sn, hartikainen jm, hartman m, hein a, heyworth j, hicks b, hillemanns p, ho dn, hollestelle a, hooning mj, hoover rn, hopper jl, hou mf, hsiung cn, huang g, humphreys k, ishiguro j, ito h, iwasaki m, iwata h, jakubowska a, janni w, john em, johnson n, jones k, jones m, jukkola-vuorinen a, kaaks r, kabisch m, kaczmarek k, kang d, kasuga y, kerin mj, khan s, khusnutdinova e, kiiski ji, kim sw, knight ja, kosma vm, kristensen vn, krüger u, kwong a, lambrechts d, le marchand l, lee e, lee mh, lee jw, neng lee c, lejbkowicz f, li j, lilyquist j, lindblom a, lissowska j, lo wy, loibl s, long j, lophatananon a, lubinski j, luccarini c, lux mp, ma esk, macinnis rj orcid profile, maishman t, makalic e, malone ke, kostovska im, mannermaa a, manoukian s, manson je, margolin s, mariapun s, martinez me, matsuo k, mavroudis d, mckay j, mclean c orcid profile, meijers-heijboer h, meindl a, menéndez p, menon u orcid profile, meyer j, miao h, miller n, taib nam, muir k, mulligan am, mulot c, neuhausen sl, nevanlinna h, neven p, nielsen sf, noh dy, nordestgaard bg, norman a, olopade oi, olson je, olsson h, olswold c, orr n, pankratz vs, park sk, park-simon tw, lloyd r, perez jia, peterlongo p, peto j, phillips ka, pinchev m, plaseska-karanfilska d, prentice r, presneau n, prokofyeva d, pugh e, pylkäs k, rack b, radice p, rahman n orcid profile, rennert g, rennert hs, rhenius v, romero a orcid profile, romm j, ruddy kj, rüdiger t, rudolph a, ruebner m, rutgers ejt, saloustros e, sandler dp, sangrajrang s, sawyer ej, schmidt df, schmutzler rk, schneeweiss a, schoemaker mj, schumacher f, schürmann p, scott rj, scott c, seal s, seynaeve c, shah m, sharma p, shen cy, sheng g, sherman me, shrubsole mj, shu xo orcid profile, smeets a, sohn c, southey mc, spinelli jj, stegmaier c, stewart-brown s, stone j orcid profile, stram do, surowy h, swerdlow a, tamimi r, taylor ja, tengström m, teo sh, beth terry m, tessier dc, thanasitthichai s, thöne k, tollenaar raem, tomlinson i, tong l, torres d orcid profile, truong t, tseng cc, tsugane s orcid profile, ulmer hu, ursin g orcid profile, untch m, vachon c, van asperen cj, van den berg d, van den ouweland amw, van der kolk l, van der luijt rb, vincent d, vollenweider j, waisfisz q, wang-gohrke s, weinberg cr, wendt c, whittemore as, wildiers h, willett w, winqvist r, wolk a, wu ah, xia l, yamaji t, yang xr, har yip c, yoo ky, yu jc, zheng w, zheng y, zhu b, ziogas a, ziv e, abctb investigators, confab/aocs investigators, lakhani sr, antoniou ac, droit a, andrulis il, amos ci, couch fj, pharoah pdp, chang-claude j, hall p, hunter dj, milne rl, garcía-closas m, schmidt mk, chanock sj, dunning am orcid profile, edwards sl, bader gd orcid profile, chenevix-trench g, simard j, kraft p, easton df	author
+1	amin n	author
+1	syndrome x	author
+1	visconti a	author
+1	tyrosine-protein phosphatase f	author
+1	family with sequence similarity 53 member b	author
+1	bisphenol a	author
+1	sandholm n	author
+1	kim yk	author
+1	jorgenson e	author
+1	imboden m	author
+1	factor xa	author
+1	ali m	author
+1	vtiamin b	author
+1	meyers jl	author
+1	lymphotropic virus type iii infections human t	author, trait
+1	breast cancer fok i	author
+1	rung j	author
+1	tin a	author
+1	shen l	author
+1	kimura m	author
+1	tansey ke	author
+1	langefeld c	author
+1	sun l	author
+1	protein kinase c	author
+1	bacelis j	author
+1	prasad g	author
+1	2 hr	author
+1	long qt	author
+1	metabolic syndrome x	author, trait
+1	xiao li	author
+1	association analyses of	author
+1	alberts r	author
+1	valdes am	author
+1	davies g	author
+1	draisma hh	author
+1	randall jc	author
+1	wilk jb	author
+1	ising m	author
+1	cathepsin o	author
+1	cao l	author
+1	avramopoulos d	author
+1	van laer l	author
+1	serum troponin i	author
+1	response to s	author
+1	gckr, type 2 dm	author
+1	howard de	author
+1	dijkstra ae	author
+1	lind pa	author
+1	limou s	author
+1	rask-andersen m	author
+1	(coagulation factor xa	author
+1	mychaleckyj jc	author
+1	osman w	author
+1	type 2 dm	author
+1	kunkle bw	author
+1	lipoprotein a	author
+1	ledda m	author
+1	zhou h	author
+1	saxena r	author
+1	chen lu	author
+1	diabetes ii	author
+1	adhikari k	author
+1	neuromedin b	author
+1	aldolase c	author
+1	interleukin 23 a	author
+1	immunoglobulin a	author
+1	butcher lm	author
+1	cytochrome c	author
+1	pattaro c	author
+1	weiss rb	author
+1	cd2ap methylation ad	author
+1	lettre g	author
+1	sdc2 =	author
+1	bossini-castillo l	author
+1	gong j	author
+1	petersen gm	author
+1	borghese b	author
+1	jain et al	author
+1	hla c	author
+1	lipid or	author
+1	nelson cp	author
+1	type ii	author
+1	meziane i	author
+1	fine-mapping of an expanded set of	author
+1	il 36 ra	author
+1	chr y	author
+1	rs6025 gg ga aa	author, variant
+1	*chromosome y	author
+1	lesch kp	author
+1	bisphenol a	author
+1	journal of	author
+1	guo w	author
+1	seleno protein p	author
+1	almoguera b	author
+1	pander j	author
+1	f9 haemophilia b	author
+1	gasdermin d	author
+1	yengo l	author
+1	psoriatic arthritis nf	author
+1	mitchell gf	author
+1	chen d	author
+1	adeyemo a	author
+1	oncostatin m	author
+1	fibrinopeptide a	author
+1	castaldi pj	author
+1	chen y	author
+1	onze loci com novas associações genéticas reprodutíveis com risco de doença alérgica.- autor: ferreira ma	author
+1	loomis sj	author
+1	factor i	author
+1	smolonska j	author
+1	taylor ke	author
+1	hu et al	author
+1	zhan m	author
+1	genome-wide association study of serious blistering skin rash caused by	author
+1	mmol l	author
+1	"hypospadius "	author
+1	yeda wu	author
+1	vatamin c	author
+1	saf a	author
+1	trzaskowski m	author
+1	cheng th	author
+1	agtr1 a	author
+1	xue a	author
+1	raj t	author
+1	filamin a	author
+1	liu j	author
+1	sun et al	author
+1	mushiroda t	author
+1	meta-analysis of genome-wide association studies for height and body mass index in	author
+1	amare at	author
+1	collagen type i	author
+1	wu s	author
+1	dolmans gh	author
+1	{{ name }}	author
+1	van zuydam nr	author
+1	drago a	author
+1	type ii dm	author
+1	cathepsin d	author
+1	lin hj	author
+1	fln a	author
+1	nicolas a	author
+1	diabetes mellitus tipo ii	author
+1	kanetsky pa	author
+1	*"prostate "	author
+1	deloukas p	author
+1	fritsche lg	author
+1	jain d	author
+1	williams fm	author
+1	morey ra	author
+1	rs756605 c	author, variant
+1	monoamine oxidase a	author
+1	prins bp	author
+1	shin et al	author
+1	deng x	author
+1	cornes bk1, khor cc, nongpiur me, xu l, tay wt, zheng y,	author
+1	mullin bh	author
+1	aragam n	author
+1	terzikhan n	author
+1	factor v	author
+1	heinzen el	author
+1	lane jm	author
+1	wang ko	author
+1	awata t	author
+1	age oneset ad	author
+1	kaspaz 3 a	author
+1	hyperlipoproteinemia type v	author
+1	cooke bailey jn	author
+1	klein ap	author
+1	bis jc	author
+1	ankyrin b	author
+1	galván-femenía i	author
+1	lotta la	author
+1	early onset mi	author
+1	zhu z	author
+1	"rs1800012 "	author, variant
+1	simpson cl	author
+1	tang w	author
+1	gateva v	author
+1	sun et al	author
+1	ahmeti kb	author
+1	goto a	author
+1	snps passing qc	author
+1	thompson ea	author
+1	jöckel kh	author
+1	kim kw	author
+1	weedon mn	author
+1	wang y	author
+1	"xist "	author
+1	petridis c	author
+1	age-at-onset ad	author
+1	perry jr	author
+1	rs3096702 32192331 aa	author, variant
+1	hemoglobin f	author, trait
+1	receptor-type tyrosine-protein phosphatase f	author
+1	evangelou e	author
+1	esparza-gordillo j	author
+1	hepetatis b	author
+1	haga s	author
+1	johnson eo	author
+1	wei wh	author
+1	type 2 diabetes protein kinase c	author
+1	yang x	author
+1	fatty acid-binding protein, intestinal, polymorphism of	author
+1	cho mh	author
+1	chd mi	author
+1	heterodimeric class ii	author
+1	henrion m	author
+1	btbd11 *	author
+1	short qt	author
+1	kl vs	author
+1	jeff jm	author
+1	give up	author
+1	ptgs2 in oa	author
+1	cooper jd	author
+1	zhu et al	author
+1	byun j	author
+1	pirastu n	author
+1	breast ca	author
+1	ober c	author
+1	hoffmann tj	author
+1	garcia-barcelo mm	author
+1	schrijvers em	author
+1	ikeda m	author
+1	vandermeer d	author
+1	relapsing-remitting ms	author
+1	li qs	author
+1	massey j	author
+1	nucks1  pd	author
+1	interleukin-6 m	author
+1	hla class ii	author
+1	protein c	author
+1	psoriasis tj	author
+1	alliey-rodriguez n	author
+1	lane j	author
+1	carboxypeptidase e	author
+1	duerr rh	author
+1	loss of y	author
+1	wright dj	author
+1	gestational hy	author
+1	chromosome y	author
+1	zheng w	author
+1	xue a	author
+1	kakuta y	author
+1	qi h	author
+1	hysi et al	author
+1	holiday et al	author
+1	cha s	author
+1	allen ek	author
+1	slager sl	author
+1	v-type proton atpase subunit f	author
+1	zillikens mc	author
+1	heard-costa nl	author
+1	al olama aa	author
+1	epilepsy rs	author
+1	chung ge	author
+1	cathepsin b	author
+1	incretin ]	author
+1	factor ix	author
+1	genotype gg	author
+1	orozco g	author
+1	stanescu hc	author
+1	sulem p	author
+1	prins et al	author
+1	köttgen a	author
+1	mead s	author
+1	levy d	author
+1	mcrae jf	author
+1	beecham ah	author
+1	dyrk1a in ad	author
+1	resting qt	author
+1	karns r	author
+1	day fr	author
+1	morris j	author
+1	nishizawa d	author
+1	kim dk	author
+1	kuiper jj	author
+1	pardinas af	author
+1	selenoprotein p	author
+1	protein s	author
+1	hair c	author
+1	troyer jl	author
+1	diabetic nephropathy aa	author
+1	zuo l	author
+1	sun b	author
+1	shi y	author
+1	sanchez-roige s	author
+1	helgason h	author
+1	serum fe	author
+1	25 oh d	author
+1	sarig o	author
+1	matrix metalloproteinase i	author
+1	haemophilia b	author
+1	orexin a	author
+1	bleeding risk due to factor c	author
+1	gudbjartsson df	author
+1	de jager pl	author
+1	'efo_0007204 '	author, trait
+1	howard dm	author
+1	selenoprotein p	author
+1	sharma a	author
+1	diabetes ii	author
+1	liu m	author
+1	lee jc	author
+1	zhu z	author
+1	lambert jc	author
+1	troponin i	author
+1	strep th	author
+1	fung hc	author
+1	chromogranin b	author
+1	tang wh	author
+1	hemophilia b	author
+1	sung yj	author
+1	peng c	author
+1	hackinger s	author
+1	ferkingstad e	author
+1	ellinghaus e	author
+1	long qt	author
+1	urolithin a	author
+1	laisk t	author
+1	pichler i	author
+1	factor ii	author
+1	il6 gg	author
+1	tomlinson ip	author
+1	childhood iq	author
+1	arnett et al	author
+1	rubicz r	author
+1	kinnersley b	author
+1	wrigh dj	author
+1	gasdermin a	author
+1	raginis-zborowska a	author
+1	brandler wm	author
+1	ogura y	author
+1	nakabayashi k	author
+1	li wd	author
+1	hwang jy	author
+1	df -h	author
+1	papassotiropoulos a	author
+1	takahashi m	author
+1	kunz m	author
+1	cooper gm	author
+1	akiyama m	author
+1	class ii	author
+1	cyclin h	author
+1	su w	author
+1	sinner mf	author
+1	complement factor p	author
+1	aung  t.	author
+1	manning k	author
