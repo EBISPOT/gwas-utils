@@ -57,7 +57,7 @@ while true; do
         break
     fi
 done
-sleep 5m
+sleep 30m
 
 # 7. Check if the file is actually an svg:
 if [[ ! -f ${dataFolder}/${fileName} ]]; then 
