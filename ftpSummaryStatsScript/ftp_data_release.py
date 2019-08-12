@@ -5,6 +5,7 @@ import argparse
 import subprocess
 from subprocess import Popen, PIPE
 from datetime import date
+import re
 
 import DBConnection
 
@@ -28,6 +29,24 @@ class summaryStatsFolders(object):
                             AND S.FULL_PVALUE_SET = 1 
                             AND H.IS_PUBLISHED = 1 
                       '''
+
+    # Query to fetch study related info to find out why a folder is unexpected:
+    extractStudyInfo = '''
+        SELECT REPLACE(A.FULLNAME_STANDARD, ' ', '') AS AUTHOR,
+          P.PUBMED_ID,
+          S.ACCESSION_ID,
+          S.FULL_PVALUE_SET,
+          HK.IS_PUBLISHED,
+          HK.CATALOG_UNPUBLISH_DATE
+        FROM STUDY S,
+            HOUSEKEEPING HK,
+            PUBLICATION P,
+            AUTHOR A
+        WHERE ACCESSION_ID in ({})
+          AND HK.ID = S.HOUSEKEEPING_ID
+          AND S.PUBLICATION_ID = P.ID
+          AND P.FIRST_AUTHOR_ID = A.ID
+    '''
 
     stagingFoldersToRename = [] # folders with study IDs in the staging area that will be renamed
     stagingNotExpectedFolders = [] # Folders in the staging area that are not expected to be there
@@ -95,7 +114,7 @@ class summaryStatsFolders(object):
         today = date.today()
 
         # Header of the report:
-        reportString = ('This is a report on summary statistics data release\n\n'
+        reportString = ('This is a report on the daily summary statistics release\n\n'
                        '[Info] Date of run: {:%d, %b %Y}\n'
                        '[Info] Source database: {}\n'
                        '[Info] Staging area: {}\n'
@@ -115,23 +134,78 @@ class summaryStatsFolders(object):
             reportString += '\n\n[Info] The following folders were missing from the staging area:\n'
             reportString += "\n".join(map('\t{}'.format,self.stagingMissingFolders))
         else:
-            reportString += '\n\n[Info] No folder is missing from the stagin directory.\n'
+            reportString += '\n\n[Info] No folder is missing from the staging directory.\n'
         
         # Unexpected folders in the staging area:
         if len(self.stagingNotExpectedFolders):
             reportString += '\n\n[Info] The following folders in the staging area are unexpected or not yet published:\n'
             reportString += "\n".join(map('\t{}'.format,self.stagingNotExpectedFolders))
         else:
-            reportString += '\n\n[Info] No unexpected folder is found in the stagin directory.\n'
+            reportString += '\n\n[Info] No unexpected folder is found in the staging directory.\n'
 
-        # Removed folders in the ftp area:
+        # Unexpected folders in the ftp area:
         if len(self.ftpFoldersToRemove):
-            reportString += '\n\n[Info] The following folders were removed from the ftp area:\n'
-            reportString += "\n".join(map('\t{}'.format,self.ftpFoldersToRemove))
+            self.__check_outstanding_studies()
+            reportString += '\n\n[Info] The following folders are unexpected in the ftp area:\n'
+            reportString += "\n".join(map('\t{}'.format,self.ftpFoldersToRemove_w_comments))
         else:
-            reportString += '\n\n[Info] No folder was removed from the ftp directory.\n'
+            reportString += '\n\n[Info] All folders in the ftp directory looks good.\n'
 
         return(reportString)
+
+    # This function parses folder names to return accession IDs:
+    def __extract_study_accessions(self, folderList):
+        accessionIdPattern = '_(GCST\d+)$'
+
+        accessionIDs = []
+        for folder in folderList:
+            matches = re.findall(accessionIdPattern, folder, flags=0)
+            if matches:
+                accessionIDs.append(matches[0])
+
+        return(accessionIDs)
+
+    # This function checks why certain folders are unexpected in the ftp folder:
+    def __check_outstanding_studies(self):
+
+        # Retrieve all problematic study:
+        accessionIDs = self.__extract_study_accessions(self.ftpFoldersToRemove)
+        quoted_ids = ["'{}'".format(x) for x in accessionIDs]
+        outstandingStudies = pd.read_sql(self.extractStudyInfo.format(','.join(quoted_ids)), connection)
+
+        # Generate folder name:
+        outstandingStudies['folder'] = outstandingStudies.apply(lambda x: '{}_{}_{}'.format(x['AUTHOR'],x['PUBMED_ID'],x['ACCESSION_ID']), axis = 1)
+
+        ftpFoldersToRemove_w_comments = []
+        for folder in self.ftpFoldersToRemove:
+
+            # If study could not be extracted from the database:
+            if not outstandingStudies.folder.isin([folder]).any():
+                ftpFoldersToRemove_w_comments.append('{} - not found in the database'.format(folder))
+                continue
+            
+            # Let's take just one row:
+            row = outstandingStudies.loc[outstandingStudies.folder == folder].iloc[0]
+            
+            # The study was unpublished:
+            if not pd.isna(row['CATALOG_UNPUBLISH_DATE']):
+                ftpFoldersToRemove_w_comments.append('{} - study was unpublished on: {:%Y %b %d}'.format(folder, row['CATALOG_UNPUBLISH_DATE']))
+
+            # The summary stats were retracted:    
+            elif row['FULL_PVALUE_SET'] == 0:
+                ftpFoldersToRemove_w_comments.append('{} - the summary stats for this study is retracted.'.format(folder))
+
+            # The study is not published, but is not retracted either:
+            elif row['IS_PUBLISHED'] == 0:
+                ftpFoldersToRemove_w_comments.append('{} - the study is not published.'.format(folder))
+         
+            # Unknown reason:
+            else:
+                ftpFoldersToRemove_w_comments.append('{} - the study state is not known. It seems the folder should be there.'.format(folder))
+
+        self.ftpFoldersToRemove_w_comments = ftpFoldersToRemove_w_comments
+
+
 
 def renameFolders(folders,stagingDir):
     for folder in folders:
@@ -229,13 +303,13 @@ if __name__ == '__main__':
     ##
 
     # Rename folders where study ID is given instead of accession ID
-    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
     # # Copy folders to ftp:
-    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
-    # # Remove folders from ftp:
-    retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
+    # # Folders are no longer retracted from ftp:
+    # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
 
     ##
     ## When all done generate report and send email:
