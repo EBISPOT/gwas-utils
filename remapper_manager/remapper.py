@@ -6,6 +6,12 @@ import argparse
 # Handler for database:
 from functions import databaseManipulation
 
+'''
+Todo: 
+* Adding start date to the progress json.
+* Upon each call get the number of all association mapped since the start date.
+* Test, push to repo.
+'''
 
 # Get Ensembl version
 def getEnsemblRelease():
