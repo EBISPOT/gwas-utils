@@ -303,10 +303,10 @@ if __name__ == '__main__':
     ##
 
     # Rename folders where study ID is given instead of accession ID
-    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
-    # # Copy folders to ftp:
-    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    # Copy folders to ftp:
+    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
     # # Folders are no longer retracted from ftp:
     # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
