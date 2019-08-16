@@ -239,10 +239,11 @@ def copyFoldersToFtp(folders, sourcePath, targetPath):
         except OSError as e:
             print(e)
 
-def sendEmailReport(report, emailAddress):
+def sendEmailReport(report, emailAddresses):
     try:
-        p = Popen(["/usr/sbin/sendmail", "-t", "-oi", emailAddress], stdin=PIPE)
-        p.communicate(b'Subject: Summary Stats release report\n' + report.encode('utf-8'))
+        mailBody = 'Subject: Summary Stats release report\nTo: {}\n{}'.format(emailAddresses,report)
+        p = Popen(["/usr/sbin/sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
+        p.communicate(mailBody.encode('utf-8'))
     except OSError as e:
         print(e) 
 
