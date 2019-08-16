@@ -311,11 +311,15 @@ if __name__ == '__main__':
     # # Folders are no longer retracted from ftp:
     # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
 
+    if len(summaryStatsFoldersObj.foldersToCopy) == 0:
+        print('[Info] On {:%d, %b %Y} there was no study to release.'.format(date.today()))
+        exit(0)
+
     ##
     ## When all done generate report and send email:
     ##
 
-    # Generate report:
+    # Generate report if at least one study is released:
     report = summaryStatsFoldersObj.generateReport()
 
     # Send email about the report:
