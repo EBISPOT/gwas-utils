@@ -90,8 +90,8 @@ def reportAssocCounts(solrCount, dbCount):
     report += ("[Info] Number of associations in release database: %s\n" % dbCount)
     
     if solrCount != dbCount:
-        report += ("[Warning] Number of associations in the solr (%s) and in the database (%s) is not the same!\n" %(
-            solrCount))
+        report += ("[Warning] Number of associations in the solr ({}) and in the database ({}) is not the same!\n".format(
+            solrCount, dbCount))
     return(report)
 
 def reportUnpublishedStudies(oldFatSolrStudies, newFatSolrStudies, prodDbStudies):
