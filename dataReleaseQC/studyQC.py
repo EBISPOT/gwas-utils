@@ -10,6 +10,27 @@ import codecs
 from functions import getDataFromDB
 from functions import getDataFromSolr
 
+def check_pruned(relDbStudies):
+    '''
+    This function checks and reports if any of the studies in the release 
+    database has missing accession ID. That should never happen and should trigger the fail
+    of the release plan.
+    '''
+
+    # IS there any unpruned study:
+    wrong_studies = relDbStudies.loc[relDbStudies.ACCESSION_ID.isna()]
+    
+    if not len(wrong_studies):
+        return(None)
+    
+    report = '[Error] There are {} studies in the release database without accession ID:\n'.format(len(wrong_studies))
+    for pmid in wrong_studies.PUBMED_ID.unique():
+        report += ("        PMID: {}, study IDs without accession ID: {}\n".format(
+            pmid, ",".join(wrong_studies.loc[wrong_studies.PUBMED_ID == pmid, 'ID'].apply(lambda x: str(x)))))
+    
+    # Add comment:
+    return(report) 
+
 def reportSolrVsDatabase(solrDf, databaseDf):
     '''
     This function compares the study data extracted from the database with the study data extarcted from 
@@ -30,7 +51,6 @@ def reportSolrVsDatabase(solrDf, databaseDf):
             pmid, ",".join(missingStudiesDf.loc[missingStudiesDf.PUBMED_ID == pmid, 'ACCESSION_ID'])))
     return(report)
     
-
 def getNewStudies(newFatStudies,oldFatStudies):
     
     newStudyAccessions = np.setdiff1d(newFatStudies.accessionId,oldFatStudies.accessionId)
@@ -70,8 +90,8 @@ def reportAssocCounts(solrCount, dbCount):
     report += ("[Info] Number of associations in release database: %s\n" % dbCount)
     
     if solrCount != dbCount:
-        report += ("[Warning] Number of associations in the solr (%s) and in the database (%s) is not the same!\n" %(
-            solrCount))
+        report += ("[Warning] Number of associations in the solr ({}) and in the database ({}) is not the same!\n".format(
+            solrCount, dbCount))
     return(report)
 
 def reportUnpublishedStudies(oldFatSolrStudies, newFatSolrStudies, prodDbStudies):
@@ -104,24 +124,26 @@ def sendNotification(data, email):
         # Adding space:
         text_file.write("\n\n")
 
+        # Print studies without accesion IDs:
+        if 'unpruned' in reports: text_file.write(reports['unpruned']+"\n")
+
         # Print missingStudyReport:
-        text_file.write(reports['missingStudyReport']+"\n")
+        if 'missingStudyReport' in reports: text_file.write(reports['missingStudyReport']+"\n")
         
         # Print deletedStudies:
-        text_file.write(reports['deletedStudies']+"\n\n")
+        if 'deletedStudies' in reports: text_file.write(reports['deletedStudies']+"\n\n")
         
-        # Print associatinos:
-        text_file.write(reports['associatinos']+"\n")
+        # Print associations:
+        if 'associations' in reports: text_file.write(reports['associations']+"\n")
         
         # Print newStudies -> header:
-        text_file.write(reports['newStudies']['newStudySummary']+"\n\n")
+        if 'newStudies' in reports: text_file.write(reports['newStudies']['newStudySummary']+"\n\n")
         
         # Print newStudies -> details:
-        text_file.write(reports['newStudies']['newStudyDetails'] +"\n")
+        if 'newStudies' in reports: text_file.write(reports['newStudies']['newStudyDetails'] +"\n")
         
     a = subprocess.Popen('cat %s | mutt -s "Data release QC report - %s" -- %s' %(filename, today, emailAddress), shell=True)    
     a.communicate()
-
 
 if __name__ == '__main__':
     '''
@@ -173,7 +195,20 @@ if __name__ == '__main__':
         'oldSolr' : oldSolrAddress,
         'newSolr' : newSolrAddress
     }
-    reports['associatinos'] = reportAssocCounts(solrCount = solrAssocCount, dbCount = dbAssocCount)
+
+    # Check if there are any unpruned data:
+    unprunedStudies = check_pruned(relDbStudies)
+
+    # If at least on unpruned study was found, report is sent and the script exits with non-zero exit code:
+    if unprunedStudies:
+        reports['unpruned'] = unprunedStudies
+        reports['unpruned'] += ('\nThe presence of studies without accesion IDs might indicate problems with the pruning of the release database.'
+            '\nTo investigate the issue, the data release process is stopped.\n\n')
+        # Compile message and send notification and exit: 
+        sendNotification(reports, emailAddress)
+        quit(1)
+
+    reports['associations'] = reportAssocCounts(solrCount = solrAssocCount, dbCount = dbAssocCount)
 
     # Generate report on new studies: dict_keys(['newStudySummary', 'newStudyDetails'])
     reports['newStudies'] = getNewStudies(newFatSolrStudies,oldFatSolrStudies)
