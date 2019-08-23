@@ -190,6 +190,12 @@ if __name__ == '__main__':
     solrAssocCount = newFatSolr.getAssociationCount()
     dbAssocCount = relDB.getAssocCount()
 
+    # Generate association report:
+    reports = {
+        'oldSolr' : oldSolrAddress,
+        'newSolr' : newSolrAddress
+    }
+
     # Check if there are any unpruned data:
     unprunedStudies = check_pruned(relDbStudies)
 
@@ -197,16 +203,10 @@ if __name__ == '__main__':
     if unprunedStudies:
         reports['unpruned'] = unprunedStudies
         
-        # Compile message and send notification: 
+        # Compile message and send notification and exit: 
         sendNotification(reports, emailAddress)
-
         quit(1)
 
-    # Generate association report:
-    reports = {
-        'oldSolr' : oldSolrAddress,
-        'newSolr' : newSolrAddress
-    }
     reports['associations'] = reportAssocCounts(solrCount = solrAssocCount, dbCount = dbAssocCount)
 
     # Generate report on new studies: dict_keys(['newStudySummary', 'newStudyDetails'])
