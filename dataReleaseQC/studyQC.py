@@ -202,7 +202,8 @@ if __name__ == '__main__':
     # If at least on unpruned study was found, report is sent and the script exits with non-zero exit code:
     if unprunedStudies:
         reports['unpruned'] = unprunedStudies
-        
+        reports['unpruned'] += ('\nThe presence of studies without accesion IDs might indicate problems with the pruning of the release database.'
+            '\nTo investigate the issue, the data release process is stopped.\n\n')
         # Compile message and send notification and exit: 
         sendNotification(reports, emailAddress)
         quit(1)
