@@ -7,6 +7,7 @@ from subprocess import Popen, PIPE
 from datetime import date
 import re
 
+
 import DBConnection
 
 '''
@@ -239,6 +240,36 @@ def copyFoldersToFtp(folders, sourcePath, targetPath):
         except OSError as e:
             print(e)
 
+def generate_md5_sum(folder):
+    '''
+    This function will generate md5sums for all files in the provided folder
+    and save in the same folder.
+    '''
+
+    # Get list of files in a folder:
+    onlyfiles = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    
+    # Check if any of the files looks like an md5 checksum file, we then skipping:
+    for file in onlyfiles:
+        if 'md5' in file.lower():
+            return None
+
+    # md5checksums are stored:
+    md5checksums = []
+    
+    # Loopthrough the files and calculate md5sum:
+    for filename in onlyfiles:
+        with open('{}/{}'.format(folder,filename),"rb") as f:
+            
+            # Read and update hash in chunks of 4K
+            bytes = f.read() # read file as bytes
+            md5checksums.append([filename, hashlib.md5(bytes).hexdigest()])
+    
+    # Saving values into a file:
+    with open('{}/md5sum.txt'.format(folder), 'w') as writer:
+        for file in md5checksums:
+            writer.write('{} {}\n'.format(file[1], file[0])) 
+
 def sendEmailReport(report, emailAddresses):
     try:
         mailBody = 'Subject: Summary Stats release report\nTo: {}\n{}'.format(emailAddresses,report)
@@ -305,6 +336,9 @@ if __name__ == '__main__':
 
     # Rename folders where study ID is given instead of accession ID
     renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+
+    # Generate md5sum checksum for folders to be copied:
+    summaryStatsFoldersObj.foldersToCopy.apply(generate_md5_sum)
 
     # Copy folders to ftp:
     copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
