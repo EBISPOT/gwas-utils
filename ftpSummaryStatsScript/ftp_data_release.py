@@ -6,7 +6,7 @@ import subprocess
 from subprocess import Popen, PIPE
 from datetime import date
 import re
-
+import hashlib 
 
 import DBConnection
 
@@ -245,7 +245,6 @@ def generate_md5_sum(folder):
     This function will generate md5sums for all files in the provided folder
     and save in the same folder.
     '''
-
     # Get list of files in a folder:
     onlyfiles = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
     
@@ -259,6 +258,7 @@ def generate_md5_sum(folder):
     
     # Loopthrough the files and calculate md5sum:
     for filename in onlyfiles:
+        print('{} {}'.format(folder, filename))
         with open('{}/{}'.format(folder,filename),"rb") as f:
             
             # Read and update hash in chunks of 4K
@@ -338,7 +338,8 @@ if __name__ == '__main__':
     renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
     # Generate md5sum checksum for folders to be copied:
-    summaryStatsFoldersObj.foldersToCopy.apply(generate_md5_sum)
+    for folder in summaryStatsFoldersObj.foldersToCopy:
+        generate_md5_sum('{}/{}'.format(stagingDir,folder))
 
     # Copy folders to ftp:
     copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
