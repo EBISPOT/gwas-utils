@@ -1,5 +1,4 @@
 import pandas as pd
-from gwas_data_sources import get_db_properties
 import DBConnection
 
 class getDataFromDB(object):
@@ -18,6 +17,17 @@ class getDataFromDB(object):
             HOUSEKEEPING HK
         WHERE S.HOUSEKEEPING_ID = HK.ID
         AND S.PUBLICATION_ID = P.ID
+        AND HK.IS_PUBLISHED = 1
+    '''
+
+    __unpublished__ = '''
+        SELECT S.ACCESSION_ID, S.ID, P.PUBMED_ID, P.TITLE, HK.LAST_UPDATE_DATE, HK.CATALOG_PUBLISH_DATE, HK.CATALOG_UNPUBLISH_DATE
+        FROM STUDY S,
+            PUBLICATION P,
+            HOUSEKEEPING HK
+        WHERE S.HOUSEKEEPING_ID = HK.ID
+        AND S.PUBLICATION_ID = P.ID
+        AND HK.IS_PUBLISHED = 0
     '''
     
     # Init
@@ -27,6 +37,7 @@ class getDataFromDB(object):
         print("[INFO] Extracting data from %s" % instance)
         self.__getAssocData__(connection.connection)
         self.__getStudyData__(connection.connection)
+        self.__getUnpublished__(connection.connection)
         
         # Closing connection: 
         print("[INFO] Closing connection.")
@@ -40,6 +51,10 @@ class getDataFromDB(object):
     def __getStudyData__(self, connection):
         self.__studyData__ = pd.read_sql(self.__studySQL__, connection)
     
+    # Get unpublished data:
+    def __getUnpublished__(self, connection):
+        self.__unpublished__ =  pd.read_sql(self.__unpublished__, connection)
+
     # Returnd study count:
     def getStudyCount(self):
         return(len(self.__studyData__))
@@ -56,3 +71,8 @@ class getDataFromDB(object):
     def getAssoc(self):
         return(self.__assocData__)
     
+    # Return unpublished data:
+    def getUnpublished(self):
+        return(self.__unpublished__)
+
+
