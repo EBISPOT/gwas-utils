@@ -258,10 +258,9 @@ def generate_md5_sum(folder):
     
     # Loopthrough the files and calculate md5sum:
     for filename in onlyfiles:
-        print('{} {}'.format(folder, filename))
         with open('{}/{}'.format(folder,filename),"rb") as f:
             
-            # Read and update hash in chunks of 4K
+            # Read and calculate hash:
             bytes = f.read() # read file as bytes
             md5checksums.append([filename, hashlib.md5(bytes).hexdigest()])
     

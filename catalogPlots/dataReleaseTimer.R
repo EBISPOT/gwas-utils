@@ -68,14 +68,6 @@ abline(linear, col ='firebrick')
 # Adding text:
 text(df$assocCount*1.01, df$Days + 0.3, labels = df$formattedDates, cex = 1.2)
 
-twoWeeks = round((14 - coeffs[1][[1]])/coeffs[2][[1]]/1000,0)
-twoWeeksDist = twoWeeks - round(df$assocCount[1]/1000)
-oneMonth = round((31 - coeffs[1][[1]])/coeffs[2][[1]]/1000,0)
-oneMonthDist = oneMonth - round(df$assocCount[1]/1000)
-
-# Adding prediction:
-text(xLim[1] * 1.02, yLim[2] - 1, labels = sprintf("Two weeks: %sK associations away",twoWeeksDist), adj = 0, cex = 1.8)
-text(xLim[1] * 1.02, yLim[2] - 2, labels = sprintf("One month: %sK associations away",oneMonthDist), adj = 0, cex = 1.8)
 dev.off()
 
 
