@@ -20,7 +20,7 @@ def send_report(email, *argv):
         
         # Print header:
         text_file.write("GWAS Catalog release notes.\n\n")
-        text_file.write("[Info] Date: %s\n" % today)
+        text_file.write("\t[Info] Date: %s\n" % today)
 
         # Concatenating the arguments:
         for report in argv:
@@ -33,18 +33,16 @@ def generate_ftp_link(row):
     ftpUrl = 'http://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics' # MengW_31482140_GCST008672
     return '{}/{}_{}_{}'.format(ftpUrl, row['author_s'].replace(" ", ""), row['pubmedId'], row['accessionId'])
 
-
 def report_absolute_values(newSolrStudy_df):
     """
     This function retunrs the report string with the absolute counts:
     """    
-    report = '[Info] Total number of publication in this release: {}\n'.format(len(newSolrStudy_df.pubmedId.unique()))
-    report += '[Info] Total number of studies in this release: {}\n'.format(len(newSolrStudy_df))
-    report += '[Info] Total number of association in this release: {}\n'.format(newSolrStudy_df.associationCount.sum())
-    report += '[Info] Number of studies with summary statistics: {}\n'.format(len(newSolrStudy_df.loc[newSolrStudy_df.fullPvalueSet == 1]))
+    report = '\t[Info] Total number of publication in this release: {}\n'.format(len(newSolrStudy_df.pubmedId.unique()))
+    report += '\t[Info] Total number of studies in this release: {}\n'.format(len(newSolrStudy_df))
+    report += '\t[Info] Total number of associations in this release: {}\n'.format(newSolrStudy_df.associationCount.sum())
+    report += '\t[Info] Total number of studies with summary statistics: {}\n'.format(len(newSolrStudy_df.loc[newSolrStudy_df.fullPvalueSet == 1]))
     return report
 
-    
 def report_summary_stats(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
     """
     This function provides report on the newly released summary statistics.
@@ -56,9 +54,9 @@ def report_summary_stats(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
     newStudies_df = newSolrStudy_df.loc[newSolrStudy_df.accessionId.isin(newStudies_accessionIDs)]
     
     if len(newStudies_df) == 0 and test_type == 'new':
-        return('[Info] This time no new summary statistics was released.')
+        return('[Info] This time no new summary statistics were released.')
     elif len(newStudies_df) == 0 and test_type == 'retracted':
-        return('[Info] In this data release no summary statistics was retracted.')
+        return('[Info] In this data release no summary statistics were retracted.')
 
     # Generate URLs for the ftp location:
     newStudies_df['ftpLink'] = newStudies_df.apply(generate_ftp_link, axis = 1)
@@ -68,27 +66,28 @@ def report_summary_stats(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
         report = '[Info] New summary statistics for {} studies of {} publication are added to the Catalog in the current release:\n'.format(len(newStudies_df), len(newStudies_df.pubmedId.unique()))
     elif test_type == 'retracted':
         report = '[Info] In this data release summary statistics of {} studes were retracted:\n'.format(len(newStudies_df))
-        
+    
+    # Generate header:
+    report += '\t'.join(['*','Author','Year','Title','Journal','PMID', 'Study accessions\n'])
+
     # Loop through the newly added publications:
     for pmid in newStudies_df.pubmedId.unique():
 
         # Generate header line for the publication:
         row = newStudies_df.loc[newStudies_df.pubmedId == pmid].iloc[0]
 
-        # Adding details for the publication:
-        report += ' * Paper: {} ({}): {:.60}...\n'.format(row['author_s'], row['publicationDate'].split('-')[0],row['title'])
-        report += '\tJournal: {}\n'.format(row['publication'])
-        report += '\tPubmed ID: {}\n'.format(row['pubmedId'])
+        report += '\t'.join(['*',
+                    row['author_s'], 
+                    row['publicationDate'].split('-')[0],
+                    row['title'],
+                    row['publication'],
+                    row['pubmedId'],
+                    ','.join(newStudies_df.loc[ newStudies_df.pubmedId == pmid].accessionId.tolist())]
+                )
 
-        # We only provide links, if the new sumstats are requested:
-        if test_type == 'new':
-            report += '\tLinks to summary statistics:\n'
-            report += '\n'.join(newStudies_df.loc[ newStudies_df.pubmedId == pmid].ftpLink.apply(lambda x: '\t\t{}'.format(x)).tolist())
-        elif test_type == 'retraction':
-            report += '\tRetracted accession IDs: {}\n'.format(', '.join(newStudies_df.loc[ newStudies_df.pubmedId == pmid].accessionId.tolist()))
-            
-        report += '\n\n'
+        report += '\n'
 
+    report += '\n'
     return report
 
 def report_studies(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
@@ -101,32 +100,35 @@ def report_studies(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
 
     # We report if nothing new happens:
     if len(newStudies_df) == 0 and test_type == 'new':
-        return('[Info] In this release no studies got published.\n')
+        return('[Info] In this release no study was published.\n')
     elif len(newStudies_df) == 0 and test_type == 'retracted':
-        return('[Info] In this release no studies was retracted.\n')
+        return('[Info] In this release no study was retracted.\n')
 
     if test_type == 'new':
-        report = '[Info] There are {} new studies of {} publication in the current release:\n'.format(len(newStudies_df), len(newStudies_df.pubmedId.unique()))
+        report = '[Info] There are {} new studies of {} publications in the current release:\n'.format(len(newStudies_df), len(newStudies_df.pubmedId.unique()))
     elif test_type == 'retracted':
         report = '[Info] In this release {} studies got retracted:\n'.format(len(newStudies_df))
         
+    report += '\t'.join(['*','Author', 'Year', 'Title', 'Journal', 'PMID', 'Study count', 
+        'Association count', 'Study accessions\n'])
+
     for pmid in newStudies_df.pubmedId.unique():
-        # Generate header line for the publication:
         row = newStudies_df.loc[newStudies_df.pubmedId == pmid].iloc[0]
-
-        # Adding details for the publication:
-        report += ' * Paper: {} ({}): {:.60}...\n'.format(row['author_s'], row['publicationDate'].split('-')[0], row['title'])
-        report += '\tJournal: {}\n'.format(row['publication'])
-        report += '\tPubmed ID: {}\n'.format(row['pubmedId'])
-        report += '\tStudy count: {}, association count: {}\n'.format(
-                len(newStudies_df.loc[newStudies_df.pubmedId == pmid]),
-                newStudies_df.loc[newStudies_df.pubmedId == pmid].associationCount.sum()
-            )
-        report += '\tStudy accessions: {}\n'.format(', '.join(newStudies_df.loc[newStudies_df.pubmedId == pmid].accessionId.tolist()))
-
+        report += '\t'.join(['*',
+                row['author_s'], 
+                row['publicationDate'].split('-')[0],
+                row['title'],
+                row['publication'],
+                row['pubmedId'],
+                str(len(newStudies_df.loc[newStudies_df.pubmedId == pmid])),
+                str(newStudies_df.loc[newStudies_df.pubmedId == pmid].associationCount.sum()),
+                ', '.join(newStudies_df.loc[newStudies_df.pubmedId == pmid].accessionId.tolist())
+            ])
         report += '\n'
+    
+    report += '\n'
 
-    return report    
+    return report
 
 ##
 ## The following values are read from the command line parameters:
