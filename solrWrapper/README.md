@@ -128,6 +128,10 @@ documentFile = 'testFolder/newDocs.json'
 solr.addDocument(documentFile)
 ```
 
+### More information
+
+See confluence [page](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/Solr+wrapper).
+
 
 
 

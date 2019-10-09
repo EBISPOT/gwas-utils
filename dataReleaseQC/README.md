@@ -109,4 +109,4 @@ Where solr addresses are specified like: `http://localhost:8983`
 
 ## More information
 
-For more information see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/dataFeleaseQC+tool).
+For more information see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/dataReleaseQC+tool).
