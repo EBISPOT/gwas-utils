@@ -26,6 +26,10 @@ A tool to solve issues with diagram generation: when the pussycat application is
 
 Tool to release summary stats folders to ftp. This script is called during the data release process.
 
+### [Access log analysis](https://github.com/EBISPOT/gwas-utils/tree/master/log-analysis)
+
+Scripts to analyse site access logs to generate statistics on user behaviour. 
+
 ### [Remapper manager](https://github.com/EBISPOT/gwas-utils/tree/master/remapper_manager)
 
 Upon every new release of Ensembl the full GWAS Catalog data has to be remapped to the new release. This tool to help the remapping process by automating the process that triggers remapping. 
