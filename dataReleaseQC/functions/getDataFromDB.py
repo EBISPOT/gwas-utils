@@ -1,5 +1,5 @@
 import pandas as pd
-import DBConnection
+from gwas_db_connect import DBConnection
 
 class getDataFromDB(object):
 

@@ -10,7 +10,7 @@ import subprocess
 import codecs
 
 # Loading custom functions:
-from functions import solrWrapper
+from solrWrapper import solrWrapper
 
 def report_missing_EFOs(study_df):
     """
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     core = args.solrCore
     email = args.email
 
-    solrObject = solrWrapper.solrWrapper(host=host, port = port, core=core)
+    solrObject = solrWrapper(host=host, port = port, core=core)
 
     # Get number of documents:
     docCount = solrObject.getAllDocumentCount()

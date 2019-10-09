@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from datetime import datetime
 
+from gwas_db_connect import data_sources
 
 class getDataFromSolr(object):
     def __init__(self, solrAddress, core, verbose = False):

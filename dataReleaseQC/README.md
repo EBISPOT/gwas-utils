@@ -14,9 +14,12 @@ The following packages are required:
 * [subprocess](https://docs.python.org/2/library/subprocess.html)
 * [requests](https://2.python-requests.org/en/master/)
 
-The scripts were written using Python 3.7
+Custom required packages:
 
-data_release_report.py  studyQC.py  test_missing_data.py  test_pruning.py  test_solr_data.py
+* [SolrWrapper](https://github.com/EBISPOT/gwas-utils/tree/master/solrWrapper)
+* [gwas_db_connect](https://gitlab.ebi.ac.uk/gwas-catalog/gwas_db_connect/tree/master/gwas_db_connect)
+
+The scripts were written using Python 3.7
 
 ## Test pruning
 
@@ -38,8 +41,14 @@ This script tests if any study or association in the release database is not ind
 #### Usage:
 
 ```bash
-python test_missing_data.py --newSolrAddress <solr address with port> --fatSolrCore <gwas solr core> --releaseDB <release database instance>
+python test_missing_data.py \
+    --solrAddress <solr address> \
+    --solrPort <solr port> \
+    --solrCore <gwas solr core> \
+    --releaseDB <release database instance>
 ```
+
+solr address is specified eg. `http://localhost`
 
 #### Example output:
 

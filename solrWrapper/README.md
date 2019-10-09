@@ -86,7 +86,7 @@ Get document count for a particular resource:
 
 ```python
 resource = 'study'
-solr.getResourceCounts(resource)3
+solr.getResourceCounts(resource)
 ```
 
 Query the solr index - to get a pandas dataframe with all (<100k) studies with the most frequently used fields.

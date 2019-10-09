@@ -8,7 +8,8 @@ import argparse
 
 # Loading custom modules
 from functions import getDataFromDB
-from functions import getDataFromSolr
+from solrWrapper import solrWrapper
+
 
 def reportSolrVsDatabase(solrDf, databaseDf):
     '''
@@ -22,8 +23,12 @@ def reportSolrVsDatabase(solrDf, databaseDf):
     
     # Where are the missing studies:
     missingStudies = np.setdiff1d(databaseDf.ACCESSION_ID,solrDf.accessionId)
-    report = ("[Warning] %s studies are missing from the solr index.\n" % len(missingStudies))
     missingStudiesDf = databaseDf.loc[databaseDf.ACCESSION_ID.isin(missingStudies)]
+
+    report = ("[Warning] {} studies are missing from the solr index from {} publication.\n".format(
+             len(missingStudiesDf),
+             len(missingStudiesDf.PUBMED_ID.unique())
+        ))
     
     for pmid in missingStudiesDf.PUBMED_ID.unique():
         report += ("[Warning] From publication with PMID %s, the following studies are missing: %s\n" %(
@@ -38,31 +43,33 @@ if __name__ == '__main__':
 
     # Commandline arguments
     parser = argparse.ArgumentParser(description='This script performs a data quality check on the generated solr index after the data release. The old and the new solr indices are compared with the database.')
-    parser.add_argument('--newSolrAddress', type = str, help = 'The hostname and port of the new solr index.')
-    parser.add_argument('--fatSolrCore', default='gwas', type = str, help = 'The core of the tested solr core. Default: gwas.')
+    parser.add_argument('--solrAddress', type = str, help = 'The hostname of the new solr index (eg. http://localhost).')
+    parser.add_argument('--solrCore', default='gwas', type = str, help = 'The core of the tested solr core.')
+    parser.add_argument('--solrPort', default='8983', type = str, help = 'The port on which the solr server is listening.')
     parser.add_argument('--releaseDB', default='spotrel', help='Release database to extract published studies. Default: spotrel.')
 
     args = parser.parse_args()
-    newSolrAddress = args.newSolrAddress
-    fatSolrCore = args.fatSolrCore
+    solrAddress = args.solrAddress
+    solrCore = args.solrCore
+    solrPort = args.solrPort
     releaseDB = args.releaseDB
 
     # Initializing database objects:
     relDB = getDataFromDB.getDataFromDB(instance=releaseDB)
     
     # Initializing solr objects:
-    newFatSolr = getDataFromSolr.getDataFromSolr(solrAddress=newSolrAddress, core=fatSolrCore)
+    solr = solrWrapper(solrAddress, solrPort, solrCore)
 
-    # Extracting studies:
-    newFatSolrStudies = newFatSolr.getStudies()
+    # Extracting studies from solr and database:
+    solrStudies = solr.get_study_table()
     relDbStudies = relDB.getStudy()
 
     # Get number of studies from db and solr
-    solrStudyCount = len(newFatSolrStudies)
+    solrStudyCount = len(solrStudies)
     dbStudyCount = len(relDbStudies)
 
     # Get number of associations db and solr
-    solrAssocCount = newFatSolr.getAssociationCount()
+    solrAssocCount = solr.getFacets()['association']
     dbAssocCount = relDB.getAssocCount()
 
     # Set exit code:
@@ -83,7 +90,7 @@ if __name__ == '__main__':
         exitCode += 1
 
         # Get studies that are missing from the solr index:
-        missingStudies = reportSolrVsDatabase(solrDf=newFatSolrStudies, databaseDf=relDbStudies)
+        missingStudies = reportSolrVsDatabase(solrDf=solrStudies, databaseDf=relDbStudies)
         print(missingStudies)
 
     # Report if all looks good:

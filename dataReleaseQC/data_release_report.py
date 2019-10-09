@@ -6,7 +6,7 @@ import subprocess
 import datetime
 
 # Loading custom functions:
-from functions import solrWrapper
+from solrWrapper import solrWrapper
 
 def send_report(email, *argv):
     """
@@ -37,7 +37,7 @@ def report_absolute_values(newSolrStudy_df):
     """
     This function retunrs the report string with the absolute counts:
     """    
-    report = '\t[Info] Total number of publication in this release: {}\n'.format(len(newSolrStudy_df.pubmedId.unique()))
+    report  = '\t[Info] Total number of publication in this release: {}\n'.format(len(newSolrStudy_df.pubmedId.unique()))
     report += '\t[Info] Total number of studies in this release: {}\n'.format(len(newSolrStudy_df))
     report += '\t[Info] Total number of associations in this release: {}\n'.format(newSolrStudy_df.associationCount.sum())
     report += '\t[Info] Total number of studies with summary statistics: {}\n'.format(len(newSolrStudy_df.loc[newSolrStudy_df.fullPvalueSet == 1]))
@@ -165,11 +165,11 @@ if __name__ == '__main__':
     emails = args.emailAddress
 
     # Retrieve data from the old solr:
-    oldSolr = solrWrapper.solrWrapper(oldSolrHost, oldSolrPort, solrCore, verbose = False)
+    oldSolr = solrWrapper(oldSolrHost, oldSolrPort, solrCore, verbose = False)
     oldSolrStudy_df = oldSolr.get_study_table()
 
     # Retrieve data from the new solr:
-    newSolr = solrWrapper.solrWrapper(newSolrHost, newSolrPort, solrCore, verbose = False)
+    newSolr = solrWrapper(newSolrHost, newSolrPort, solrCore, verbose = False)
     newSolrStudy_df = newSolr.get_study_table()
 
     # Extract report for absolute values of the release:
