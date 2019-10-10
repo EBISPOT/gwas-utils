@@ -34,6 +34,10 @@ Scripts to analyse site access logs to generate statistics on user behaviour.
 
 Upon every new release of Ensembl the full GWAS Catalog data has to be remapped to the new release. This tool to help the remapping process by automating the process that triggers remapping. 
 
+### [Search term classifier](https://github.com/EBISPOT/gwas-utils/tree/master/search_term_classifier)
+
+To generate site access stats it is useful to know what users are sarching for. This script classifies search terms parsed out from site access statistics.
+
 ### [Solr wrapper](https://github.com/EBISPOT/gwas-utils/tree/master/solrWrapper)
 
 This small Python module makes it easy to query, update, refresh the specified solr instance/core. 

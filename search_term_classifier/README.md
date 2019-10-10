@@ -1,6 +1,6 @@
 # Search term classifier
 
-This script was written in an effort to gain a better idea on the user behaviour. To adjust the priorities of the development of the user interface, we wanted to know what do users of the GWAS Catalog search for. For this purpose we used the tomcat access logs. The logfiles were parsed using the [log-analysis](https://github.com/EBISPOT/gwas-utils/tree/master/log-analysis) script to get the list of all searched terms and the number of how many that term was queried.
+This script was written in an effort to gain a better understanding on the user behaviour. To adjust the priorities of the development of the user interface, we wanted to know what do users of the GWAS Catalog search for. As a source we used the tomcat access logs. The logfiles were parsed using the [log-analysis](https://github.com/EBISPOT/gwas-utils/tree/master/log-analysis) script to get the list of all searched terms and the number of how many that term was queried.
 
 Then this script parses these search terms tries to classify into one of the main categories (eg. `pubmed ID`, `gene`, `variant` etc.). 
 
