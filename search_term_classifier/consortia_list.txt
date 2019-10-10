@@ -1,0 +1,87 @@
+BioBank Japan
+Biobank UK
+UK Biobank
+UKBB
+BioVU
+Children's Hospital of Philadelphia Biorepository
+China Kadoorie Biobank
+Electronic Medical Records and Genomics
+eMERGE
+Generation Scotland
+MyCode Community Health Initiative
+Australian Genomics
+France Genomic Medicine 2025
+Genomics England
+Qatar Genome Project
+Saudi Human Genome Program
+Scottish Genomes Partnership
+Tohoku Medical Megabank Project
+U.S. All of Us Research Program
+African Partnership for Chronic Disease Research
+APCDR
+BioSHaRE Project
+BioSHaRE
+Broad-Novartis Cancer Cell Line Encyclopedia
+CCLE
+Cancer Core Europe
+Cancer MoonShot 2020
+CARE for RARE
+FORGE
+Clinical Genome Resource
+ClinGen
+Clinical Sequencing Exploratory Research
+CSER
+Critical Assessment of Genome Interpretation
+CAGI
+Deciphering Developmental Disorders
+DDD
+DNAdigest
+Electronic Medical Records and Genomics
+eMERGE
+ENIGMA Consortium
+EuRenomics
+European Network for Genetic and Genomic Epidemiology
+ENGAGE
+Exome Aggregation Consortium
+ExAC
+Farr Institute
+Gen2Phen
+Genome Asia 100K
+Genome in a Bottle
+Genomic Medicine Alliance
+Genomics Research and Innovation Network
+GRIN
+Global Genomic Medicine Collaborative 
+G2MC
+GoT2D
+H3Africa
+Human Genome Variation Society
+HGVS
+Human Variome Project
+Implementing Genomics in Practice
+IGNITE
+International Cancer Genome Consortium
+ICGC
+International Genomics of Alzheimer's Project
+IGAP
+International Inflammatory Bowel Disease Genetics Consortium
+IIBDGC
+International Multiple Sclerosis Genetics Consortium
+IMSG
+International Parkinson's Disease Genomics Consortium
+IPDCG
+International Rare Diseases Research Consortium
+IRDiRC
+International Stroke Genetics Consortium Portal
+ISGC
+Leiden Open Variation Database
+Lung Genomics Research Consortium
+LGRC
+Medulloblastoma Advanced Genomics International Consortium
+MAGIC
+Meta-Analyses of Glucose and Insulin-related traits Consortium
+The Avon Longitudinal Study of Parents and Children
+ALSPAC
+Amish Studies
+Atherosclerosis Risk in Communities Study
+ARIC
