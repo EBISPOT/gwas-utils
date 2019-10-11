@@ -40,6 +40,28 @@ Specify e-mail of a admin user: <email2>
 
 To ensure consistency and tracking, curator accounts are not deleted but inactivated. Upon inactivating the account the password hash is updated with an other user's hash, so the inactivated user's email address can be used to log in with the other user's password. 
 
+**Action: modify**
+
+As a first step, the user is identified by his email address:
+
+```
+Specify the email address of the user to be updated:
+```
+
+The personal details attached to this user is going to be changed as follows: 
+
+```
+[Info] Modification user information of the GWAS Catalog
+[Info] Those fields you want to keep the same, leave empty!
+Specify email address:
+Specify first name:
+Specify last name:
+Specify password hash: $2a$04$rZ/PUN81G8LJFn0azu1T4ex8gTeo8zaUJRK.Zupvf2EDIJtRvn8l6
+```
+
+* To update only the password, just past the hash and leave all the other fields empty.
+* If the user want to change email address, the script checks if the given email is in already in use or not.
+
 ### More information
 
 See documentation on [confluence](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/Curator+user+manager).
