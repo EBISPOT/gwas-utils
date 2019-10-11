@@ -1,4 +1,3 @@
-import pandas as pd
 import argparse
 
 from gwas_db_connect import DBConnection
@@ -106,16 +105,14 @@ class userManager(object):
     def updateUserInfo(self, oldEmail, userinput):
 
         # fetch old dataframe with all the data:
-        if self.checkUser(oldEmail):
-            current_user_df = self.actual_user_data
-        else:
+        if not self.checkUser(oldEmail):
             return 1
         
         # If the email or the password hash is given, we have to update the secure user table:
         if ('EMAIL' in userinput) or ('PASSWORD_HASH' in userinput):
             sendData = {'OLD_EMAIL' : oldEmail}
             sendData['NEW_EMAIL'] = userinput['EMAIL'] if 'EMAIL' in userinput else oldEmail
-            sendData['PASSWORD_HASH'] = userinput['PASSWORD_HASH'] if 'PASSWORD_HASH' in userinput else current_user_df.PASSWORD_HASH.tolist()[0]
+            sendData['PASSWORD_HASH'] = userinput['PASSWORD_HASH'] if 'PASSWORD_HASH' in userinput else self.actual_user_data['PASSWORD_HASH']
             
             # Update secure user table with data:
             self.__cursor__.execute(self.updateSecureUser, sendData)
@@ -125,8 +122,8 @@ class userManager(object):
         if ('EMAIL' in userinput) or ('FIRST_NAME' in userinput) or ('LAST_NAME' in userinput):
             sendData = {'OLD_EMAIL' : oldEmail}
             sendData['NEW_EMAIL'] = userinput['EMAIL'] if 'EMAIL' in userinput else oldEmail
-            sendData['FIRST_NAME'] = userinput['FIRST_NAME'] if 'FIRST_NAME' in userinput else current_user_df.FIRST_NAME.tolist()[0]
-            sendData['LAST_NAME'] = userinput['LAST_NAME'] if 'LAST_NAME' in userinput else current_user_df.LAST_NAME.tolist()[0]
+            sendData['FIRST_NAME'] = userinput['FIRST_NAME'] if 'FIRST_NAME' in userinput else self.actual_user_data['FIRST_NAME']
+            sendData['LAST_NAME'] = userinput['LAST_NAME'] if 'LAST_NAME' in userinput else self.actual_user_data['LAST_NAME']
 
             # Update secure user table with data:
             self.__cursor__.execute(self.updateCurator, sendData)
@@ -136,14 +133,14 @@ class userManager(object):
         # If email, first name or last name is changed, update event type table:
         if 'LAST_NAME' in userinput:
             sendData = {
-                'OLD_LAST_NAME' : current_user_df.LAST_NAME.tolist()[0],
+                'OLD_LAST_NAME' : self.actual_user_data['LAST_NAME'],
                 'ACTION' : userinput['LAST_NAME'],
                 'TRANSLATED_EVENT' : 'Study curator set to ' + userinput['LAST_NAME'], 
                 'EVENT_TYPE' : 'STUDY_CURATOR_ASSIGNMENT_' + userinput['LAST_NAME'].upper()
             }
 
             # Update secure user table with data:
-            self.__cursor__.execute(self.updateEventType, )
+            self.__cursor__.execute(self.updateEventType, sendData)
             print('[Info] Changes to EVENT_TYPE table has been submitted.')
             
             
@@ -171,12 +168,22 @@ class userManager(object):
         self.__connection__.commit()
 
     def checkUser(self, userEmail):
-        df = pd.read_sql(self.checkUserSQL, self.__connection__, params = {'email': userEmail})
-        
-        self.actual_user = userEmail
-        self.actual_user_data = df 
-        
-        return(len(df))
+
+        # Retrieve user from database based on the email provided:
+        self.__cursor__.execute(self.checkUserSQL, {'email' : userEmail})
+        row = self.__cursor__.fetchone()
+
+        # Default header expected for this query:
+        columns = [ 'EMAIL', 'PASSWORD_HASH', 'FIRST_NAME', 'LAST_NAME', 'EVENT_TYPE']
+
+        if row:
+            self.actual_user_data = dict(zip(columns, row))
+            self.actual_user = userEmail
+            return 1
+        else:
+            self.actual_user_data = {}
+            self.actual_user = userEmail
+            return 0
 
 def validateInput(userinput):
 
@@ -228,7 +235,7 @@ def modifyUser(dbManager):
         exit()
 
     # Save details for the current user:
-    current_user_df = dbManager.actual_user_data
+    current_user = dbManager.actual_user_data
 
     print("[Info] Modification user information of the GWAS Catalog")
     print("[Info] Those fields you want to keep the same, leave empty!")
@@ -243,10 +250,10 @@ def modifyUser(dbManager):
         exit()
 
     # Ask for the first name:
-    userinput['FIRST_NAME'] = input("Specify first name ({}): ".format(current_user_df.FIRST_NAME.tolist()[0]))
+    userinput['FIRST_NAME'] = input("Specify first name ({}): ".format(current_user['FIRST_NAME']))
 
     # Ask for last name:
-    userinput['LAST_NAME'] = input("Specify last name ({}): ".format(current_user_df.LAST_NAME.tolist()[0]))
+    userinput['LAST_NAME'] = input("Specify last name ({}): ".format(current_user['LAST_NAME']))
 
     # Ask for the password hash:
     userinput['PASSWORD_HASH'] = input("Specify password hash: ")
