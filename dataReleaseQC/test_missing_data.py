@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     # Check if the association counts are the same:
     if solrAssocCount == dbAssocCount:
-        print('[Info] Association count ({}) in solr and release database matches.'.foramt(dbAssocCount))
+        print('[Info] Association count ({}) in solr and release database matches.'.format(dbAssocCount))
     else:
         print('[Warning] Association count does not match: {} in the release db vs. {} in the solr.'.format(dbAssocCount, solrAssocCount))
         exitCode += 1
