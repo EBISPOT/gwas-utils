@@ -1,9 +1,9 @@
 import re
 import requests
 from datetime import datetime
-import DBConnection
 import argparse
 
+from gwas_db_connect import DBConnection
 
 """
 This script generates stats file as part of the data release process. The stats file then used by the UI application, so the format and content is
