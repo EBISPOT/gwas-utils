@@ -138,7 +138,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='This script generates stats file as part of the data release process. The stats file then used by the UI application, so the format and content is tightly defined.')
     parser.add_argument('--propertiesFile', type = str, help = 'The production application properties file.')
     parser.add_argument('--targetDirectory', type = str, help = 'The folder in which the result file is generated.')
-    parser.add_argument('--filename', default='gwas-catalog-stats-test.txt', help='Name of the stats file generated as output.')
+    parser.add_argument('--filename', default='gwas-catalog-stats.txt', help='Name of the stats file generated as output.')
     parser.add_argument('--dbInstance', help='Name of the database instance from which the counts are extracted.')
 
     args = parser.parse_args()
