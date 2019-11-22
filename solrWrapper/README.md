@@ -50,8 +50,8 @@ Upon successful initialization, this should be written to the standard output:
 Health checks:
 
 ```python
-solr.isServerRunning() # Checks if server is up and running
-solr.isCoreOK() # checks if the core is available
+solr.is_server_running() # Checks if server is up and running
+solr.is_core_OK() # checks if the core is available
 solr.get_core() # Get used core
 solr.get_host() # get host name
 solr.get_port() # get the used port
@@ -61,7 +61,7 @@ solr.get_core_list() # get a list of available cores on the solr server
 Get facet counts (default facet field is `resourcename`):
 
 ```python
-solr.getFacets()
+solr.get_facets()
 ```
 
 Returns dictionary with resources as keys and their count as values:
@@ -73,20 +73,20 @@ Returns dictionary with resources as keys and their count as values:
 Get the number of all documents in the solr index:
 
 ```python
-solr.getAllDocumentCount()
+solr.get_all_document_count()
 ```
 
 Get the schema of the given solr core in a pandas dataframe. The returned dataframe will contain all the field names, type, if the field is indexed, stored or multivalued:
 
 ```python
-solr.getSchema()
+solr.get_schema()
 ```
 
 Get document count for a particular resource:
 
 ```python
 resource = 'study'
-solr.getResourceCounts(resource)
+solr.get_resource_counts(resource)
 ```
 
 Query the solr index - to get a pandas dataframe with all (<100k) studies with the most frequently used fields.
@@ -115,10 +115,16 @@ Reload solr core:
 solr.reload()
 ```
 
+Deleting objects from solr based on query:
+
+```python
+solr.delete_query('(resourcename:study OR resourcename:association) AND ( pubmedId:22683750 )')
+```
+
 Wiping out all documents from the core:
 
 ```python
-solr.wipeCore()
+solr.wipe_core()
 ```
 
 Upload new documents:
