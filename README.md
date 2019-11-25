@@ -18,6 +18,10 @@ A tool to add, change, remove curator user in the database.
 
 Tool to compare databases and solr as part of the quality control process. This script is called during the data release process.
 
+### [Data export tool](https://github.com/EBISPOT/gwas-utils/tree/master/data_export)
+
+A script to perform the data export task of the data release plan. Generates all downloadable files, names them properly, then generates release specific readme for the ftp folder.
+
 ### [Diagram creator for data release](https://github.com/EBISPOT/gwas-utils/tree/master/diagramCreator)
 
 A tool to solve issues with diagram generation: when the pussycat application is called, this script keeps checking the process and the generation of the diagram. Also performs certain checks. This script is also part of the data release process.
