@@ -1,6 +1,5 @@
 import pandas as pd
-from gwas_data_sources import get_db_properties
-import DBConnection
+from gwas_db_connect import DBConnection
 
 
 class databaseManipulation(object):
@@ -51,11 +50,13 @@ class databaseManipulation(object):
             FROM ASSOCIATION A
             WHERE A.ID >= :startID
                 AND A.ID <= :endID
+                AND TRUNC(A.LAST_MAPPING_DATE) = TO_DATE(:startDate, 'YYYY-MM-DD')
         '''
 
-    def __init__(self, dbName = 'dev2'):
+    def __init__(self, dbName, startDate):
         connectionObject = DBConnection.gwasCatalogDbConnector(dbName)
         self.__connection__ = connectionObject.connection
+        self.__startDate__ = startDate
 
     def getFirstToRemap(self, start, end):
         unmappedDf = pd.read_sql(self.__getUnmappedIDs__, self.__connection__, params = {'startID': int(start), 'endID' : int(end)})
@@ -92,7 +93,7 @@ class databaseManipulation(object):
         cursor.close()
         
     def getAssociationCount(self, startID, endID):
-        countDf = pd.read_sql( self.__countIds__, self.__connection__, params={'startID': int(startID), 'endID': int(endID) })
+        countDf = pd.read_sql( self.__countIds__, self.__connection__, params={'startID': int(startID), 'endID': int(endID), 'startDate' : self.__startDate__})
         return(countDf.COUNT.tolist()[0])
     
     def closeConnection(self):

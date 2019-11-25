@@ -1,7 +1,8 @@
 import pandas as pd
 import json
 import requests
-import argparse 
+import argparse
+from datatime import date
 
 # Handler for database:
 from functions import databaseManipulation
@@ -26,7 +27,15 @@ def getEnsemblRelease():
 
 # Restart remapping.
 def restartRemapping(ensemblRelease):
-    return({'ensemblVersion' : ensemblRelease, 'progression' : [[0,0]]})
+    today = date.today()
+    return(
+        {
+            'ensemblVersion' : ensemblRelease, 
+            'startDate' : today.strftime('%Y-%m-%d'),
+            'progression' : [
+                [0,0]
+            ],
+        })
 
 def triggerRemapping(dbInstance, progressData, rowCount):
 
@@ -35,11 +44,14 @@ def triggerRemapping(dbInstance, progressData, rowCount):
     oldStart = lastState[0]
     oldEnd = lastState[1]
 
+    # Extract start date:
+    startDate = progressData['startDate']
+
     # Print progress:
     print("[Info] The last remapping happened between %s and %s" % (oldStart, oldEnd))
 
-    # Instanciate db object:    
-    databaseObject = databaseManipulation.databaseManipulation(dbInstance)
+    # Instanciate db object:
+    databaseObject = databaseManipulation.databaseManipulation(dbInstance, startDate)
 
     # Get unmapped:
     unmappedCount = databaseObject.getUnmappedCount()
