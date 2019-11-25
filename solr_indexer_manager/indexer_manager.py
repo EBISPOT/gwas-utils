@@ -4,6 +4,7 @@ from datetime import date
 from solrWrapper import solrWrapper
 
 # Loading components:
+from components import wrapper_manager
 from components import getUpdated
 from components import solrUpdater
 
@@ -34,6 +35,9 @@ if __name__ == '__main__':
     solrCore = args.solrCore
     solrPort = args.solrPort
 
+    # Parse wrapper:
+    wrapperScript = args.wrapperScript
+
     # Determine updates by comparing old and new database instances:
     old_table = getUpdated.get_studies(oldInstance)
     new_table = getUpdated.get_studies(newInstance)
@@ -42,4 +46,17 @@ if __name__ == '__main__':
     # Instantiate solr object:
     solr_object = solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
+
+    # Generate a list of jobs:
+    wrapper_calls = wrapper_manager.call_generator(db_updates, wrapperScript)
+
+    # Generate trait calls:
+    trait_calls = wrapper_manager.trait_calls(wrapperScript)
+
+    # Print reports before submit to farm:
+    print('[Info] Publication chunks:')
+    print('\n\t'.join(wrapper_calls))
+
+    print('[Info] Trait chunks:')
+    print('\n\t'.join(trait_calls))
 
