@@ -113,5 +113,5 @@ if __name__ == '__main__':
     print('\n\t'.join(trait_calls))
 
     # Submitting the jobs to the farm:
-    manage_lsf_jobs(wrapper_calls, trait_calls, logDir)
+    # manage_lsf_jobs(wrapper_calls, trait_calls, logDir)
 

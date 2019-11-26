@@ -107,12 +107,13 @@ class LSF_manager(object):
         for jobID in self.jobs.keys():
             try:
                 statuses[self.jobs[jobID]['status']] += 1
-            except KeyError
+            except KeyError:
                 statuses[self.jobs[jobID]['status']] = 1
         return statuses
-        
+
     def update_job_status(self):
         for jobID in self.jobs.keys():
             if self.jobs[jobID]['status'] == 'DONE':
                 continue
+            self.check_job(jobID)
 
