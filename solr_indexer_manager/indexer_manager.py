@@ -31,8 +31,10 @@ def manage_lsf_jobs(wrapper_calls, trait_calls, workingDir):
         try:
             os.mkdir('{}/{}'.format(workingDir, folder_index))
         except FileExistsError:
-            print('[Warning] folder already exists: {}/{}'.format(logDir, i))
+            print('[Warning] folder already exists: {}/{}'.format(logDir, folder_index))
             continue
+
+        folder_index += 1
 
         # Submit job to farm:
         LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, folder_index))
@@ -114,5 +116,5 @@ if __name__ == '__main__':
     print('\n\t'.join(trait_calls))
 
     # Submitting the jobs to the farm:
-    # manage_lsf_jobs(wrapper_calls, trait_calls, logDir)
+    manage_lsf_jobs(wrapper_calls, trait_calls, logDir)
 
