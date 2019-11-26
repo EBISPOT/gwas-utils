@@ -1,5 +1,4 @@
-import subprocess
-import os
+from subprocess import Popen, PIPE
 import re
 from collections import OrderedDict
 

@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import date
 from solrWrapper import solrWrapper
 import time
+import os
 
 # Loading components:
 from components import wrapper_manager
@@ -22,7 +23,7 @@ def manage_lsf_jobs(wrapper_calls, trait_calls, workingDir):
     jobGroup = '/gwas_catalog/solr_indexer'
 
     # Initialize lsf object:
-    LSF_obj = LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir)
+    LSF_obj = lsf_manager.LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir)
 
     # Looping though all jobs:
     folder_index = 0
