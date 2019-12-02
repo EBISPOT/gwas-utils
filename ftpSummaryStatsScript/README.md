@@ -14,7 +14,12 @@ A Python script to copy summary statistics files from the staging folders to the
 ### Usage
 
 ```bash
-python ftp_data_release.py --releaseDB ${database} --stagingDir ${stagingDir} --ftpDir ${ftpDir} --emailRecipient ${email}
+python ftp_data_release.py \
+    --releaseDB ${database} \
+    --stagingDir ${stagingDir} \
+    --ftpDir ${ftpDir} \
+    --emailRecipient ${email} \
+    --test
 ```
 
 **Parameters:**
@@ -22,6 +27,7 @@ python ftp_data_release.py --releaseDB ${database} --stagingDir ${stagingDir} --
 * *releaseDB* : instance name for the release database. This instance should only contain published studies
 * *stagingDir* : directory where curators copy summary stats files until the corresponding study is published
 * *ftpDir* : directory where the released data will be copyied
+* *test* : flag to indicate test run. If test run is specified, no action is taken, just a report is sent.
 
 ### More information
 
