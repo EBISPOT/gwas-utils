@@ -8,7 +8,7 @@ from datetime import date
 import re
 import hashlib 
 
-import DBConnection
+from gwas_db_connect import DBConnection
 
 '''
 Applied nomenclature:
@@ -293,21 +293,26 @@ if __name__ == '__main__':
     parser.add_argument('--stagingDir', type=str, help='Path to staging directory.')
     parser.add_argument('--ftpDir', type=str, help='Path to ftp directory.')
     parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
+    parser.add_argument('--test', action='store_true', help='If test run is specified, no release is done just send notification.')
     args = parser.parse_args()
 
     database = args.releaseDB
     stagingDir = args.stagingDir
     ftpDir = args.ftpDir
     emailRecipient = args.emailRecipient
+    testFlag = args.test # By default the test flag is false
+
+    # Print out start report:
+    print('[Info  {:%d, %b %Y}] Summary stats release started...'.format(date.today()))
 
     # Check if staging directory exists:
     if not os.path.isdir(stagingDir):
-        print('[Error] No valid staging directory provided. Exiting.')
+        print('[Error {:%d, %b %Y}] No valid staging directory provided. Exiting.'.format(date.today()))
         sys.exit(1)
 
     # Check if ftp dir exists:
     if not os.path.isdir(ftpDir):
-        print('[Error] No valid ftp directory provided. Exiting.')
+        print('[Error{:%d, %b %Y}] No valid ftp directory provided. Exiting.'.format(date.today()))
         sys.exit(1)
 
     # Open connection:
@@ -330,24 +335,32 @@ if __name__ == '__main__':
     summaryStatsFoldersObj.checkFtpArea(ftpFolders)
 
     ##
-    ## When the comparisons are done, we move files:
+    ## When the comparisons are done, we move files, if we are not testing:
     ##
 
+    # Just sending report without action:
+    if testFlag:
+        report = summaryStatsFoldersObj.generateReport()
+        sendEmailReport(report, emailRecipient)
+        exit(0)
+
     # Rename folders where study ID is given instead of accession ID
-    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
     # Generate md5sum checksum for folders to be copied:
     for folder in summaryStatsFoldersObj.foldersToCopy:
         generate_md5_sum('{}/{}'.format(stagingDir,folder))
 
     # Copy folders to ftp:
-    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
     # # Folders are no longer retracted from ftp:
     # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
 
-    if len(summaryStatsFoldersObj.foldersToCopy) == 0:
-        print('[Info] On {:%d, %b %Y} there was no study to release.'.format(date.today()))
+    if (len(summaryStatsFoldersObj.foldersToCopy) == 0) and \
+       (len(summaryStatsFoldersObj.stagingMissingFolders) == 0):
+        
+        print('[Info {:%d, %b %Y}] There was no study to release and no folder was missing.'.format(date.today()))
         exit(0)
 
     ##
