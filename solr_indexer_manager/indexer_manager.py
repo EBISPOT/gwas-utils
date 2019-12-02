@@ -1,6 +1,6 @@
 import argparse
 import pandas as pd
-from datetime import date
+from datetime import datetime
 from solrWrapper import solrWrapper
 import time
 import os
@@ -11,8 +11,29 @@ from components import getUpdated
 from components import solrUpdater
 from components import lsf_manager
 
+def job_generator(db_updates, wrapper):
+    """
+    This function generates the jobs based on the provided wrapper script and the dictionary with the db updates.
 
-def manage_lsf_jobs(wrapper_calls, trait_calls, workingDir):
+    Return data:
+    {
+        ${pmid} : './${wrapper} -d -e -p ${pmid}',
+        ...
+        efotrait : './${wrapper} -a -s -d',
+        diseasetrait : './${wrapper} -a -s -e'
+    }
+    """
+
+    # Indexing jobs with associations and studies for each pubmed ID:
+    jobs = {pmid : '{} -d -e -p {}'.format(wrapper, pmid) for x in db_updates.values() for pmid in x }
+
+    # Indexing job to generate disease trait and efo trait documents:
+    jobs['efo_traits'] = '{} -a -s -d '.format(wrapper)
+    jobs['disease_traits'] = '{} -a -s -e '.format(wrapper)
+
+    return jobs
+
+def manage_lsf_jobs(job_list, workingDir):
     '''
     This function handles the lsf jobs. Monitors their progression and decides when to exit and how.... boy it needs to be improved.
     '''
@@ -27,27 +48,27 @@ def manage_lsf_jobs(wrapper_calls, trait_calls, workingDir):
 
     # Looping though all jobs:
     folder_index = 0
-    for job in wrapper_calls + trait_calls:
-        try:
-            os.mkdir('{}/{}'.format(workingDir, folder_index))
-        except FileExistsError:
-            print('[Warning] folder already exists: {}/{}'.format(logDir, folder_index))
-            continue
 
-        folder_index += 1
+    # Looping through all the jobs, create separate folders and submit each to the farm:
+    for job_ID, job in job_list.items():
+        try:
+            os.mkdir('{}/{}'.format(workingDir, job_ID))
+        except FileExistsError:
+            print('[Warning] folder already exists: {}/{}'.format(logDir, job_ID))
 
         # Submit job to farm:
-        LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, folder_index))
+        LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, job_ID), jobname = job_ID)
 
-    # Wait until all jobs are finished:
+    # Wait until all jobs are finished or terminated:
     while True:
         report = LSF_obj.generate_report()
 
-        print('[Info] The statuses of the submitted jobs are:')
+        print('[Info] Checking statuses of the submitted jobs at: {:%b %d %H:%M}'.format(datetime.now()))
         for status, count in report.items():
             print("\t{}: {}".format(status, count))
 
         if 'RUN' not in report and 'PEND' not in report:
+            print('[Info] No running or pending jobs were found. Exiting.')
             break
 
         time.sleep(1800)
@@ -55,7 +76,6 @@ def manage_lsf_jobs(wrapper_calls, trait_calls, workingDir):
     # Having this means all the jobs are finished:
     report = LSF_obj.generate_report()
     return report
-
 
 if __name__ == '__main__':
 
@@ -103,18 +123,12 @@ if __name__ == '__main__':
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
 
     # Generate a list of jobs:
-    wrapper_calls = wrapper_manager.call_generator(db_updates, wrapperScript)
-
-    # Generate trait calls:
-    trait_calls = wrapper_manager.trait_calls(wrapperScript)
+    joblist = job_generator(db_updates, wrapperScript)
 
     # Print reports before submit to farm:
-    print('[Info] Publication chunks:')
-    print('\n\t'.join(wrapper_calls))
-
-    print('[Info] Trait chunks:')
-    print('\n\t'.join(trait_calls))
+    print('[Info] List of jobs to be submitted to the farm:')
+    print('\n\t'.join(joblist.values()))
 
     # Submitting the jobs to the farm:
-    manage_lsf_jobs(wrapper_calls, trait_calls, logDir)
+    manage_lsf_jobs(joblist, logDir)
 
