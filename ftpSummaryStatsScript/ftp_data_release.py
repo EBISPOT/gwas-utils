@@ -345,14 +345,14 @@ if __name__ == '__main__':
         exit(0)
 
     # Rename folders where study ID is given instead of accession ID
-    # renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
 
     # Generate md5sum checksum for folders to be copied:
     for folder in summaryStatsFoldersObj.foldersToCopy:
         generate_md5_sum('{}/{}'.format(stagingDir,folder))
 
     # Copy folders to ftp:
-    # copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+    copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
 
     # # Folders are no longer retracted from ftp:
     # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
