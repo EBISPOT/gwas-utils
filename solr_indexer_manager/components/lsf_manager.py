@@ -102,6 +102,7 @@ class LSF_manager(object):
     def generate_report(self):
         self.update_job_status()
         statuses = {}
+        
         # Looping through all jobs and getting the statuses:
         for jobID in self.jobs.keys():
             try:

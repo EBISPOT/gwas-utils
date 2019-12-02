@@ -120,6 +120,8 @@ if __name__ == '__main__':
 
     # Instantiate solr object:
     solr_object = solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
+
+    # Removed associations and studies for all updated/deleted studies + removing all trait documents:
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
 
     # Generate a list of jobs:
@@ -131,4 +133,9 @@ if __name__ == '__main__':
 
     # Submitting the jobs to the farm:
     manage_lsf_jobs(joblist, logDir)
+
+    # At this point there's no downstream management of the jobs.... just submit and wait. 
+    # we are assuming things went well. If not downstream QC measures will terminate the plan anyway.
+    # Later time based on experience this can be made more sophisticated.
+
 
