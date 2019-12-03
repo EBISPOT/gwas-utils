@@ -131,7 +131,6 @@ class ePMC_wrapper():
         return(returnData)
     
     def __getURL(self, URL):
-        print(URL)
         r = requests.get(URL)
         
         if not r.ok:
