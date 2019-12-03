@@ -22,10 +22,15 @@ Other packages:
 ```bash
 python ${scriptDir}/publication_lookup.py \
     --dbInstance ${dbInstance} \
-    --pmidFile ${inputFile}
+    --input ${input_filename} \
+    --queryType pmid \
+    --output ${output_filename}
 ```
 
 **Where**:
 
 * `dbInstance` is the database instance name from which the publications are looked up.
-* `pmidFile` txt file where each line contains one Pubmed ID
+* `input` txt file where each line contains one title or pmid
+* `queryType` if the input is a list of Pubmed IDs (`pmid`) or titles (`title`). Default value is `pmid`.
+* `output` the filename into which the table is saved in tsv format. Default value: `output.tsv`
+
