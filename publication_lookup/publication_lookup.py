@@ -2,6 +2,7 @@ import pandas as pd
 from gwas_db_connect import DBConnection
 from collections import OrderedDict
 import argparse
+import re
 
 # Loading components:
 from components import ePMC_wrapper
@@ -37,11 +38,15 @@ def catalog_db_lookup(connection, pmid_list):
     return(pd.DataFrame(pooled_lookup))
 
 # The epmc lookup can be done in any field:
-def epmc_lookup(query_terms, query_type):
+def epmc_lookup(query_terms):
     epmcHandler = ePMC_wrapper.ePMC_wrapper()
     pubData = []
 
     for query_term in query_terms:
+        # Inferring query type:
+        query_type = 'pmid' if re.match('^[0-9]+$',query_term) else 'title'
+
+        # Fetch data from EuroPMC:
         responses = epmcHandler.search(queryTerms = {query_type : query_term})
 
         # Construct dummy response:
@@ -64,10 +69,7 @@ def epmc_lookup(query_terms, query_type):
         # Extrat the first author:
         pubData_df['first_author'] = pubData_df.authors.apply(lambda x: x.split(',')[0] if x else None)
 
-        # 
-
     return(pubData_df.drop(['authors'], axis=1))
-
 
 if __name__ == '__main__':
 
@@ -77,14 +79,12 @@ if __name__ == '__main__':
     # Database related input:
     parser.add_argument('--dbInstance', help='Database instance name.', type=str)
     parser.add_argument('--input', help='Txt file with query terms.', type=str)
-    parser.add_argument('--queryType', help='Type of the query. What are we searching for.', type=str, default = 'pmid', choices=['pmid', 'title'])
     parser.add_argument('--output', help='tsv file to save output.', default = 'output.tsv')
     args = parser.parse_args()
 
     # Parse input parameters:
     dbInstance = args.dbInstance
     inputFile = args.input
-    queryType = args.queryType
     outputFile = args.output
 
     # Content of the input file will be stored in this array:
@@ -97,10 +97,10 @@ if __name__ == '__main__':
             input_container.append(line)
 
     # Print report:
-    print('[Info] {} {}s were read from the input file ({}).'.format(len(input_container), queryType, inputFile))
+    print('[Info] {} query items were read from the input file ({}).'.format(len(input_container), inputFile))
 
     # Fetch data form EuroPMC:
-    epmc_lookup_df = epmc_lookup(input_container, queryType)
+    epmc_lookup_df = epmc_lookup(input_container)
     print('[Info] {} of the queried input were found in the EPMC database.'.format(len(epmc_lookup_df.loc[~epmc_lookup_df.journal.isna()])))
 
     # Establish database connection:
