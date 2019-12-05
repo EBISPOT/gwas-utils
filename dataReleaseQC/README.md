@@ -100,7 +100,8 @@ python data_release_report.py  --oldSolrAddress <host name of the old solr> \
     --newSolrAddress <host name of the new solr> \
     --newSolrPort <port name of the new solr> \
     --solrCore <solr core name> \
-    --emailAddress <email addresses>
+    --emailAddress <email addresses> \
+    --outputFile <output file name>
 ```
 
 Where solr addresses are specified like: `http://localhost:8983`
@@ -113,7 +114,7 @@ This script generates stats file that the UI reads and display (date of release,
 
 ```bash
 python stats_file_generator.py --propertiesFile <prop_file> \
-    --filename <outputFile> \
+    --outputFile <outputFile> \
     --dbInstance <instance_name>
 ```
 

@@ -8,15 +8,14 @@ import datetime
 # Loading custom functions:
 from solrWrapper import solrWrapper
 
-def send_report(email, *argv):
+def send_report(email = None, outputFile = None, *argv):
     """
     If at least one missing EFO term or label mismatch we send a report
     """
 
     today = datetime.datetime.today().strftime('%Y-%m-%d')
-    filename = 'data_release_notes_{}.txt'.format(today)
 
-    with codecs.open(filename, "w", "utf-8-sig") as text_file:
+    with codecs.open(outputFile, "w", "utf-8-sig") as text_file:
         
         # Print header:
         text_file.write("GWAS Catalog release notes.\n\n")
@@ -26,7 +25,7 @@ def send_report(email, *argv):
         for report in argv:
             text_file.write("{}\n".format(report))
             
-    a = subprocess.Popen('cat %s | mutt -s "Data release QC report - %s" -- %s' %(filename, today, email), shell=True)
+    a = subprocess.Popen('cat %s | mutt -s "Data release QC report - %s" -- %s' %(outputFile, today, email), shell=True)
     a.communicate()
 
 def generate_ftp_link(row):
@@ -147,6 +146,8 @@ if __name__ == '__main__':
     parser.add_argument('--newSolrPort', type = str, help = 'The port name on which the solr server is listening.')
     parser.add_argument('--solrCore', default='gwas', type = str, help = 'The core of the tested solr core. Defaule: gwas.')
     parser.add_argument('--emailAddress', type = str, help='Email address to which the report will be sent.')
+    parser.add_argument('--outputFile', type = str, help='Otput filename into which the report will be saved.')
+    
 
     args = parser.parse_args()
 
@@ -163,6 +164,9 @@ if __name__ == '__main__':
 
     # Recipient email list:
     emails = args.emailAddress
+
+    # Output file name:
+    outputFile = args.outputFile
 
     # Retrieve data from the old solr:
     oldSolr = solrWrapper(oldSolrHost, oldSolrPort, solrCore, verbose = False)
@@ -188,5 +192,5 @@ if __name__ == '__main__':
     retractedSummaryStatsReport = report_summary_stats(oldSolrStudy_df, newSolrStudy_df, test_type = 'retracted')
 
     # Compiling all the reports:
-    send_report(emails, av_report, newStudyReport, newSummaryStatsReport, retractedStudyReport, retractedSummaryStatsReport)
+    send_report(emails, outputFile, av_report, newStudyReport, newSummaryStatsReport, retractedStudyReport, retractedSummaryStatsReport)
 
