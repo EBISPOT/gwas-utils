@@ -23,25 +23,59 @@ def get_db_counts(connection):
     # studycount=4220
     # associationcount=157336
     # snpcount=107486
+   
+    '''
+    Warning: It might be confusing, but studycount actually publicationcount in the final document.
     
+    That's why in the code, I'm referring to that value as publication count. :D 
+    '''
+
     returnData = {
         'studycount' : None,
         'associationcount' : None,
         'snpcount' : None
     }
-    
+     
     # Get study count:
-    studyCountSql = '''SELECT COUNT(*) FROM STUDY'''
-    connection.cursor.execute(studyCountSql)
+    publicationCountSql = '''
+        SELECT COUNT(DISTINCT(P.PUBMED_ID))
+        FROM PUBLICATION P,
+          STUDY S,
+          HOUSEKEEPING HK
+        WHERE HK.ID = S.HOUSEKEEPING_ID
+          AND HK.IS_PUBLISHED = 1
+          AND S.PUBLICATION_ID = P.ID
+        ''' 
+    connection.cursor.execute(publicationCountSql)
     returnData['studycount'] = connection.cursor.fetchall()[0][0]
     
     # Get association Count:
-    associationCountSql = '''SELECT COUNT(*) FROM ASSOCIATION'''
+    associationCountSql = '''
+        SELECT COUNT(DISTINCT(A.ID))
+        FROM ASSOCIATION A,
+          STUDY S,
+          HOUSEKEEPING HK
+        WHERE HK.ID = S.HOUSEKEEPING_ID
+          AND HK.IS_PUBLISHED = 1
+          AND A.STUDY_ID = S.ID
+        '''
     connection.cursor.execute(associationCountSql)
     returnData['associationcount'] = connection.cursor.fetchall()[0][0]
     
     # Get snp count:
-    snpCountSql = '''SELECT COUNT(*) FROM SINGLE_NUCLEOTIDE_POLYMORPHISM'''
+    snpCountSql = '''
+        SELECT COUNT(DISTINCT(SNP.RS_ID))
+        FROM ASSOCIATION A,
+          SINGLE_NUCLEOTIDE_POLYMORPHISM SNP,
+          STUDY S,
+          HOUSEKEEPING HK,
+          ASSOCIATION_SNP_VIEW ASV
+        WHERE HK.ID = S.HOUSEKEEPING_ID
+          AND HK.IS_PUBLISHED = 1
+          AND A.STUDY_ID = S.ID
+          AND A.ID = ASV.ASSOCIATION_ID
+          AND SNP.ID = ASV.SNP_ID
+        '''
     connection.cursor.execute(snpCountSql)
     returnData['snpcount'] = connection.cursor.fetchall()[0][0]
     
@@ -137,7 +171,6 @@ if __name__ == "__main__":
     # Commandline arguments
     parser = argparse.ArgumentParser(description='This script generates stats file as part of the data release process. The stats file then used by the UI application, so the format and content is tightly defined.')
     parser.add_argument('--propertiesFile', type = str, help = 'The production application properties file.')
-    parser.add_argument('--targetDirectory', type = str, help = 'The folder in which the result file is generated.')
     parser.add_argument('--filename', default='gwas-catalog-stats.txt', help='Name of the stats file generated as output.')
     parser.add_argument('--dbInstance', help='Name of the database instance from which the counts are extracted.')
 
@@ -145,7 +178,6 @@ if __name__ == "__main__":
 
     # Input parameters:
     applicationProperties = args.propertiesFile
-    targetDirectory = args.targetDirectory
     StatsFilename = args.filename
     dbInstance = args.dbInstance
 
@@ -170,7 +202,7 @@ if __name__ == "__main__":
     statsData.update(get_db_counts(connection))
 
     # Write file:
-    with open('{}/{}'.format(targetDirectory, StatsFilename), 'w') as statsfile:
+    with open(StatsFilename, 'w') as statsfile:
         
         # Write header:
         statsfile.write('# {:%c %z}\n'.format(datetime.now()))

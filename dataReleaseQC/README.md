@@ -105,7 +105,37 @@ python data_release_report.py  --oldSolrAddress <host name of the old solr> \
 
 Where solr addresses are specified like: `http://localhost:8983`
 
+## Stats file generator
 
+This script generates stats file that the UI reads and display (date of release, association count etc.).
+
+#### Usage:
+
+```bash
+python stats_file_generator.py --propertiesFile <prop_file> \
+    --filename <outputFile> \
+    --dbInstance <instance_name>
+```
+
+Where:
+
+* `propertiesFile` - The application property file of the remapper application to fetch the path to the URL of the currently used Ensembl REST API. This is required to get the current Ensembl release version onto which the GWAS Catalog data is mapped.
+* `outputFile` - Path and file name of the output file. It must be discoverable by other components of the data release plan.
+* `instance name` - The name of the release database to extract the number of publications and associations in the release.
+
+Output:
+
+```
+dbsnpbuild=151
+studycount=4220
+associationcount=157336
+genomebuild=GRCh38.p12
+releasedate=2019-09-24
+snpcount=107486
+ensemblbuild=96
+```
+
+It is important to highlight that the study count is not referring to studies but publications!!! This should be updated in the [gwas-ui](https://github.com/EBISPOT/gwas-ui) code as well to make sure it is more intuitive to maintain.
 
 ## More information
 
