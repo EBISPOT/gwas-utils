@@ -1,7 +1,44 @@
 #!/usr/bin/env bash
 
+##
+## This script was written to replace the data export stage of the GWAS Catalog data release plan
+## 
+## List of exported files:
+##  - Association file.
+##  - Alternative association file.
+##  - Study file.
+##  - Alternative association file.
+##  - Ancestry file.
+##  - Trait mapping file.
+##  - GWAS Catalog knowledge base file.
+##  - GWAS Catalog diagram.
+##  - Stats file generation
+##  - Release report
+##  - Readme file
+
+# Workflow:
+## 1 - Processing and testing command line parameters.
+## 2 - Cleaning up output directory
+## 3 - Extracting output files from tomcat
+## 4 - Generate trait mapping file.
+## 5 - Fetch owl file.
+## 6 - Fetch diagram file + convert
+## 7 - Generate release notes
+## 8 - Generate stats file
+## 9 - Extract release info (Ensembl mapping, dbSNP version, build)
+##10 - Generate readme file.
+
 # Generate date string:
 export today=$(date "+%Y-%m-%d")
+
+##
+## Fetching applied Ensembl release, Genome build, dbSNP version:
+##
+function fetch_release_info {
+    statsFile="${1}" # not tested, it is already ferified earlier:
+    read genomeBuild dbSNPBuild EnsemblReles <<<$(cat $statsFile | perl -MData::Dumper -lane '@a = split "=", $_; $h{$a[0]} = $a[1]; END {printf "%s %s %s", $h{"genomebuild"}, $h{"dbsnpbuild"}, $h{"ensemblbuild"} }')
+
+}
 
 ##
 ## This function fetches ancestry/association and study data from the solr index:
@@ -9,7 +46,6 @@ export today=$(date "+%Y-%m-%d")
 function fetch_data_from_tomcat {
     outputDir="${1}"
     host="${2}"
-    ensemblRelease="${3}"
 
     # We need to test all the variables to make sure we have all of them
     if [[ -z "${3}" ]]; then 
@@ -19,11 +55,11 @@ function fetch_data_from_tomcat {
 
     # Associative array to get proper file name:
     declare -A fileTypes=(
-        ['association']="gwas_catalog_v1.0-associations_e${ensemblRelease}_r${today}.tsv"
-        ['alternative_assocation']="gwas_catalog_v1.0.2-associations_e${ensemblRelease}_r${today}.tsv"
-        ['study']="gwas_catalog_v1.0-studies_e${ensemblRelease}_r${today}.tsv"
-        ['alternative_study']="gwas_catalog_v1.0.2-studies_e${ensemblRelease}_r${today}.tsv"
-        ['ancestry']="gwas_catalog-ancestry_r${today}.tsv"
+        ['association']="gwas-catalog-associations.tsv"
+        ['alternative_assocation']="gwas-catalog-associations_ontology-annotated.tsv"
+        ['study']="gwas-catalog-studies.tsv"
+        ['alternative_study']="gwas-catalog-studies_ontology-annotated.tsv"
+        ['ancestry']="gwas-catalog-ancestry.tsv"
     )
 
     # Associative array to get tomcat queries:
@@ -61,7 +97,7 @@ function fetch_data_from_tomcat {
 
 
 ##
-## This function calls trait mapping file:
+## This function calls the generation of the trait mapping file:
 ##
 function generate_trait_mapping {
     outputDir="${1}"
@@ -90,9 +126,12 @@ function generate_trait_mapping {
 ## Generate readme file:
 ##
 function generate_readme {
+
+    # Parameters:
     outputDir="${1}"
     genomeBuild="${2}"
-    ensemblRelease="${3}"
+    dbSNPBuild="${3}"
+    ensemblRelease="${4}"
 
     # Get association files:
     assocFile=$( cd ${outputDir}; ls gwas_catalog_v1.0-associations* )
@@ -114,6 +153,7 @@ function generate_readme {
 GWAS catalog release date: ${today}
 Ensembl release version that the data is mapped to: e${ensemblRelease}
 The applied genome build: ${genomeBuild}
+dbSNP build: ${dbsnpbuild}
 
 Directory contains:
 
@@ -157,16 +197,6 @@ MD5 sums:" > "${outputDir}/README.txt"
     echo >> "${outputDir}/README.txt"
 
 }
-
-##
-## We need to get the Ensembl ID and the genome build.
-##
-
-
-##
-## Fetching 
-##
-
 
 ##
 ## Generate help message:
@@ -345,15 +375,23 @@ if [[ ! -f "${outputDir}/release_notes.txt" ]]; then
     exit 1;
 fi
 
-# Generate readme file:
-generate_readme  "${outputDir}" "GRCH38p12" "96"
-
-# outputDir="${1}"
-#     genomeBuild="${2}"
-#     ensemblRelease="${3}"
-
-# Test if there are the 
 
 
 
+##
+## 1. Generate stats file:
+##
 
+
+##
+## Fetch release info from stats file:
+##
+read genomeBuild dbSNPBuild EnsemblReles <<<$(cat $statsFile \
+    | perl -MData::Dumper -lane '@a = split "=", $_; $h{$a[0]} = $a[1]; END {printf "%s %s %s", $h{"genomebuild"}, $h{"dbsnpbuild"}, $h{"ensemblbuild"} }')
+
+
+##
+## Generate readme file:
+##
+
+generate_readme  "${outputDir}" "${genomeBuild}" "${dbSNPBuild}" "${EnsemblReles}"

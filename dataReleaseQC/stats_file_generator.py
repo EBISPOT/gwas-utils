@@ -178,7 +178,7 @@ if __name__ == "__main__":
 
     # Input parameters:
     applicationProperties = args.propertiesFile
-    StatsFilename = args.filename
+    StatsFilename = args.outputFile
     dbInstance = args.dbInstance
 
     # Read application properties:
