@@ -35,7 +35,8 @@ python ${scriptDir}/indexer_manager.py \
     --oldInstance ${old_database_instance} \
     --solrHost http://localhost --solrCore gwas --solrPort 8983 \
     --wrapperScript ${wrapperScriptDir}/build-solr-index.sh \
-    --logFolder ${logDir}
+    --logFolder ${logDir} \
+    --fullIndex
 ```
 
 **Where**:
@@ -45,3 +46,4 @@ python ${scriptDir}/indexer_manager.py \
 * `solrHost`, `solrCore`, `8983` are pointers to the solr server
 * `${wrapperScriptDir}/build-solr-index.sh` is the wrapper for the solr indexer application. (currently not versioned)
 * `logDir` directory into which the logfiles are saved.
+* `--fullIndex` - Enable this for the full catalog index: if this switch is turned on, the solr index is wiped off, and all publication of the new database instance is submitted to the farm for indexing.
