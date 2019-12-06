@@ -6,7 +6,7 @@ import time
 import os
 
 # Loading components:
-from components import wrapper_manager
+# from components import wrapper_manager
 from components import getUpdated
 from components import solrUpdater
 from components import lsf_manager
@@ -25,7 +25,7 @@ def job_generator(db_updates, wrapper):
     """
 
     # Indexing jobs with associations and studies for each pubmed ID:
-    jobs = {pmid : '{} -d -e -p {}'.format(wrapper, pmid) for x in db_updates.values() for pmid in x }
+    jobs = {pmid : '{} -d -e -p {}'.format(wrapper, pmid) for x in db_updates.values() for pmid in x if pmid != '*'}
 
     # Indexing job to generate disease trait and efo trait documents:
     jobs['efo_traits'] = '{} -a -s -d '.format(wrapper)
@@ -93,7 +93,10 @@ if __name__ == '__main__':
 
     # Input related to solr indexer:
     parser.add_argument('--wrapperScript', help='Wrapper script for the solr indexer.')
-
+    
+    # Input related to solr indexer:
+    parser.add_argument('--fullIndex', help='Flag to indicate that the entire solr index needs to be wiped off. And the whole index is going to be re-generated.', action = "store_true")
+    
     # Location for log files:
     parser.add_argument('--logFolder', help='Folder into which the log files will be generated.')
     args = parser.parse_args()
@@ -106,6 +109,7 @@ if __name__ == '__main__':
     solrHost = args.solrHost
     solrCore = args.solrCore
     solrPort = args.solrPort
+    fullIndex = args.fullIndex
 
     # Parse wrapper:
     wrapperScript = args.wrapperScript
@@ -116,7 +120,16 @@ if __name__ == '__main__':
     # Determine updates by comparing old and new database instances:
     old_table = getUpdated.get_studies(oldInstance)
     new_table = getUpdated.get_studies(newInstance)
-    db_updates = getUpdated.get_db_updates(old_table, new_table)
+
+    # The update object is generated depending on if the flag is enabled or not:
+    if fullIndex:
+        db_updates = {
+            "added" : new_table.PUBMED_ID.unique().tolist(), # As if all publications in the new table was newly added
+            "removed" : ['*'], # As if all publications were removed.
+            "updated" : []
+        }
+    else:
+        db_updates = getUpdated.get_db_updates(old_table, new_table)
 
     # Instantiate solr object:
     solr_object = solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
@@ -126,6 +139,7 @@ if __name__ == '__main__':
 
     # Generate a list of jobs:
     joblist = job_generator(db_updates, wrapperScript)
+    print(joblist)
 
     # Print reports before submit to farm:
     print('[Info] List of jobs to be submitted to the farm:')
