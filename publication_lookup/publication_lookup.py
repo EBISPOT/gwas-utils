@@ -39,37 +39,34 @@ def catalog_db_lookup(connection, pmid_list):
 
 # The epmc lookup can be done in any field:
 def epmc_lookup(query_terms):
-    epmcHandler = ePMC_wrapper.ePMC_wrapper()
-    pubData = []
+    epmcHandler = ePMC_wrapper.ePMC_wrapper(resultType = 'core')
 
     for query_term in query_terms:
+        print(query_term)
         # Inferring query type:
         query_type = 'pmid' if re.match('^[0-9]+$',query_term) else 'title'
 
         # Fetch data from EuroPMC:
-        responses = epmcHandler.search(queryTerms = {query_type : query_term})
+        epmcHandler.search(queryTerms = {query_type : query_term})
 
-        # Construct dummy response:
-        correct_data = {'pmid' : None,
-                'title'   : None,
-                'authors' : None,
-                'date'    : None,
-                'journal' : None}
-        correct_data[query_type] = query_term
+        # Extract parsed response:
+        returnData = epmcHandler.parse_field()
 
-        # Loop throuh all response and if found the correct one, update:
-        for response in responses:
-            if response[query_type] == query_term:
-                correct_data = response
+        # Update queried fields if nothing was found:
+        if returnData[query_type].tolist()[0] != query_term:
+            returnData[query_type] = query_term
 
-        # Add the data:
-        pubData.append(correct_data)
-        pubData_df = pd.DataFrame(pubData)
+        # Adding rows to dataframe:
+        try:
+            pubData = pubData.append(returnData,sort=False, ignore_index = True)
+        except:
+            pubData = returnData
 
-        # Extrat the first author:
-        pubData_df['first_author'] = pubData_df.authors.apply(lambda x: x.split(',')[0] if x else None)
+    # Extrat the first author:
+    pubData['first_author'] = pubData.authors.apply(lambda x: x.split(',')[0] if x else None)
+    pubData.drop(['authors'], axis=1)
 
-    return(pubData_df.drop(['authors'], axis=1))
+    return(pubData)
 
 if __name__ == '__main__':
 
@@ -112,7 +109,7 @@ if __name__ == '__main__':
 
     # Pooling data together:
     merged_df = epmc_lookup_df.merge(db_lookup_df, left_on='pmid', right_on='pmid')
-    column_order = ['title', 'first_author', 'date', 'journal', 'pmid', 'in_catalog', 'study_accession', 'summary_stats']
+    column_order = ['title', 'first_author', 'date', 'journal', 'pmid', 'c_author', 'c_orcid', 'c_email', 'in_catalog', 'study_accession', 'summary_stats']
     merged_df[column_order].to_csv(outputFile, sep = '\t', index = False)
 
     print('[Info] Combined table saved to {}'.format(outputFile))
