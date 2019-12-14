@@ -187,16 +187,16 @@ if __name__ == '__main__':
     solrObject = solrWrapper(host=host, port = port, core=core)
 
     # Get number of documents:
-    docCount = solrObject.getAllDocumentCount()
+    docCount = solrObject.get_all_document_count()
     print('[Info] Number of documents: {}'.format(docCount))
 
     # Get fatects:
-    facets = solrObject.getFacets()
+    facets = solrObject.get_facets()
     print('[Info] Facets in the core:\n\t{}'.format(',\n\t'.join(['{}:{}'.format(key, value) for key, value in facets.items()])))
 
     # Get a number of a single resource:
     resource = 'study'
-    print('[Info] Number of {} documents in the core: {}'.format(resource, solrObject.getResourceCounts(resource)))
+    print('[Info] Number of {} documents in the core: {}'.format(resource, solrObject.get_resource_counts(resource)))
 
     # Get study table:
     study_df = solrObject.get_study_table()

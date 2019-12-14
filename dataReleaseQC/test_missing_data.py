@@ -69,7 +69,7 @@ if __name__ == '__main__':
     dbStudyCount = len(relDbStudies)
 
     # Get number of associations db and solr
-    solrAssocCount = solr.getFacets()['association']
+    solrAssocCount = solr.get_facets()['association']
     dbAssocCount = relDB.getAssocCount()
 
     # Set exit code:
