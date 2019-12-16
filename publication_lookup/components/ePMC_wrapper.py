@@ -171,9 +171,9 @@ class ePMC_wrapper():
                             c_orcid.append(author['authorId']['value'])
             
             return_data.update({
-                'c_author': ','.join(list(set(c_author))),
-                'c_email' : ','.join(list(set(c_emails))),
-                'c_orcid' : ','.join(list(set(c_orcid)))
+                'c_author': ','.join(c_author),
+                'c_email' : ','.join(c_emails),
+                'c_orcid' : ','.join(c_orcid)
             })
 
             return return_data
