@@ -91,23 +91,15 @@ class LSF_manager(object):
         output = y.communicate()
         stdout = str(output[0])
         
-        # If status is not available for the queried jobID:
-        if output[1]:
-            self.jobs[jobID]['status'] = None
-            return(None)
+        return stdout.split(" ")[2]
+
+    def generate_report(self):
         
-        # Parsing status if available:
-        else:
-            jobStatus = stdout.split(" ")[2]
-            self.jobs[jobID]['status'] = jobStatus
-
-
-    def check_all_jobs(self):
-        self.update_job_status()
+        # Job statuses are collected in this variable:
         statuses = {}
-        indices_to_delete = []
-        jobIDs_to_resubmit = []
-        jobIDs_to_kill = []
+
+        # These jobs are going to be killed/deleted and resubmitted (index values are kept):
+        jobs_to_delete = [] 
 
         ##
         ## Looping through all jobs and update statuses:
@@ -116,47 +108,40 @@ class LSF_manager(object):
 
             # If a job was finished, we don't care:
             if job['status'] == 'DONE':
-                statuses['DONE']+=1
+                # record status:
+                try:
+                    statuses['DONE'] += 1
+                except KeyError:
+                    statuses['DONE'] = 1
+
                 continue
 
             # Check for and record status:
             jobID = job['job_id']
             new_status = self.check_job(jobID)
             job['status'] = new_status
-            statuses[new_status]+=1
+
+            # record status:
+            try:
+                statuses[new_status] += 1
+            except KeyError:
+                statuses[new_status] = 1
 
             # We kill and resubmit a job if the status is not DONE, RUN or PEND
             if new_status not in ['DONE', 'RUN', 'PEND']:
-                indices_to_delete.append(index)
-                jobIDs_to_kill.append(jobID)
-                jobIDs_to_resubmit.append(jobID)
-                statuses[new_status]+=1
+                jobs_to_delete.append(index)
                 print('[Warning] A job (id: {}) was found with {} status. The job is killed and re-submitted to the farm.'.format(jobID, new_status))
-
-            if new_status == 'DONE':
-                statuses['DONE']+=1
-            else:
-                statuses[new_status]+=1
-        
-        ## 
-        ## Print out report:
-        ##
-        print('[Info] Current statuses of the submitted jobs: {}'.format(','.join(['{} - {}'.format(k,v) for k,v in statuses.items()])))
 
         ##
         ## Delete failed jobs form list, kill the process and re-submit them:
         ##
-        if indices_to_delete:
-            self.jobs = [v for i,v in enumerate(self.jobs) if i not in frozenset(indices_to_delete)]
+        if jobs_to_delete:
+            # Re-submit jobs:
+            for index in jobs_to_delete:
+                job = self.jobs[index]
+                self.submit_job(command = job['command'], workingDir = job['working_dir'], jobname = job['job_name'])
 
-        # kill jobs:
-        for jobID in jobIDs_to_kill:
-            # kill job:
-            self.kill_jobID(jobID)
+            # Remove failed jobs:
+            self.jobs = [v for i,v in enumerate(self.jobs) if i not in frozenset(jobs_to_delete)]
 
-        # re-submit command:
-        for jobID in jobIDs_to_resubmit:
-            job = self.jobs[jobID]
-            self.submit_job(command = job['command'], workingDir = job['working_dir'], jobname = job['job_name'])
-
-
+        return statuses

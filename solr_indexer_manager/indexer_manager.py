@@ -67,15 +67,12 @@ def manage_lsf_jobs(job_list, workingDir):
         for status, count in report.items():
             print("\t{}: {}".format(status, count))
 
-        if 'RUN' not in report and 'PEND' not in report:
+        if 'RUN' not in report and 'PEND' not in report and 'EXIT' not in report:
             print('[Info] No running or pending jobs were found. Exiting.')
             break
 
-        time.sleep(1800)
+        time.sleep(10)
 
-    # Having this means all the jobs are finished:
-    report = LSF_obj.generate_report()
-    return report
 
 if __name__ == '__main__':
 
@@ -99,6 +96,9 @@ if __name__ == '__main__':
     
     # Location for log files:
     parser.add_argument('--logFolder', help='Folder into which the log files will be generated.')
+
+    # Print out excessive reports:
+    parser.add_argument('--verbose', help='Flag to give more informative output.', action = "store_true")
     args = parser.parse_args()
 
     # Parser out database instance names:
@@ -110,6 +110,7 @@ if __name__ == '__main__':
     solrCore = args.solrCore
     solrPort = args.solrPort
     fullIndex = args.fullIndex
+    verbose = args.verbose
 
     # Parse wrapper:
     wrapperScript = args.wrapperScript
@@ -139,11 +140,11 @@ if __name__ == '__main__':
 
     # Generate a list of jobs:
     joblist = job_generator(db_updates, wrapperScript)
-    print(joblist)
 
     # Print reports before submit to farm:
-    print('[Info] List of jobs to be submitted to the farm:')
-    print('\n\t'.join(joblist.values()))
+    if verbose:
+        print('[Info] List of jobs to be submitted to the farm:')
+        print('\n\t'.join(joblist.values()))
 
     # Submitting the jobs to the farm:
     manage_lsf_jobs(joblist, logDir)
