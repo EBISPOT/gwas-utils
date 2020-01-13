@@ -82,6 +82,9 @@ class LSF_manager(object):
                 'working_dir' : workingDir, 
                 'job_name' : jobname
             })
+    def kill_job(self, jobID):
+        x = Popen(['bkill', jobID], stdout=PIPE, stderr=PIPE)
+
 
     def check_job(self,jobID):
         x = Popen(['bjobs', '-a', jobID], stdout=PIPE, stderr=PIPE)
@@ -136,9 +139,16 @@ class LSF_manager(object):
         ## Delete failed jobs form list, kill the process and re-submit them:
         ##
         if jobs_to_delete:
-            # Re-submit jobs:
+
             for index in jobs_to_delete:
+
+                # Extract job details:
                 job = self.jobs[index]
+
+                # Kill job:
+                self.kill_job(job['job_id'])
+
+                # Resubmit job:
                 self.submit_job(command = job['command'], workingDir = job['working_dir'], jobname = job['job_name'])
 
             # Remove failed jobs:
