@@ -71,7 +71,7 @@ def manage_lsf_jobs(job_list, workingDir):
             print('[Info] No running or pending jobs were found. Exiting.')
             break
 
-        time.sleep(10)
+        time.sleep(600)
 
 
 if __name__ == '__main__':
