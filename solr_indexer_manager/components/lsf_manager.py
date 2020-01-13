@@ -85,6 +85,15 @@ class LSF_manager(object):
     def kill_job(self, jobID):
         x = Popen(['bkill', jobID], stdout=PIPE, stderr=PIPE)
 
+        # Parse output:
+        output = x.communicate()
+        stdout = output[0]
+        stderr = output[1]
+    
+        if stdout:
+            print(stdout)
+        if stderr:
+            print(stderr)
 
     def check_job(self,jobID):
         x = Popen(['bjobs', '-a', jobID], stdout=PIPE, stderr=PIPE)
