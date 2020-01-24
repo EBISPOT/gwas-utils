@@ -39,7 +39,7 @@ def manage_lsf_jobs(job_list, workingDir):
     '''
 
     # Hardcoded variables:
-    memoryLimit = 2000
+    memoryLimit = 4000
     jobPrefix = 'solr_indexing'
     jobGroup = '/gwas_catalog/solr_indexer'
 
