@@ -31,7 +31,7 @@ def catalog_db_lookup(connection, pmid_list):
         pooled_lookup.append(OrderedDict({
             'pmid' : pmid,
             'in_catalog' : in_catalog,
-            'study_accession' : ','.join(df.ACCESSION_ID.tolist()),
+            'study_accession' : ','.join(df.loc[~df.ACCESSION_ID.isna(),'ACCESSION_ID'].tolist()),
             'summary_stats' : df.FULL_PVALUE_SET.isin(['1']).any(),
         }))
 
