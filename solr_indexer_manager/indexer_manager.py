@@ -42,9 +42,10 @@ def manage_lsf_jobs(job_list, workingDir):
     memoryLimit = 4000
     jobPrefix = 'solr_indexing'
     jobGroup = '/gwas_catalog/solr_indexer'
+    queue = 'production-rh74'
 
     # Initialize lsf object:
-    LSF_obj = lsf_manager.LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir)
+    LSF_obj = lsf_manager.LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir, queue=queue)
 
     # Looping though all jobs:
     folder_index = 0
