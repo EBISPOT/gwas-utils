@@ -258,11 +258,15 @@ def generate_md5_sum(folder):
     
     # Loopthrough the files and calculate md5sum:
     for filename in onlyfiles:
+        #print('md5 for ' + filename)
         with open('{}/{}'.format(folder,filename),"rb") as f:
-            
             # Read and calculate hash:
-            bytes = f.read() # read file as bytes
-            md5checksums.append([filename, hashlib.md5(bytes).hexdigest()])
+            #bytes = f.read()
+            # read file as bytes
+            file_hash = hashlib.md5()
+            for chunk in iter(lambda: f.read(8192), b''):
+                file_hash.update(chunk)
+            md5checksums.append([filename, file_hash.hexdigest()])
     
     # Saving values into a file:
     with open('{}/md5sum.txt'.format(folder), 'w') as writer:
