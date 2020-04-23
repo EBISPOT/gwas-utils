@@ -37,7 +37,7 @@ from collections import defaultdict
 
 
 def build_studies_download(argv):
-    base_url = ''
+    base_url = 'http://localhost:8080'
     try:
         opts, args = getopt.getopt(argv, "hu:", ["url="])
     except getopt.GetoptError:
