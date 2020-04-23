@@ -56,7 +56,7 @@ def build_studies_download(argv):
     #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
-        with open('gwas-catalog-unpublished-studies.txt', 'w', newline='') as csvfile:
+        with open('gwas-catalog-unpublished-studies-download.txt', 'w', newline='') as csvfile:
             fieldnames = ['STUDY ACCESSION', 'FIRST AUTHOR', 'STAGE', 'NUMBER OF INDIVDUALS', 'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF RECRUITMENT', 'ADDITONAL ANCESTRY DESCRIPTION', 'Founder/Genetically isolated population', 'Number of cases', 'Number of controls', 'Sample description', 'DOI', 'DATE ADDED TO CATALOG', 'JOURNAL','STUDY', 'DISEASE/TRAIT', 'PLATFORM [SNPS PASSING QC]', 'GENOTYPING TECHNOLOGY', 'Statistical model']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect=csv.excel_tab)
 
