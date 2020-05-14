@@ -1,4 +1,5 @@
 import csv
+import datetime
 import getopt
 import json
 import sys
@@ -6,40 +7,95 @@ import urllib.request
 from collections import defaultdict
 
 
-# def build_ancestry_download():
-#     #STUDY ACCESSION	FIRST AUTHOR	STAGE	NUMBER OF INDIVDUALS	BROAD ANCESTRAL CATEGORY	COUNTRY OF RECRUITMENT	ADDITONAL ANCESTRY DESCRIPTION	Founder/Genetically isolated population	Number of cases	Number of controls	Sample description	DOI
-#     url = 'http://localhost:8081/api/studies/unpublished'#replace w/ env. variable
-#     with urllib.request.urlopen(url) as f:
-#     #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
-#         data = json.load(f)
-#         print(data)
-#
-#         with open('unpublished_ancestry.tsv', 'w', newline='') as csvfile:
-#             fieldnames = ['STUDY ACCESSION', 'FIRST AUTHOR', 'STAGE', 'NUMBER OF INDIVDUALS', 'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF RECRUITMENT', 'ADDITONAL ANCESTRY DESCRIPTION', 'Founder/Genetically isolated population', 'Number of cases', 'Number of controls', 'Sample description', 'DOI']
-#             writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect=csv.excel_tab)
-#             writer.writeheader()
-#             for study in data:
-#                 table = defaultdict()
-#                 table['STUDY ACCESSION'] = study['accession']
-#                 table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
-#                 for sample in study['unpublishedAncestries']:
-#                     table['NUMBER OF INDIVDUALS'] = sample['sample_size']
-#                     table['STAGE'] = sample['stage']
-#                     table['BROAD ANCESTRAL CATEGORY'] = sample['ancestry_category']
-#                     table['COUNTRY OF RECRUITMENT'] = sample['country_recruitment']
-#                     table['ADDITONAL ANCESTRY DESCRIPTION'] = sample['ancestry']
-#                     table['Founder/Genetically isolated population'] = sample['ancestry_description']
-#                     table['Number of cases'] = sample['cases']
-#                     table['Number of controls'] = sample['controls']
-#                     table['Sample description'] = sample['sample_description']
-#                     table['DOI'] = study['body_of_work'][0]['doi']
-#                     writer.writerow(table)
+def build_ancestry_download(url):
+    #STUDY ACCESSION	FIRST AUTHOR	STAGE	NUMBER OF INDIVDUALS	BROAD ANCESTRAL CATEGORY	COUNTRY OF RECRUITMENT	ADDITONAL ANCESTRY DESCRIPTION	Founder/Genetically isolated population	Number of cases	Number of controls	Sample description	DOI
+    with urllib.request.urlopen(url) as f:
+    #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
+        data = json.load(f)
+        print(data)
+
+        with open('gwas-catalog-unpublished-ancestry-r-v1.0.3.tsv', 'w', newline='') as csvfile:
+            fieldnames = ['STUDY ACCESSION', 'PUBMEDID', 'FIRST AUTHOR', 'DATE', 'INITIAL SAMPLE DESCRIPTION',
+                          'REPLICATION SAMPLE DESCRIPTION', 'STAGE', 'NUMBER OF INDIVIDUALS',
+                          'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF ORIGIN', 'COUNTRY OF RECRUITMENT',
+                          'ADDITIONAL ANCESTRY DESCRIPTION', 'ANCESTRY DESCRIPTOR',
+                          'FOUNDER/GENETICALLY ISOLATED POPULATION',
+                          'NUMBER OF CASES', 'NUMBER OF CONTROLS', 'SAMPLE DESCRIPTION', 'COHORT(S)',
+                          'COHORT-SPECIFIC REFERENCE']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect=csv.excel_tab)
+            writer.writeheader()
+            for study in data:
+                table = defaultdict()
+                table['STUDY ACCESSION'] = study['accession']
+                table['PUBMED ID'] = 'NA'
+                table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
+                table['DATE'] = 'not yet curated'
+                table['INITIAL SAMPLE SIZE'] = 'not yet curated'
+                table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
+                table['COHORT(S)'] = study['cohort']
+                table['COHORT-SPECIFIC REFERENCE'] = study['cohort_id']
+                for sample in study['unpublishedAncestries']:
+                    table['STAGE'] = sample['stage']
+                    table['NUMBER OF INDIVDUALS'] = sample['sample_size']
+                    table['BROAD ANCESTRAL CATEGORY'] = sample['ancestry_category']
+                    table['COUNTRY OF RECRUITMENT'] = sample['country_recruitment']
+                    table['ADDITIONAL ANCESTRY DESCRIPTION'] = sample['ancestry']
+                    table['ANCESTRY DESCRIPTOR'] = sample['ancestry']
+                    table['FOUNDER/GENETICALLY ISOLATED POPULATION'] = sample['ancestry_description']
+                    table['NUMBER OF CASES'] = sample['cases']
+                    table['NUMBER OF CONTROLS'] = sample['controls']
+                    table['SAMPLE DESCRIPTION'] = sample['sample_description']
+                    writer.writerow(table)
 
 
-def build_studies_download(argv):
+def build_studies_download(url):
+    with urllib.request.urlopen(url) as f:
+    #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
+        data = json.load(f)
+        print(data)
+        with open('gwas-catalog-unpublished-studies-v1.0.3.tsv', 'w', newline='') as csvfile:
+            fieldnames = ['DATE ADDED TO CATALOG', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'JOURNAL', 'LINK', 'STUDY',
+                          'DISEASE/TRAIT', 'INITIAL SAMPLE SIZE', 'REPLICATION SAMPLE SIZE',
+                          'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED TRAIT', 'MAPPED TRAIT URI',
+                          'STUDY ACCESSION', 'GENOTYPING TECHNOLOGY', 'SUMMARY STATS LOCATION', 'SUBMISSION DATE',
+                          'STATISTICAL MODEL', 'BACKGROUND TRAIT', 'MAPPED BACKGROUND TRAIT',
+                          'MAPPED BACKGROUND TRAIT URI']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect=csv.excel_tab)
+
+            writer.writeheader()
+            for study in data:
+                table = defaultdict()
+                table['DATE ADDED TO CATALOG'] = 'not yet curated'
+                table['STATISTICAL MODEL'] = study['statistical_model']
+                table['DISEASE/TRAIT'] = study['trait']
+                table['INITIAL SAMPLE SIZE'] = 'not yet curated'
+                table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
+                table['PLATFORM [SNPS PASSING QC]'] = study['array_manufacturer']
+                table['ASSOCIATION COUNT'] = 'not yet curated'
+                table['MAPPED TRAIT'] = 'not yet curated'
+                table['MAPPED TRAIT URI'] = 'not yet curated'
+                table['STUDY ACCESSION'] = study['accession']
+                table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
+                table['SUMMARY STATS LOCATION'] = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/' + study['accession']
+                table['DATE'] = study['created_date']
+                table['STATISTICAL MODEL'] = study['statistical_model']
+                table['BACKGROUND TRAIT'] = study['background_trait']
+                table['MAPPED BACKGROUND TRAIT'] = 'not yet curated'
+                table['MAPPED BACKGROUND TRAIT URI'] = 'not yet curated'
+              #  table['STUDY'] = study['study_description']
+                for bodyOfWork in study['body_of_work']:
+                    table['PUBMED ID'] = 'not yet curated'
+                    table['FIRST AUTHOR'] = bodyOfWork['first_author']
+                    table['DATE'] = 'not yet curated'
+                    table['JOURNAL'] = 'not yet curated'
+                    table['LINK'] = bodyOfWork['doi']
+                    writer.writerow(table)
+
+
+if __name__ == '__main__':
     base_url = 'http://localhost:8080'
     try:
-        opts, args = getopt.getopt(argv, "hu:", ["url="])
+        opts, args = getopt.getopt(sys.argv[1:], "hu:", ["url="])
     except getopt.GetoptError:
         print('unpublished_study_export.py -u <base url>')
         sys.exit(2)
@@ -52,42 +108,6 @@ def build_studies_download(argv):
         elif opt in ("-o", "--ofile"):
             outputfile = arg
     url = base_url + '/gwas/rest/api/studies/unpublished'#replace w/ env. variable
-    with urllib.request.urlopen(url) as f:
-    #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
-        data = json.load(f)
-        print(data)
-        with open('gwas-catalog-unpublished-studies-download.txt', 'w', newline='') as csvfile:
-            fieldnames = ['STUDY ACCESSION', 'FIRST AUTHOR', 'STAGE', 'NUMBER OF INDIVDUALS', 'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF RECRUITMENT', 'ADDITONAL ANCESTRY DESCRIPTION', 'Founder/Genetically isolated population', 'Number of cases', 'Number of controls', 'Sample description', 'DOI', 'DATE ADDED TO CATALOG', 'JOURNAL','STUDY', 'DISEASE/TRAIT', 'PLATFORM [SNPS PASSING QC]', 'GENOTYPING TECHNOLOGY', 'Statistical model']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect=csv.excel_tab)
 
-            writer.writeheader()
-            for study in data:
-                table = defaultdict()
-                table['STUDY ACCESSION'] = study['accession']
-                table['DATE ADDED TO CATALOG'] = study['created_date']
-                table['PLATFORM [SNPS PASSING QC]'] = study['array_manufacturer']
-                table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
-                table['Statistical model'] = study['statistical_model']
-                table['DISEASE/TRAIT'] = study['trait']
-                for bodyOfWork in study['body_of_work']:
-                    table['FIRST AUTHOR'] = bodyOfWork['first_author']
-                    table['JOURNAL'] = bodyOfWork['journal']
-                    #table['LINK'] = bodyOfWork['link']
-                    table['STUDY'] = bodyOfWork['title']
-                    table['DOI'] = bodyOfWork['doi']
-                    for sample in study['unpublishedAncestries']:
-                        table['NUMBER OF INDIVDUALS'] = sample['sample_size']
-                        table['STAGE'] = sample['stage']
-                        table['BROAD ANCESTRAL CATEGORY'] = sample['ancestry_category']
-                        table['COUNTRY OF RECRUITMENT'] = sample['country_recruitment']
-                        table['ADDITONAL ANCESTRY DESCRIPTION'] = sample['ancestry']
-                        table['Founder/Genetically isolated population'] = sample['ancestry_description']
-                        table['Number of cases'] = sample['cases']
-                        table['Number of controls'] = sample['controls']
-                        table['Sample description'] = sample['sample_description']
-                    writer.writerow(table)
-
-
-if __name__ == '__main__':
-    build_studies_download(sys.argv[1:])
+    build_studies_download(url)
 
