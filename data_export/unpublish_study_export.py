@@ -7,14 +7,14 @@ import urllib.request
 from collections import defaultdict
 
 
-def build_ancestry_download(url):
+def build_ancestry_download(url, outputdir):
     #STUDY ACCESSION	FIRST AUTHOR	STAGE	NUMBER OF INDIVDUALS	BROAD ANCESTRAL CATEGORY	COUNTRY OF RECRUITMENT	ADDITONAL ANCESTRY DESCRIPTION	Founder/Genetically isolated population	Number of cases	Number of controls	Sample description	DOI
     with urllib.request.urlopen(url) as f:
     #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
 
-        with open('gwas-catalog-unpublished-ancestry-v1.0.3.tsv', 'w', newline='') as csvfile:
+        with open(outputdir + '/gwas-catalog-unpublished-ancestry-v1.0.3.tsv', 'w', newline='') as csvfile:
             fieldnames = ['STUDY ACCESSION', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'INITIAL SAMPLE DESCRIPTION',
                           'REPLICATION SAMPLE DESCRIPTION', 'STAGE', 'NUMBER OF INDIVIDUALS',
                           'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF ORIGIN', 'COUNTRY OF RECRUITMENT',
@@ -48,12 +48,12 @@ def build_ancestry_download(url):
                     writer.writerow(table)
 
 
-def build_studies_download(url):
+def build_studies_download(url, outputdir):
     with urllib.request.urlopen(url) as f:
     #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
-        with open('gwas-catalog-unpublished-studies-v1.0.3.tsv', 'w', newline='') as csvfile:
+        with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.tsv', 'w', newline='') as csvfile:
             fieldnames = ['DATE ADDED TO CATALOG', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'JOURNAL', 'LINK', 'STUDY',
                           'DISEASE/TRAIT', 'INITIAL SAMPLE SIZE', 'REPLICATION SAMPLE SIZE',
                           'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED TRAIT', 'MAPPED TRAIT URI',
@@ -94,6 +94,7 @@ def build_studies_download(url):
 
 if __name__ == '__main__':
     base_url = 'http://localhost:8080'
+    outputdir = "."
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hu:", ["url="])
     except getopt.GetoptError:
@@ -105,10 +106,10 @@ if __name__ == '__main__':
             sys.exit()
         elif opt in ("-u", "--url"):
             base_url = arg
-        elif opt in ("-o", "--ofile"):
-            outputfile = arg
+        elif opt in ("-o", "--output_dir"):
+            outputdir = arg
     url = base_url + '/gwas/rest/api/studies/unpublished'#replace w/ env. variable
 
-    build_studies_download(url)
-    build_ancestry_download(url)
+    build_studies_download(url, outputdir)
+    build_ancestry_download(url, outputdir)
 
