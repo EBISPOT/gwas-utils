@@ -14,8 +14,8 @@ def build_ancestry_download(url):
         data = json.load(f)
         print(data)
 
-        with open('gwas-catalog-unpublished-ancestry-r-v1.0.3.tsv', 'w', newline='') as csvfile:
-            fieldnames = ['STUDY ACCESSION', 'PUBMEDID', 'FIRST AUTHOR', 'DATE', 'INITIAL SAMPLE DESCRIPTION',
+        with open('gwas-catalog-unpublished-ancestry-v1.0.3.tsv', 'w', newline='') as csvfile:
+            fieldnames = ['STUDY ACCESSION', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'INITIAL SAMPLE DESCRIPTION',
                           'REPLICATION SAMPLE DESCRIPTION', 'STAGE', 'NUMBER OF INDIVIDUALS',
                           'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF ORIGIN', 'COUNTRY OF RECRUITMENT',
                           'ADDITIONAL ANCESTRY DESCRIPTION', 'ANCESTRY DESCRIPTOR',
@@ -26,17 +26,17 @@ def build_ancestry_download(url):
             writer.writeheader()
             for study in data:
                 table = defaultdict()
-                table['STUDY ACCESSION'] = study['accession']
+                table['STUDY ACCESSION'] = study['study_accession']
                 table['PUBMED ID'] = 'NA'
                 table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
                 table['DATE'] = 'not yet curated'
-                table['INITIAL SAMPLE SIZE'] = 'not yet curated'
-                table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
+                table['INITIAL SAMPLE DESCRIPTION'] = 'not yet curated'
+                table['REPLICATION SAMPLE DESCRIPTION'] = 'not yet curated'
                 table['COHORT(S)'] = study['cohort']
                 table['COHORT-SPECIFIC REFERENCE'] = study['cohort_id']
                 for sample in study['unpublishedAncestries']:
                     table['STAGE'] = sample['stage']
-                    table['NUMBER OF INDIVDUALS'] = sample['sample_size']
+                    table['NUMBER OF INDIVIDUALS'] = sample['sample_size']
                     table['BROAD ANCESTRAL CATEGORY'] = sample['ancestry_category']
                     table['COUNTRY OF RECRUITMENT'] = sample['country_recruitment']
                     table['ADDITIONAL ANCESTRY DESCRIPTION'] = sample['ancestry']
@@ -74,10 +74,10 @@ def build_studies_download(url):
                 table['ASSOCIATION COUNT'] = 'not yet curated'
                 table['MAPPED TRAIT'] = 'not yet curated'
                 table['MAPPED TRAIT URI'] = 'not yet curated'
-                table['STUDY ACCESSION'] = study['accession']
+                table['STUDY ACCESSION'] = study['study_accession']
                 table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
-                table['SUMMARY STATS LOCATION'] = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/' + study['accession']
-                table['DATE'] = study['created_date']
+                table['SUMMARY STATS LOCATION'] = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/' + study['study_accession']
+                table['DATE'] = study['createdDate']
                 table['STATISTICAL MODEL'] = study['statistical_model']
                 table['BACKGROUND TRAIT'] = study['background_trait']
                 table['MAPPED BACKGROUND TRAIT'] = 'not yet curated'
@@ -110,4 +110,5 @@ if __name__ == '__main__':
     url = base_url + '/gwas/rest/api/studies/unpublished'#replace w/ env. variable
 
     build_studies_download(url)
+    build_ancestry_download(url)
 
