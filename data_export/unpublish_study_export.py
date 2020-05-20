@@ -96,9 +96,9 @@ if __name__ == '__main__':
     base_url = 'http://localhost:8080'
     outputdir = "."
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hu:", ["url="])
+        opts, args = getopt.getopt(sys.argv[1:], "hu:o:", ["url=", "output_dir="])
     except getopt.GetoptError:
-        print('unpublished_study_export.py -u <base url>')
+        print('unpublished_study_export.py -u <base url> -o <output dir>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
