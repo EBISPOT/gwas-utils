@@ -14,7 +14,7 @@ def build_ancestry_download(url, outputdir):
         data = json.load(f)
         print(data)
 
-        with open(outputdir + '/gwas-catalog-unpublished-ancestries-v1.0.3.tsv', 'w', newline='') as csvfile:
+        with open(outputdir + '/gwas-catalog-unpublished-ancestries-v1.0.3.tmp.tsv', 'w', newline='') as csvfile:
             fieldnames = ['STUDY ACCESSION', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'INITIAL SAMPLE DESCRIPTION',
                           'REPLICATION SAMPLE DESCRIPTION', 'STAGE', 'NUMBER OF INDIVIDUALS',
                           'BROAD ANCESTRAL CATEGORY', 'COUNTRY OF ORIGIN', 'COUNTRY OF RECRUITMENT',
@@ -53,7 +53,7 @@ def build_studies_download(url, outputdir):
     #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
-        with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.tsv', 'w', newline='') as csvfile:
+        with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.tmp.tsv', 'w', newline='') as csvfile:
             fieldnames = ['DATE ADDED TO CATALOG', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'JOURNAL', 'LINK', 'STUDY',
                           'DISEASE/TRAIT', 'INITIAL SAMPLE SIZE', 'REPLICATION SAMPLE SIZE',
                           'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED TRAIT', 'MAPPED TRAIT URI',
