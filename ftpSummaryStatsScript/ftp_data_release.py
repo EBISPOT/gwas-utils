@@ -30,6 +30,11 @@ class summaryStatsFolders(object):
                             AND S.FULL_PVALUE_SET = 1 
                             AND H.IS_PUBLISHED = 1 
                       '''
+    # may need to query unpublished study table as well
+    extractPrePubSql = '''SELECT U.ACCESSION 
+                        FROM UNPUBLISHED_STUDY U 
+                        WHERE U.SUMMARY_STATS_FILE <> 'NR'
+                       '''
 
     # Query to fetch study related info to find out why a folder is unexpected:
     extractStudyInfo = '''
@@ -62,20 +67,26 @@ class summaryStatsFolders(object):
         self.database = database
         try:
             df = pd.read_sql(self.extractStudySql, connection)
+            df = df.append(prepub_df)
+
         except:
             print('exception')
 
         # Set study IDs as string:
-        df['ID'] = df['ID'].astype(str)
+        #df['ID'] = df['ID'].astype(str)
 
         # Function to generate folder names:
         def _generateFolder(row):
             return("_".join(row[[0,1,2]]) if not row[2] is None else 'NA')
 
         # Generate folder names with accession IDs and study IDs:
-        df['newFolderName'] = df[['AUTHOR','PUBMED_ID', 'ACCESSION_ID']].apply(_generateFolder, axis = 1)
-        df['oldFolderName'] = df[['AUTHOR','PUBMED_ID', 'ID']].apply(_generateFolder, axis = 1)
+        df['newFolderName'] = df[['AUTHOR','PUBMED_ID', 'ACCESSION_ID']].apply(_generateFolder, axis=1)
         
+        prepub_df = pd.read_sql(self.extractPrePubSql, connection).rename(columns={'ACCESSION':'ACCESSION_ID'})
+        prepub_df['newFolderName'] = prepub_df['ACCESSION_ID']
+        df = df.append(prepub_df)
+        df['oldFolderName'] = df[['ACCESSION_ID']]
+
         # Print out report:
         print('[Info] Based on the release database ({}) {} studies have summary stats from {} publication'.format(database, len(df), len(df.PUBMED_ID.unique())))
         
@@ -156,7 +167,7 @@ class summaryStatsFolders(object):
 
     # This function parses folder names to return accession IDs:
     def __extract_study_accessions(self, folderList):
-        accessionIdPattern = '_(GCST\d+)$'
+        accessionIdPattern = '(GCST\d+)$'
 
         accessionIDs = []
         for folder in folderList:
@@ -175,7 +186,8 @@ class summaryStatsFolders(object):
         outstandingStudies = pd.read_sql(self.extractStudyInfo.format(','.join(quoted_ids)), connection)
 
         # Generate folder name:
-        outstandingStudies['folder'] = outstandingStudies.apply(lambda x: '{}_{}_{}'.format(x['AUTHOR'],x['PUBMED_ID'],x['ACCESSION_ID']), axis = 1)
+        outstandingStudies['folder'] = outstandingStudies.apply(lambda x: '{}_{}_{}'.format(x['AUTHOR'],x['PUBMED_ID'],x['ACCESSION_ID']) if all([x['AUTHOR'], x['PUBMED_ID']]) else x['ACCESSION_ID'], axis = 1)
+        print(outstandingStudies)
 
         ftpFoldersToRemove_w_comments = []
         for folder in self.ftpFoldersToRemove:
