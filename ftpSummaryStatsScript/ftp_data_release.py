@@ -186,8 +186,10 @@ class summaryStatsFolders(object):
         outstandingStudies = pd.read_sql(self.extractStudyInfo.format(','.join(quoted_ids)), connection)
 
         # Generate folder name:
-        outstandingStudies['folder'] = outstandingStudies.apply(lambda x: '{}_{}_{}'.format(x['AUTHOR'],x['PUBMED_ID'],x['ACCESSION_ID']) if all([x['AUTHOR'], x['PUBMED_ID']]) else x['ACCESSION_ID'], axis = 1)
-        print(outstandingStudies)
+        if len(outstandingStudies) > 0:
+            outstandingStudies['folder'] = outstandingStudies.apply(lambda x: '{}_{}_{}'.format(x['AUTHOR'],x['PUBMED_ID'],x['ACCESSION_ID']) if all([x['AUTHOR'], x['PUBMED_ID']]) else x['ACCESSION_ID'], axis = 1)
+        else:
+            outstandingStudies['folder'] = 'NA'
 
         ftpFoldersToRemove_w_comments = []
         for folder in self.ftpFoldersToRemove:
