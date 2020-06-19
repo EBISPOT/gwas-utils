@@ -77,7 +77,7 @@ def build_studies_download(url, outputdir):
                 table['STUDY ACCESSION'] = study['study_accession']
                 table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
                 table['SUMMARY STATS LOCATION'] = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/' + study['study_accession']
-                table['DATE'] = study['createdDate']
+                table['SUBMISSION DATE'] = datetime.date.fromtimestamp(study['createdDate'] / 1000).isoformat()
                 table['STATISTICAL MODEL'] = study['statistical_model']
                 table['BACKGROUND TRAIT'] = study['background_trait']
                 table['MAPPED BACKGROUND TRAIT'] = 'not yet curated'
