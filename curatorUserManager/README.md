@@ -1,6 +1,9 @@
 # GWAS Catalog curator user management
 
-NOTE: This is not maintained. The original documentation for this process should be followed to add any new user to the database. See https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/User+administration+in+the+curation+system for more details.
+
+```
+NOTE: This is not maintained. The original documentation for this process should be followed to add or remove any user to the database. See https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/User+administration+in+the+curation+system for more details.
+```
 
 
 A small wrapper to add or inactivate curator in a specified database. Use with Python 3.
