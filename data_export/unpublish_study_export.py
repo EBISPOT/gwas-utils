@@ -10,7 +10,6 @@ from collections import defaultdict
 def build_ancestry_download(url, outputdir):
     #STUDY ACCESSION	FIRST AUTHOR	STAGE	NUMBER OF INDIVDUALS	BROAD ANCESTRAL CATEGORY	COUNTRY OF RECRUITMENT	ADDITONAL ANCESTRY DESCRIPTION	Founder/Genetically isolated population	Number of cases	Number of controls	Sample description	DOI
     with urllib.request.urlopen(url) as f:
-    #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
 
@@ -28,7 +27,10 @@ def build_ancestry_download(url, outputdir):
                 table = defaultdict()
                 table['STUDY ACCESSION'] = study['study_accession']
                 table['PUBMED ID'] = 'NA'
-                table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
+                if not study['body_of_work']:
+                    table['FIRST AUTHOR'] = ''
+                else:
+                    table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
                 table['DATE'] = 'not yet curated'
                 table['INITIAL SAMPLE DESCRIPTION'] = 'not yet curated'
                 table['REPLICATION SAMPLE DESCRIPTION'] = 'not yet curated'
