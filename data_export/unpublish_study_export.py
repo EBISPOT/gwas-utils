@@ -30,7 +30,10 @@ def build_ancestry_download(url, outputdir):
                 if not study['body_of_work']:
                     table['FIRST AUTHOR'] = ''
                 else:
-                    table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
+                    if 'first_author' in study['body_of_work'][0]:
+                        table['FIRST AUTHOR'] = study['body_of_work'][0]['first_author']
+                    else:
+                        table['FIRST AUTHOR'] = 'NA'
                 table['DATE'] = 'not yet curated'
                 table['INITIAL SAMPLE DESCRIPTION'] = 'not yet curated'
                 table['REPLICATION SAMPLE DESCRIPTION'] = 'not yet curated'
