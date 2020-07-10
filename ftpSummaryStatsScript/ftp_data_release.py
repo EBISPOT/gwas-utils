@@ -60,6 +60,7 @@ class summaryStatsFolders(object):
     ftpFoldersToRemove = [] # Folders in the ftp area that needs to be removed
     ftpExpectedFolders = [] # Expected folders in the ftp area
     foldersToCopy = [] # Folders that will be copied from the staging area to the ftp area
+    foldersToSymlink = {}
 
     def __init__(self, connection, stagingDir, ftpDir, database):
         self.stagingDir = stagingDir
@@ -82,45 +83,43 @@ class summaryStatsFolders(object):
         # Generate folder names with accession IDs and study IDs:
         df['newFolderName'] = df[['AUTHOR','PUBMED_ID', 'ACCESSION_ID']].apply(_generateFolder, axis=1)
         
+        self.foldersToSymlink = pd.Series(df.newFolderName.values,index=df.ACCESSION_ID).to_dict()
+
         prepub_df = pd.read_sql(self.extractPrePubSql, connection).rename(columns={'ACCESSION':'ACCESSION_ID'})
-        prepub_df['newFolderName'] = prepub_df['ACCESSION_ID']
+        prepub_df['newFolderName'] = None
         df = df.append(prepub_df)
-        df['oldFolderName'] = df[['ACCESSION_ID']]
 
         # Print out report:
         print('[Info] Based on the release database ({}) {} studies have summary stats from {} publication'.format(database, len(df), len(df.PUBMED_ID.unique())))
         
         self.DBstudies = df
+        
 
     def checkStagingArea(self, stagingFolders):
 
         # Folders that have names with accession ID are expected to be copied to the ftp area:
-        self.ftpExpectedFolders = stagingFolders.loc[stagingFolders.isin(self.DBstudies.newFolderName)].tolist()
+        self.ftpExpectedFolders = stagingFolders.loc[stagingFolders.isin(self.DBstudies.ACCESSION_ID)].tolist()
+
 
         # Find out which folders needs to be renamed or unexpected: folders with accession ID could not be found
-        for problematicFolder in stagingFolders[~stagingFolders.isin(self.DBstudies.newFolderName)]:
+        for problematicFolder in stagingFolders[~stagingFolders.isin(self.DBstudies.ACCESSION_ID)]:
             
-            # Folders with study ID could be found -> to rename then copy
-            if self.DBstudies.oldFolderName.isin([problematicFolder]).any():
-                self.stagingFoldersToRename.append((problematicFolder, self.DBstudies.loc[self.DBstudies.oldFolderName == problematicFolder,'newFolderName'].any()))
-                self.ftpExpectedFolders.append(self.DBstudies.loc[self.DBstudies.oldFolderName == problematicFolder,'newFolderName'].any())
-
             # Folders cannot be found -> not expected folder or file.
-            else:
-                self.stagingNotExpectedFolders.append(problematicFolder)
+            self.stagingNotExpectedFolders.append(problematicFolder)
 
         # Folders we don't see but expect:
-        self.stagingMissingFolders = self.DBstudies.newFolderName[(~self.DBstudies.newFolderName.isin(stagingFolders) & 
-                                                                   ~self.DBstudies.oldFolderName.isin(stagingFolders))].tolist()
+        self.stagingMissingFolders = self.DBstudies.ACCESSION_ID[(~self.DBstudies.ACCESSION_ID.isin(stagingFolders))].tolist()
                 
     def checkFtpArea(self, ftpFolders):
 
         # Check folders on ftp that should not be there:
-        self.ftpFoldersToRemove = ftpFolders.loc[~ftpFolders.isin(self.DBstudies.newFolderName)].tolist()
+        self.ftpFoldersToRemove = ftpFolders.loc[~ftpFolders.isin(self.DBstudies.ACCESSION_ID)].tolist()
 
         # Check folders on staging that should be copied to ftp:
         allExpectedFolders = pd.Series(self.ftpExpectedFolders)
         self.foldersToCopy = allExpectedFolders[~allExpectedFolders.isin(ftpFolders)].tolist()
+
+
 
     def generateReport(self):
         today = date.today()
@@ -138,8 +137,9 @@ class summaryStatsFolders(object):
         reportString += "\n".join(map('\t{}'.format,self.foldersToCopy))
 
         # Renamed folders:
-        reportString += '\n\n[Info] The following folders were renamed in the staging area:\n'
-        reportString += '\n'.join(map(lambda x:'\t{} -> {}'.format(*x), summaryStatsFoldersObj.stagingFoldersToRename))
+        reportString += '\n\n[Info] The following folders were symlinked on the ftp:\n'
+        for k, v in summaryStatsFoldersObj.foldersToSymlink.items():
+            reportString += '\n\t{} -> {}'.format(k, v)
 
         # Missing folders from the staging area:
         if len(self.stagingMissingFolders):
@@ -181,9 +181,11 @@ class summaryStatsFolders(object):
     def __check_outstanding_studies(self):
 
         # Retrieve all problematic study:
+        outstandingStudies = pd.DataFrame()
         accessionIDs = self.__extract_study_accessions(self.ftpFoldersToRemove)
-        quoted_ids = ["'{}'".format(x) for x in accessionIDs]
-        outstandingStudies = pd.read_sql(self.extractStudyInfo.format(','.join(quoted_ids)), connection)
+        if accessionIDs:
+            quoted_ids = ["'{}'".format(x) for x in accessionIDs]
+            outstandingStudies = pd.read_sql(self.extractStudyInfo.format(','.join(quoted_ids)), connection)
 
         # Generate folder name:
         if len(outstandingStudies) > 0:
@@ -253,6 +255,21 @@ def copyFoldersToFtp(folders, sourcePath, targetPath):
             subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', from_dir, to_dir])
         except OSError as e:
             print(e)
+
+
+def createSymlinks(folderDict, targetDir):
+    discard = []
+    for folder, symlinkName in folderDict.items():
+        folderPath = os.path.join(targetDir, folder)
+        symlinkPath = os.path.join(targetDir, symlinkName)
+        if os.path.exists(folderPath) and not os.path.exists(symlinkPath):
+            print('{} --> {}'.format(folderPath, symlinkPath))
+            os.symlink(folder, symlinkPath)
+        else:
+            discard.append(folder)
+    for k in discard: 
+        del folderDict[k]
+        
 
 def generate_md5_sum(folder):
     '''
@@ -341,7 +358,8 @@ if __name__ == '__main__':
     stagingFolders = pd.Series(os.listdir(stagingDir))
 
     # Get folders from the ftp area:
-    ftpFolders = pd.Series(os.listdir(ftpDir))
+    dirListNoLinks = [f for f in os.listdir(ftpDir) if not os.path.islink(os.path.join(ftpDir,f))]
+    ftpFolders = pd.Series(dirListNoLinks)
 
     # Extracting studies with summary stats from the database:
     summaryStatsFoldersObj = summaryStatsFolders(connection, stagingDir, ftpDir, database)
@@ -363,7 +381,8 @@ if __name__ == '__main__':
         exit(0)
 
     # Rename folders where study ID is given instead of accession ID
-    renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+    #renameFolders(summaryStatsFoldersObj.stagingFoldersToRename,stagingDir)
+
 
     # Generate md5sum checksum for folders to be copied:
     for folder in summaryStatsFoldersObj.foldersToCopy:
@@ -371,6 +390,9 @@ if __name__ == '__main__':
 
     # Copy folders to ftp:
     copyFoldersToFtp(summaryStatsFoldersObj.foldersToCopy, stagingDir, ftpDir)
+
+    # Create symlinks on ftp for those with pmids:
+    createSymlinks(summaryStatsFoldersObj.foldersToSymlink, ftpDir)
 
     # # Folders are no longer retracted from ftp:
     # retractFolderFromFtp(summaryStatsFoldersObj.ftpFoldersToRemove, ftpDir)
