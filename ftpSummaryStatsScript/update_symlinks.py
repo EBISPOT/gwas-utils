@@ -30,7 +30,7 @@ def get_symlink_name(connection, gcst):
     elif len(df) > 1:
         print("More than one entry for that GCST in the DB - you should check fix it: {}".format(gcst))
     else:
-        print("No entry in DB for: {}".format(gcst))
+        print("No entry in the 'published' STUDY table for: {}".format(gcst))
     return symlink_name
 
 
