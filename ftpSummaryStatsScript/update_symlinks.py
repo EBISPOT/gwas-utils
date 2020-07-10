@@ -34,15 +34,18 @@ def get_symlink_name(connection, gcst):
     return symlink_name
 
 
-def make_symlink(connection, stagingDir, ftpDir, database, gcst):
+def make_symlink(connection, stagingDir, ftpDir, database, gcst, test=False):
     symlink_name = get_symlink_name(connection, gcst)
     if symlink_name:
         symlink_with_path = os.path.join(stagingDir, symlink_name)
         folder_with_path = os.path.join(stagingDir, gcst)
-        try:
-            subprocess.call(['ln', '-vs', folder_with_path, symlink_with_path])
-        except OSError as e:
-            print(e) 
+        if test is True:
+            print("If this wasn't a test: symlink would be made for {} --> {}".format(folder_with_path, symlink_with_path))
+        else:
+            try:
+                subprocess.call(['ln', '-vs', folder_with_path, symlink_with_path])
+            except OSError as e:
+                print(e) 
 
 
 def main():
@@ -50,7 +53,7 @@ def main():
     parser.add_argument('--releaseDB', type=str, help='Name of the database for extracting study data.')
     parser.add_argument('--stagingDir', type=str, help='Path to staging directory.')
     parser.add_argument('--ftpDir', type=str, help='Path to ftp directory.')
-    parser.add_argument('--test', action='store_true', help='If test run is specified, no release is done just send notification.')
+    parser.add_argument('--test', action='store_true', default='store_false', help='If test run is specified, no release is done just send notification.')
     args = parser.parse_args()
 
     database = args.releaseDB
@@ -63,7 +66,7 @@ def main():
 
     studies = get_list_of_prepubs_in_staging(stagingDir)
     for study in studies:
-        make_symlink(connection, stagingDir, ftpDir, database, study)
+        make_symlink(connection, stagingDir, ftpDir, database, study, testFlag)
 
 
 if __name__ == '__main__':
