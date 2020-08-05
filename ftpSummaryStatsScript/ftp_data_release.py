@@ -84,6 +84,12 @@ class summaryStatsFolders(object):
         
         prepub_df = pd.read_sql(self.extractPrePubSql, connection).rename(columns={'ACCESSION':'ACCESSION_ID'})
         prepub_df['newFolderName'] = prepub_df['ACCESSION_ID']
+
+        # identify any studies that are present in both the unpublished study and published study tables 
+        # (this should never happen, but it does) and assume they should not be in the unpublished table
+        self.conflicts = prepub_df[prepub_df['ACCESSION_ID'].isin(df['ACCESSION_ID'])]['ACCESSION_ID'].tolist()
+        prepub_df = prepub_df[~prepub_df['ACCESSION_ID'].isin(df['ACCESSION_ID'])]
+
         df = df.append(prepub_df)
         df['oldFolderName'] = df[['ACCESSION_ID']]
 
@@ -162,6 +168,11 @@ class summaryStatsFolders(object):
             reportString += "\n".join(map('\t{}'.format,self.ftpFoldersToRemove_w_comments))
         else:
             reportString += '\n\n[Info] All folders in the ftp directory looks good.\n'
+
+        # Studies in both the unpublished and published study tables:
+        if len(self.conflicts):
+            reportString += '\n\n[Info] The following studies were identified in both the UNPUBLISHED_STUDY and (published) STUDY tables:\n'
+            reportString += "\n".join(map('\t{}'.format,self.conflicts))
 
         return(reportString)
 
