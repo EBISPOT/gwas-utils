@@ -87,7 +87,7 @@ class summaryStatsFolders(object):
 
         # identify any studies that are present in both the unpublished study and published study tables 
         # (this should never happen, but it does) and assume they should not be in the unpublished table
-        self.conflicts = prepub_df[prepub_df['ACCESSION_ID'].isin(df['ACCESSION_ID'])]['ACCESSION_ID'].tolist()
+        self.unpubAndPubConflict = prepub_df[prepub_df['ACCESSION_ID'].isin(df['ACCESSION_ID'])]['ACCESSION_ID'].tolist()
         prepub_df = prepub_df[~prepub_df['ACCESSION_ID'].isin(df['ACCESSION_ID'])]
 
         df = df.append(prepub_df)
@@ -123,6 +123,9 @@ class summaryStatsFolders(object):
 
         # Check folders on ftp that should not be there:
         self.ftpFoldersToRemove = ftpFolders.loc[~ftpFolders.isin(self.DBstudies.newFolderName)].tolist()
+
+        # Need to keep unpublished links so these do not need to be removed
+        self.ftpFoldersToRemove = [f for f in self.ftpFoldersToRemove if not str(f.startswith("GCST"))]
 
         # Check folders on staging that should be copied to ftp:
         allExpectedFolders = pd.Series(self.ftpExpectedFolders)
@@ -170,9 +173,9 @@ class summaryStatsFolders(object):
             reportString += '\n\n[Info] All folders in the ftp directory looks good.\n'
 
         # Studies in both the unpublished and published study tables:
-        if len(self.conflicts):
+        if len(self.unpubAndPubConflict):
             reportString += '\n\n[Info] The following studies were identified in both the UNPUBLISHED_STUDY and (published) STUDY tables:\n'
-            reportString += "\n".join(map('\t{}'.format,self.conflicts))
+            reportString += "\n".join(map('\t{}'.format,self.unpubAndPubConflict))
 
         return(reportString)
 
