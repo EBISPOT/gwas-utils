@@ -78,15 +78,24 @@ def main():
     argparser.add_argument("-depo_staging", help='The private FTP staging path', required=True)
     argparser.add_argument("-public_ftp", help='The public FTP sumstats path', required=True)
     argparser.add_argument("-to_format", help='The path to the formatting directory', required=True)
+    argparser.add_argument("-test", help='Test run, no moving or cleaning', action='store_true', required=False)
             
     args = argparser.parse_args()
     
     depo_staging = args.depo_staging
     public_ftp = args.public_ftp
     to_format = args.to_format
+    test_run = args.test
     
     files = identify_files_to_harmonise(public_ftp, depo_staging)
-    move_files(files, depo_staging, to_format) 
+    print("Files to move:")
+    for f in files:
+        print(f)
+    if test_run is True:
+        print("This was a test run, nothing actually happened")
+        pass
+    else:
+        move_files(files, depo_staging, to_format) 
 
 
 if __name__ == '__main__':
