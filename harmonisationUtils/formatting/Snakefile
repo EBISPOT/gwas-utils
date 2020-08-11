@@ -1,0 +1,43 @@
+import os
+import glob
+
+configfile: "config.yaml"
+
+def file_with_ext(wildcards):
+    globbed_names = glob.glob(os.path.join(config["to_format"], wildcards.ss_file) + ".*")
+    if not globbed_names:
+        # if no files match pattern, return something that doesn't exist, otherwise
+        # snakemake will think that the empty list as an input is fulfilled.
+        return [os.path.join(config["to_format"], wildcards.ss_file)]
+    return globbed_names
+
+rule format_files:
+    input:
+        in_ss = file_with_ext
+    output:
+        expand("{to_format}/formatted_{{ss_file}}.tsv", to_format=config["to_format"])
+    params:
+        format_configs=config["format_configs"],
+        to_format=config["to_format"]
+    shell:
+        """
+        echo {input.in_ss};
+        export SS_FORMAT_CONFIG_DIR={params.format_configs};
+        tabman -f {input.in_ss} -mode gen -config {wildcards.ss_file}.xlsx;
+        tabman -f {input.in_ss} -mode apply -config {wildcards.ss_file}.xlsx;
+        rm {params.format_configs}/{wildcards.ss_file}.xlsx
+        """
+
+rule move_files:
+    input:
+        expand("{to_format}/formatted_{{ss_file}}.tsv", to_format=config["to_format"])
+    output:
+        expand("{to_harmonise}/{{ss_file}}.tsv", to_harmonise=config["to_harmonise"])
+    params:
+        format_configs=config["format_configs"],
+        to_harmonise=config["to_harmonise"],
+        to_format=config["to_format"]
+    shell:
+        """
+        mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv
+        """
