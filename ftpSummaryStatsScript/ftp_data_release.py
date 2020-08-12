@@ -6,7 +6,8 @@ import subprocess
 from subprocess import Popen, PIPE
 from datetime import date
 import re
-import hashlib 
+import hashlib
+import shutil
 
 from gwas_db_connect import DBConnection
 
@@ -68,7 +69,6 @@ class summaryStatsFolders(object):
         try:
             df = pd.read_sql(self.extractStudySql, connection)
             df = df.append(prepub_df)
-
         except:
             print('exception')
 
@@ -131,7 +131,7 @@ class summaryStatsFolders(object):
         allExpectedFolders = pd.Series(self.ftpExpectedFolders)
         self.foldersToCopy = allExpectedFolders[~allExpectedFolders.isin(ftpFolders)].tolist()
 
-    def generateReport(self):
+    def generateReport(self, exceptions=[]):
         today = date.today()
 
         # Header of the report:
@@ -176,6 +176,11 @@ class summaryStatsFolders(object):
         if len(self.unpubAndPubConflict):
             reportString += '\n\n[Info] The following studies were identified in both the UNPUBLISHED_STUDY and (published) STUDY tables:\n'
             reportString += "\n".join(map('\t{}'.format,self.unpubAndPubConflict))
+
+        if len(exceptions):
+            reportString += '\n\n[Error] The following exceptions were raised:\n'
+            reportString += "\n".join(map('\t{}'.format,exceptions))
+
 
         return(reportString)
 
@@ -235,22 +240,25 @@ class summaryStatsFolders(object):
         self.ftpFoldersToRemove_w_comments = ftpFoldersToRemove_w_comments
 
 
+exceptions = []
 
 def renameFolders(folders,stagingDir):
     for folder in folders:
-        oldFolder = '{}/{}'.format(stagingDir, folder[0])
-        newFolder = '{}/{}'.format(stagingDir, folder[1])
+        oldFolder = os.path.join(stagingDir, folder[0])
+        newFolder = os.path.join(stagingDir, folder[1])
         try:
-            subprocess.call(['mv', oldFolder, newFolder])
-        except OSError as e:
-            print(e)
+            shutil.move(oldFolder, newFolder)
+        except shutil.Error as e:
+            exceptions.append(e)
+            print('yes')
+            print(exceptions)
 
 def copyFoldersToFtp(folders, sourcePath, targetPath):
 
     for folderToCopy in folders:
 
         # Copy directory to ftp area:
-        from_dir = '{}/{}'.format(sourcePath, folderToCopy)
+        from_dir = os.path.join(sourcePath, folderToCopy)
         to_dir = '{}/'.format(targetPath)
         
         try:
@@ -267,6 +275,7 @@ def copyFoldersToFtp(folders, sourcePath, targetPath):
             subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', from_dir, to_dir])
         except OSError as e:
             print(e)
+            exceptions.append(e)
 
 def generate_md5_sum(folder):
     '''
@@ -287,7 +296,7 @@ def generate_md5_sum(folder):
     # Loopthrough the files and calculate md5sum:
     for filename in onlyfiles:
         #print('md5 for ' + filename)
-        with open('{}/{}'.format(folder,filename),"rb") as f:
+        with open(os.path.join(folder,filename),"rb") as f:
             # Read and calculate hash:
             #bytes = f.read()
             # read file as bytes
@@ -307,15 +316,17 @@ def sendEmailReport(report, emailAddresses):
         p = Popen(["/usr/sbin/sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
         p.communicate(mailBody.encode('utf-8'))
     except OSError as e:
-        print(e) 
+        print(e)
+        exceptions.append(e)
 
 def retractFolderFromFtp(folders, ftpDir):
     for folder in folders:
-        folderWPath = '{}/{}'.format(ftpDir, folder)
+        folderWPath = os.path.join(ftpDir, folder)
         try:
             subprocess.call(['rm', '-rf', folderWPath])
         except OSError as e:
             print(e) 
+            exceptions.append(e)
 
 if __name__ == '__main__':
 
@@ -372,7 +383,7 @@ if __name__ == '__main__':
 
     # Just sending report without action:
     if testFlag:
-        report = summaryStatsFoldersObj.generateReport()
+        report = summaryStatsFoldersObj.generateReport(exceptions)
         sendEmailReport(report, emailRecipient)
         exit(0)
 
@@ -400,8 +411,7 @@ if __name__ == '__main__':
     ##
 
     # Generate report if at least one study is released:
-    report = summaryStatsFoldersObj.generateReport()
-
+    report = summaryStatsFoldersObj.generateReport(exceptions)
     # Send email about the report:
     sendEmailReport(report, emailRecipient)
 
