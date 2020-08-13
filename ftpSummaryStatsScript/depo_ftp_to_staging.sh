@@ -5,10 +5,17 @@
 #     1) successful depo app validation
 #
 # These files simply need to be moved from the 'deposition app private FTP validation successful' dir
-# to our staging area. It should be run as a cronjob on a noah-login node.
+# to our staging area.
+# Then move the file out of the depo app staging and into ready to harmoise dir (harmonise_dir)
 
-source_dir=<depo app staging>
-staging_dir=<sumstats staging path>
+source_dir=<depo app staging path>
+staging_dir=<staging path>
+harmonise_dir=<ready to harmonise path>
 
 # need to chmod so everyone can read
-rsync -rv --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r $source_dir $staging_dir
+for f in $source_dir/*; do
+        if [ -e "$f" ]; then
+                rsync -rv --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r $f $staging_dir/
+                mv -v $f $harmonise_dir/
+        fi
+done

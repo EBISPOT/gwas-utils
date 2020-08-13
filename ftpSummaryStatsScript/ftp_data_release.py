@@ -246,12 +246,12 @@ def renameFolders(folders,stagingDir):
     for folder in folders:
         oldFolder = os.path.join(stagingDir, folder[0])
         newFolder = os.path.join(stagingDir, folder[1])
-        try:
-            shutil.move(oldFolder, newFolder)
-        except shutil.Error as e:
-            exceptions.append(e)
-            print('yes')
-            print(exceptions)
+        if not os.path.exists(newFolder):
+            try:
+                shutil.move(oldFolder, newFolder)
+            except shutil.Error as e:
+                exceptions.append(e)
+                print(exceptions)
 
 def copyFoldersToFtp(folders, sourcePath, targetPath):
 
