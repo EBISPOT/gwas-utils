@@ -13,6 +13,8 @@ gwas_rest_url = "https://www.ebi.ac.uk/gwas/rest/api"
 class Study:
     def __init__(self, study_id):
         self.study_id = study_id
+        self.pmid = None
+        self.efo = None
 
     def set_study_metadata(self):
         study_call = gwas_rest_url + "/studies/" + self.study_id
@@ -69,7 +71,7 @@ def move_files(to_harmonise, depo_source, to_format):
                 print(parent_dir)
                 shutil.rmtree(parent_dir)
             else:
-                print("Unable to generate a name for the sumstats")
+                print("Unable to generate a name for the sumstats: {}. Leaving it alone.".format(f))
                 break
 
 
