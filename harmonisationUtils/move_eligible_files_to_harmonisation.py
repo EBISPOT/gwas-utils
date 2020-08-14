@@ -35,8 +35,8 @@ class Study:
         return None
 
 
-def identify_files_to_harmonise(public_ftp, depo_staging):
-    new_studies = os.listdir(depo_staging)
+def identify_files_to_harmonise(public_ftp, depo_source):
+    new_studies = os.listdir(depo_source)
     to_harmonise = {}
     published_studies = [f for f in os.listdir(public_ftp) if not f.startswith("GCST")] 
     for f in published_studies:
@@ -46,15 +46,15 @@ def identify_files_to_harmonise(public_ftp, depo_staging):
     return to_harmonise
 
 
-def move_files(to_harmonise, depo_staging, to_format):
+def move_files(to_harmonise, depo_source, to_format):
     for f in to_harmonise:
-        sumstats_files = [f for f in os.listdir(os.path.join(depo_staging, f)) if f.startswith("GCST")]
+        sumstats_files = [f for f in os.listdir(os.path.join(depo_source, f)) if f.startswith("GCST")]
         if len(sumstats_files) != 1:
-            print("There should be one file (and only one) that looks like a sumstast file in {}, but this is not true!".format(os.path.join(depo_staging, f)))
+            print("There should be one file (and only one) that looks like a sumstast file in {}, but this is not true!".format(os.path.join(depo_source, f)))
             sys.exit()
         else:
             study = Study(f)
-            sumstats_src = os.path.join(depo_staging, f, sumstats_files[0])
+            sumstats_src = os.path.join(depo_source, f, sumstats_files[0])
             print("source file: {}".format(sumstats_src))
             build = "Build" + str(os.path.basename(sumstats_src).split(".")[0].split("uild")[-1][-2:])
             file_ext = "".join(pathlib.Path(sumstats_src).suffixes)
@@ -65,7 +65,7 @@ def move_files(to_harmonise, depo_staging, to_format):
                 print("moving to {}".format(sumstats_dest))
                 shutil.move(sumstats_src, sumstats_dest)
                 print("clearing source files")
-                parent_dir = os.path.join(depo_staging, f)
+                parent_dir = os.path.join(depo_source, f)
                 print(parent_dir)
                 shutil.rmtree(parent_dir)
             else:
@@ -75,19 +75,19 @@ def move_files(to_harmonise, depo_staging, to_format):
 
 def main():
     argparser = argparse.ArgumentParser()
-    argparser.add_argument("-depo_staging", help='The private FTP staging path', required=True)
+    argparser.add_argument("-depo_source", help='The source for the submitted files', required=True)
     argparser.add_argument("-public_ftp", help='The public FTP sumstats path', required=True)
     argparser.add_argument("-to_format", help='The path to the formatting directory', required=True)
     argparser.add_argument("-test", help='Test run, no moving or cleaning', action='store_true', required=False)
             
     args = argparser.parse_args()
     
-    depo_staging = args.depo_staging
+    depo_source = args.depo_source
     public_ftp = args.public_ftp
     to_format = args.to_format
     test_run = args.test
     
-    files = identify_files_to_harmonise(public_ftp, depo_staging)
+    files = identify_files_to_harmonise(public_ftp, depo_source)
     print("Files to move:")
     for f in files:
         print(f)
@@ -95,7 +95,7 @@ def main():
         print("This was a test run, nothing actually happened")
         pass
     else:
-        move_files(files, depo_staging, to_format) 
+        move_files(files, depo_source, to_format) 
 
 
 if __name__ == '__main__':
