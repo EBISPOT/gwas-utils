@@ -8,9 +8,9 @@
 # to our staging area.
 # Then move the file out of the depo app staging and into ready to harmoise dir (harmonise_dir)
 
-source_dir=<depo app staging path>
-staging_dir=<staging path>
-harmonise_dir=<ready to harmonise path>
+source_dir=$1
+staging_dir=$2
+harmonise_dir=$3
 
 # need to chmod so everyone can read
 for f in $source_dir/*; do
