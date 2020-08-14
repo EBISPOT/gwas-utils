@@ -72,7 +72,7 @@ def move_files(to_harmonise, depo_source, to_format):
                 shutil.rmtree(parent_dir)
             else:
                 print("Unable to generate a name for the sumstats: {}. Leaving it alone.".format(f))
-                break
+                
 
 
 def main():
