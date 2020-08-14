@@ -1,0 +1,4 @@
+__default__:
+  - "-g /sumstatsformatter"
+  - "-oo snakemake.out"
+  - "-eo snakemake.err"
