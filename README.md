@@ -46,6 +46,9 @@ To generate site access stats it is useful to know what users are sarching for. 
 
 This small Python module makes it easy to query, update, refresh the specified solr instance/core. 
 
+### [FTP Summary Stats Script](https://github.com/EBISPOT/gwas-utils/tree/master/ftpSummaryStatsScript)
+
+Scripts to control summary statistics file release to the FTP
 
 ### [Harmonisation Utils](https://github.com/EBISPOT/gwas-utils/tree/master/harmonisationUtils)
 
