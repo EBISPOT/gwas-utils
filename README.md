@@ -47,3 +47,6 @@ To generate site access stats it is useful to know what users are sarching for. 
 This small Python module makes it easy to query, update, refresh the specified solr instance/core. 
 
 
+### [Harmonisation Utils](https://github.com/EBISPOT/gwas-utils/tree/master/harmonisationUtils)
+
+Scripts to control data flow from submission app to harmonisation pipeline
