@@ -45,9 +45,11 @@ for f in $harmonise_dir/*; do
             rsync -rv $release_dir/$gcst/harmonised $remote/
 
             # clean up harmonised, formatted and raw files
-            rm $f.tsv
+            #rm $f.tsv
+            echo "remove $f.tsv"
             mv $f/report.txt $reports/${gcst}_report.txt
-            rm -r $f
+            #rm -r $f
+            echo "remove $f"
         fi
     fi
-don
+done
