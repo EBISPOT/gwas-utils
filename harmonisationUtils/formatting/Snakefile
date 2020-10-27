@@ -37,7 +37,7 @@ rule format_files:
         format_configs=config["format_configs"],
         to_format=config["to_format"]
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 28000
+        mem_mb = lambda wildcards, attempt: attempt * 2800
     shell:
         """
         echo {input.in_ss};
