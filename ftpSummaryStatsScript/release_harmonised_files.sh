@@ -4,6 +4,7 @@ harmonise_dir=$1
 release_dir=$2
 ftp_dir=$3
 reports=$4
+api_load=$5
 
 if [ $ftp_dir ]; then
     :
@@ -31,6 +32,7 @@ for f in $harmonise_dir/*; do
 
         # compress harmonised file
         gzip -c  $f/harmonised.qc.tsv > $release_dir/$gcst/harmonised/$file_id_no_build.h.tsv.gz
+        rsync -v $f/harmonised.qc.tsv $api_load/$file_id_no_build.tsv
         # compress associated formatted file
         gzip -c $f.tsv > $release_dir/$gcst/harmonised/$file_id.f.tsv.gz
 
@@ -42,7 +44,7 @@ for f in $harmonise_dir/*; do
         remote=$(find $ftp_dir -maxdepth 1 -type d -name "*_$gcst")
         if [[ $remote ]]; then
             echo $remote
-            rsync -rv $release_dir/$gcst/harmonised $remote/
+            rsync -rv --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r $release_dir/$gcst/harmonised $remote/
 
             # clean up harmonised, formatted and raw files
             rm $f.tsv
