@@ -1,0 +1,144 @@
+import os
+import pathlib
+import glob
+
+configfile: "config.yaml"
+
+SSIDS = [os.path.basename(f).replace(".tsv", "") for f in list(pathlib.Path(config["to_load"]).glob("*.tsv"))]
+
+def file_with_ext(wildcards):
+    toload =  [f for f in glob.glob(os.path.join(config["to_load"], wildcards.ss_file) + "*.tsv") if os.path.isfile(f)]
+    if not toload:
+        # if no files match pattern, return something that doesn't exist, otherwise
+        # snakemake will think that the empty list as an input is fulfilled.
+        return [os.path.join(config["to_load"], wildcards.ss_file)]
+    return toload
+
+def target_files():
+    targets = []
+    toload =  [os.path.basename(f) for f in list(pathlib.Path(config["to_load"]).glob("*.tsv"))]
+    for f in toload:
+        file_ext = "".join(pathlib.Path(f).suffixes)
+        file_no_ext = f.replace(file_ext, "")
+        targets.append(os.path.join(config["loaded"], file_no_ext + ".tsv")) 
+    return targets
+
+
+rule all:
+    input:
+        target_files()
+
+rule prep_for_load:
+    input:
+         in_ss = file_with_ext
+    output:
+         expand("{to_load}/{chromosome}/{{ss_file}}.csv", chromosome=config["chromosomes"], to_load=config["to_load"])
+    params:
+         to_load=config["to_load"],
+         out_dir=config["out_dir"],
+         props=config["props"],
+         chroms=config["chromosomes"]
+    resources:
+         mem_mb = 4000
+    shell:
+         """
+         for chr in {params.chroms}; do
+             mkdir -p {params.to_load}/$chr
+         done;
+         export SS_LOAD={params.to_load};
+         export SS_OUT={params.out_dir};
+         export SS_CONFIG={params.props};
+         echo {input.in_ss};
+         name={wildcards.ss_file}
+         study=$(echo "$name" | cut -d"-" -f2)
+         gwas-prep-file -f {wildcards.ss_file}.tsv -study $study
+         for chr in {params.chroms}; do
+             if [[ ! -f {params.to_load}/$chr/{wildcards.ss_file}.csv ]]; then
+                touch {params.to_load}/$chr/{wildcards.ss_file}.csv
+             fi
+         done
+         """
+
+rule load_study:
+    input:
+         rules.prep_for_load.output
+    output:
+         expand("{out_dir}/bystudy/{{chromosome}}/file_{{ss_file}}.h5", out_dir=config["out_dir"])
+    params:
+         to_load=config["to_load"],
+         out_dir=config["out_dir"],
+         props=config["props"],
+    resources:
+         mem_mb = lambda wildcards, attempt: attempt * 8000
+    shell:
+         """
+         export SS_LOAD={params.to_load};
+         export SS_OUT={params.out_dir};
+         export SS_CONFIG={params.props};
+         name={wildcards.ss_file}
+         study=$(echo $name | cut -d'-' -f2)
+         trait=$(echo $name | cut -d'-' -f3)
+         f="{wildcards.ss_file}.csv"
+         chr="{wildcards.chromosome}"
+         h5file="{params.out_dir}/bystudy/{wildcards.chromosome}/file_{wildcards.ss_file}.h5"
+         echo $h5file
+         if [[ -s {params.to_load}/$chr/{wildcards.ss_file}.csv ]]; then
+             gwas-load -f $f -chr $chr -loader 'bystudy' -study $study -trait $trait
+             gwas-reindex -f $h5file
+             gwas-load -f "{wildcards.ss_file}.tsv" -loader 'study_info' -study $study -trait $trait
+         else
+             touch $h5file
+         fi
+         """
+
+
+rule repack:
+    input:
+        hdfs=expand("{out_dir}/bystudy/{{chromosome}}/file_{ss_file}.h5", out_dir=config["out_dir"], ss_file=SSIDS)
+    output:
+        expand("{to_load}/{{chromosome}}/REPACKED_COMPLETE", to_load=config["to_load"])
+    params:
+        to_load=config["to_load"],
+        out_dir=config["out_dir"],
+        props=config["props"],
+    resources:
+        mem_mb = lambda wildcards, attempt: attempt * 4800
+    shell:
+        """
+        export SS_LOAD={params.to_load};
+        export SS_OUT={params.out_dir};
+        export SS_CONFIG={params.props};
+        for f in {input.hdfs}; do
+            name=$(basename $f | cut -f 1 -d '.')
+            study=$(echo $name | cut -d'-' -f2)
+            chrom="{wildcards.chromosome}"
+            if [[ -s $f ]]; then
+                echo $f
+                echo $SS_OUT/bychr/file_chr$chrom.h5:/$study
+                ptrepack -v --complib blosc:snappy --complevel 9 --overwrite-nodes --chunkshape 'auto' --sortby 'base_pair_location' --propindexes $f:/$study $SS_OUT/bychr/file_chr$chrom.h5:/$study
+            else
+                rm -v $f
+            fi
+        done
+        touch "{params.to_load}/{wildcards.chromosome}/REPACKED_COMPLETE"
+        """
+     
+         
+rule clean_and_tidy:
+    input:
+        expand("{to_load}/{chromosome}/REPACKED_COMPLETE", chromosome=config["chromosomes"], to_load=config["to_load"]),
+        in_ss = expand("{to_load}/{ss_file}.tsv", to_load=config["to_load"], ss_file=SSIDS)
+    output:
+        expand("{loaded}/{ss_file}.tsv", loaded=config["loaded"], ss_file=SSIDS)
+    params:
+        to_load=config["to_load"],
+        out_dir=config["out_dir"],
+        props=config["props"],
+        loaded=config["loaded"],
+        chroms=config["chromosomes"]
+    shell:
+        """
+        for f in {input.in_ss}; do mv -v $f {params.loaded}/; done
+        for chrom in {params.chroms}; do rm -v {params.to_load}/$chrom/*; done
+        """
+

@@ -1,0 +1,4 @@
+__default__:
+  - "-g /sumstatsloader"
+  - "-oo snakemake.out"
+  - "-eo snakemake.err"
