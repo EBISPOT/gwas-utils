@@ -16,7 +16,7 @@ harmonise_dir=$3
 for f in $source_dir/*; do
         # if the file exists and has not been modified in the last 60 mins
         if [ -e "$f" ] &&  [[ -n $(find "$f" -mmin +60) ]]; then
-                rsync -rv --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r $f $staging_dir/
+                rsync -prv --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r $f $staging_dir/
                 mv -v $f $harmonise_dir/
         fi
 done
