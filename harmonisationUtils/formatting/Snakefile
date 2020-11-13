@@ -59,4 +59,5 @@ rule move_files:
     shell:
         """
         mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv
+        rm -v {params.to_format}/{wildcards.ss_file}.*
         """
