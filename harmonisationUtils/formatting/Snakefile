@@ -42,8 +42,8 @@ rule format_files:
         """
         echo {input.in_ss};
         export SS_FORMAT_CONFIG_DIR={params.format_configs};
-        n=$(echo {input.in_ss})
-        if [[ $n == *".tsv"* ]]; then sep="tsv"; elif [[ $n == *".csv"* ]]; then sep="csv"; else sep="tsv"; fi
+        n=$(echo {input.in_ss});
+        if [[ $n == *".tsv"* ]]; then sep="tsv"; elif [[ $n == *".csv"* ]]; then sep="csv"; else sep="tsv"; fi;
         tabman -f {input.in_ss} -mode gen -config {wildcards.ss_file}.xlsx -sep $sep;
         tabman -f {input.in_ss} -mode apply -config {wildcards.ss_file}.xlsx;
         rm {params.format_configs}/{wildcards.ss_file}.xlsx
