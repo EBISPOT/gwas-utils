@@ -35,11 +35,13 @@ class SummaryStatsSync:
         # First get all accessions for pubmed indexed (published-studies)
         published_studies_url = urljoin(self.api_url, "published-studies")
         resp = requests.get(published_studies_url, params={'size': self.api_page_size}).json()
-        studies_to_release = [study['accession_id'] for study in resp['_embedded']['studies'] if self._published_is_true(study)]
+        studies_to_release = [study['accession_id'] for study in resp['_embedded']['studies'] 
+                              if self._published_is_true(study)]
         # and loop through pages
         for page in range(1, self._last_page(resp)):
             resp = requests.get(published_studies_url, params={'size': self.api_page_size, 'page': page}).json()
-            studies_to_release.extend([study['accession_id'] for study in resp['_embedded']['studies'] if self._published_is_true(study)])
+            studies_to_release.extend([study['accession_id'] for study in resp['_embedded']['studies'] 
+                                       if self._published_is_true(study)])
 
         # Then get add accessuins for non-pubmed indexed (unpublished-studies)
         unpublished_studies_url = urljoin(self.api_url, "unpublished-studies")
@@ -75,7 +77,7 @@ class SummaryStatsSync:
         self.staging_studies = set(self._accessions_from_dirnames(self.get_staging_contents()))
         self.ftp_studies = set(self._accessions_from_dirnames(self.get_ftp_contents()))
         self.curation_published = set(self.get_curation_published_list())
-        self.to_sync_to_ftp = self.curation_published - self.ftp_studies
+        self.to_sync_to_ftp = (self.curation_published & self.staging_studies) - self.ftp_studies
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
         self.unexpected_on_staging = self.staging_studies - self.curation_published
@@ -94,23 +96,18 @@ class SummaryStatsSync:
     def remove_study_from_ftp(self, study):
         pass
 
-    def studies_to_sync_from_to_ftp(self):
+    def sync_to_ftp(self):
+        for study in self.to_sync_to_ftp:
+            pass
         # api AND staging AND NOT ftp
-        pass
+        
 
-    def studies_to_remove_from_ftp(self):
+    def remove_from_ftp(self):
         # NOT api AND ftp
         pass
 
-    def studies_unexpected_on_staging(self):
-        # NOT api AND staging
-        # --> just add to report
-        pass
-    
-    def studies_expected_on_staging(self):
-        # api AND NOT staging
-        # --> just add to report
-        pass
+
+
 
 
 
@@ -128,8 +125,6 @@ def main():
                                      )
 
     sumstats_sync.get_sumstats_status()
-    print(sumstats_sync.staging_studies)
-    print(sumstats_sync.curation_published)
     print("Missing from ftp:")
     print(len(sumstats_sync.to_sync_to_ftp))
     print("To remove from ftp:")
