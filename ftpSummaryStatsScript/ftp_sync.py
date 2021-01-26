@@ -6,16 +6,24 @@ import glob
 import hashlib
 from urllib.parse import urljoin
 import subprocess
+from subprocess import Popen, PIPE
 from pathlib import Path
 import logging
 import shutil
 
 
-logging.basicConfig(level=logging.DEBUG, format='(%(levelname)s): %(message)s')
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("ftpsync.log", mode='w'),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
-# REMOVE this:
-import api_list
+
+#import api_list # LOCAL DEVELOPING ONLY
 
 # inputs: staging, ftp and curation api
 #    --> what needs to be released to ftp? = api AND staging AND NOT ftp
@@ -106,17 +114,19 @@ class SummaryStatsSync:
         return only_files
 
 
-    def get_sumstats_status(self):
+    def get_sumstats_status(self, get_curation_status=True):
         self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
         self.staging_studies = set(self.staging_studies_dict.keys())
         self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
         self.ftp_studies = set(self.ftp_studies_dict.keys())
-        #self.curation_published = set(self.get_curation_published_list())
-        self.curation_published = set(api_list.RESP)
+        if get_curation_status:
+            self.curation_published = set(self.get_curation_published_list())
+            #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
         self.to_sync_to_ftp = (self.curation_published & self.staging_studies) - self.ftp_studies
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
         self.unexpected_on_staging = self.staging_studies - self.curation_published
+        return True
 
     @staticmethod
     def _accessions_from_dirnames(dirnames):
@@ -154,6 +164,7 @@ class SummaryStatsSync:
         try:
             logger.info("Removing {}".format(path))
             shutil.rmtree(path, ignore_errors=True)
+            logger.info("==========================================")
         except FileNotFoundError as e:
             logger.error(e)
 
@@ -164,25 +175,28 @@ class SummaryStatsSync:
         destdir = os.path.join(self.staging_path, pardir)
         self.make_dir(destdir)
         dest = os.path.join(destdir, study)
+        logger.info("Moving {} --> {}".format(source, dest))
         self.move_dir(source, dest)
         
 
     def sync_to_ftp(self):
         # api AND staging AND NOT ftp
         for study in self.to_sync_to_ftp:
+            logger.info("{} --> FTP".format(study))
             source = self.staging_studies_dict[study]
             self._generate_md5sums_for_contents(source)
             if self._create_pardir_on_dest(source):
                 self._rsync_study_dir(source, study)
+        logger.info("==========================================")
 
     @staticmethod
     def move_dir(source, dest):
-        logger.info("Moving {} --> {}".format(source, dest))
+        logger.debug("Moving {} --> {}".format(source, dest))
         shutil.move(source, dest)
 
     @staticmethod
     def make_dir(path):
-        logger.info("mkdir: {}".format(path))
+        logger.debug("mkdir: {}".format(path))
         Path(path).mkdir(parents=True, exist_ok=True)
 
     def _create_pardir_on_dest(self, source):
@@ -194,18 +208,22 @@ class SummaryStatsSync:
         return True
 
     def _rsync_study_dir(self, source, study):
-        # rsync is fussy about trailing slashes and we need them in this case.
-        dest = os.path.join(self.destdir, study + "/")
-        source = source + "/"
-        # rsync parameters:
-        # -r - recursive
-        # -v - verbose
-        # -h - human readable output
-        # --size-only - only file size is compared, timestamp is ignored
-        # --delete - delete outstanding files on the target folder
-        # --exclude=harmonised - excluding harmonised folders
-        # --exclude=".*" - excluding hidden files
-        subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
+        try:
+            # rsync is fussy about trailing slashes and we need them in this case.
+            dest = os.path.join(self.destdir, study + "/")
+            source = source + "/"
+            # rsync parameters:
+            # -r - recursive
+            # -v - verbose
+            # -h - human readable output
+            # --size-only - only file size is compared, timestamp is ignored
+            # --delete - delete outstanding files on the target folder
+            # --exclude=harmonised - excluding harmonised folders
+            # --exclude=".*" - excluding hidden files
+            logger.info("Sync {} --> {}".format(source, dest))
+            subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
+        except OSError as e:
+            logger.error(e)
     
     def remove_unexepcted_from_ftp(self):
         # NOT api AND ftp
@@ -217,32 +235,47 @@ class SummaryStatsSync:
                     self.move_study_from_ftp_to_staging(study)
 
 
+def sendEmailReport(logs, emailAddresses):
+    try:
+        with open(logs, 'r') as f:
+            report = f.read()
+            mailBody = 'Subject: Summary Stats release report\nTo: {}\n{}'.format(emailAddresses,report)
+            p = Popen(["/usr/sbin/sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
+            p.communicate(mailBody.encode('utf-8'))
+    except OSError as e:
+        logger.error(e)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--stagingDir', type=str, help='Path to staging directory.')
     parser.add_argument('--ftpDir', type=str, help='Path to ftp directory.')
     parser.add_argument('--apiURL', type=str, help='URL base for curation REST API')
-    parser.add_argument('--test', action='store_true', default='store_false', help='If test run is specified, no release is done just send notification.')
+    parser.add_argument('--test', action='store_true', help='If test run is specified, no release is done just send notification.')
+    parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
     args = parser.parse_args()
-    
+    logger.info("============ FTP sync report =============")
     sumstats_sync = SummaryStatsSync(staging_path = args.stagingDir,
                                      ftp_path = args.ftpDir,
                                      api_url = args.apiURL
                                      )
-
-    sumstats_sync.get_sumstats_status()
-    logger.info("Missing from ftp:")
-    logger.info(len(sumstats_sync.to_sync_to_ftp))
-    logger.info("To remove from ftp:")
-    logger.info(len(sumstats_sync.remove_from_ftp))
-    logger.info("Missing from staging:")
-    logger.info(len(sumstats_sync.missing_from_staging))
-    logger.info("Unexpected on staging:")
-    logger.info(sumstats_sync.unexpected_on_staging)
-    sumstats_sync.sync_to_ftp()
-    sumstats_sync.remove_unexepcted_from_ftp()
+    if sumstats_sync.get_sumstats_status():
+        if not args.test:
+            logger.info("Sync with FTP...")
+            sumstats_sync.sync_to_ftp()
+            sumstats_sync.remove_unexepcted_from_ftp()
+            logger.info("This is not a test.")
+        else:
+            logger.info("This is a test. Nothing will happen.")
+    sumstats_sync.get_sumstats_status(get_curation_status=False)
+    logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_sync_to_ftp)))
+    logger.info("==========================================")
+    logger.info("Missing from staging: {}".format(list(sumstats_sync.missing_from_staging)))
+    logger.info("==========================================")
+    logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
+    logger.info("==========================================")
+    sendEmailReport("ftpsync.log", args.emailRecipient) 
     
-
 
 if __name__ == '__main__':
     main()
