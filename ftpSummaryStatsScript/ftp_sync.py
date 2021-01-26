@@ -1,8 +1,21 @@
 import os
+import re
 import argparse
 import requests
 import glob
+import hashlib
 from urllib.parse import urljoin
+import subprocess
+from pathlib import Path
+import logging
+import shutil
+
+
+logging.basicConfig(level=logging.DEBUG, format='(%(levelname)s): %(message)s')
+logger = logging.getLogger(__name__)
+
+# REMOVE this:
+import api_list
 
 # inputs: staging, ftp and curation api
 #    --> what needs to be released to ftp? = api AND staging AND NOT ftp
@@ -21,6 +34,7 @@ class SummaryStatsSync:
         self.api_url = api_url
         self.api_page_size = 1000 # can configure if necessary
         self.nesting_dir_pattern = "GCST*-GCST*"
+        self.nesting_dir_regex = "^GCST[0-9]+-GCST[0-9]+$"
 
 
     def get_staging_contents(self):
@@ -34,23 +48,35 @@ class SummaryStatsSync:
     def get_curation_published_list(self):
         # First get all accessions for pubmed indexed (published-studies)
         published_studies_url = urljoin(self.api_url, "published-studies")
-        resp = requests.get(published_studies_url, params={'size': self.api_page_size}).json()
-        studies_to_release = [study['accession_id'] for study in resp['_embedded']['studies'] 
+        resp = requests.get(published_studies_url, 
+                            params={'size': self.api_page_size}
+                            ).json()
+        studies = resp['_embedded']['studies']
+        studies_to_release = [study['accession_id'] for study in studies 
                               if self._published_is_true(study)]
         # and loop through pages
         for page in range(1, self._last_page(resp)):
-            resp = requests.get(published_studies_url, params={'size': self.api_page_size, 'page': page}).json()
-            studies_to_release.extend([study['accession_id'] for study in resp['_embedded']['studies'] 
+            resp = requests.get(published_studies_url, 
+                                params={'size': self.api_page_size, 'page': page}
+                                ).json()
+            studies = resp['_embedded']['studies']
+            studies_to_release.extend([study['accession_id'] for study in studies 
                                        if self._published_is_true(study)])
 
         # Then get add accessuins for non-pubmed indexed (unpublished-studies)
         unpublished_studies_url = urljoin(self.api_url, "unpublished-studies")
-        resp = requests.get(unpublished_studies_url, params={'size': self.api_page_size}).json()
+        resp = requests.get(unpublished_studies_url,
+                            params={'size': self.api_page_size}
+                            ).json()
         last_page = resp['page']['totalPages']
-        studies_to_release.extend([study['study_accession'] for study in resp['_embedded']['unpublishedStudies']])
+        studies = resp['_embedded']['unpublishedStudies']
+        studies_to_release.extend([study['study_accession'] for study in studies])
         for page in range(1, self._last_page(resp)):
-            resp = requests.get(unpublished_studies_url, params={'size': self.api_page_size, 'page': page}).json()
-            studies_to_release.extend([study['study_accession'] for study in resp['_embedded']['unpublishedStudies']])
+            resp = requests.get(unpublished_studies_url,
+                                params={'size': self.api_page_size, 'page': page}
+                                ).json()
+            studies = resp['_embedded']['unpublishedStudies']        
+            studies_to_release.extend([study['study_accession'] for study in studies])
         
         # remove potential duplicates...just in case ;P
         return list(set(studies_to_release))
@@ -70,13 +96,23 @@ class SummaryStatsSync:
         # parent = parent dir e.g. staging dir or ftp dir
         # pattern = globbing pattern of the child dirs
         # '*/' matches dirs within the child dirs
-        return glob.glob(os.path.join(parent, pattern, '*/'))
+        # abspath is very important to make sure that parent paths resolve correctly downstream
+        return glob.glob(os.path.abspath(os.path.join(parent, pattern, '*/')))
+
+    @staticmethod
+    def _list_files_in_dir(directory):
+        only_files = [f for f in os.listdir(directory) 
+                     if os.path.isfile(os.path.join(directory, f))]
+        return only_files
 
 
     def get_sumstats_status(self):
-        self.staging_studies = set(self._accessions_from_dirnames(self.get_staging_contents()))
-        self.ftp_studies = set(self._accessions_from_dirnames(self.get_ftp_contents()))
-        self.curation_published = set(self.get_curation_published_list())
+        self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
+        self.staging_studies = set(self.staging_studies_dict.keys())
+        self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
+        self.ftp_studies = set(self.ftp_studies_dict.keys())
+        #self.curation_published = set(self.get_curation_published_list())
+        self.curation_published = set(api_list.RESP)
         self.to_sync_to_ftp = (self.curation_published & self.staging_studies) - self.ftp_studies
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
@@ -84,31 +120,101 @@ class SummaryStatsSync:
 
     @staticmethod
     def _accessions_from_dirnames(dirnames):
-        return [os.path.basename(os.path.abspath(directory)) for directory in dirnames]
+        # dict of {study_accession: path}
+        return {os.path.basename(directory): directory for directory in dirnames}
 
     def sync_study_from_staging_to_ftp(self, study):
         self.generate_md5sum_for_study_files(study)
 
-    @staticmethod
-    def generate_md5sum_for_study_files(study):
-        pass
-
-    def remove_study_from_ftp(self, study):
-        pass
-
-    def sync_to_ftp(self):
-        for study in self.to_sync_to_ftp:
-            pass
-        # api AND staging AND NOT ftp
+    def _generate_md5sums_for_contents(self, directory):
+        only_files = self._list_files_in_dir(directory)
+        for file in only_files:
+            if 'md5' in file.lower():
+                return None
+        md5checksums = []
+        # Loopthrough the files and calculate md5sum:
+        for filename in only_files:
+            with open(os.path.join(directory, filename),"rb") as f:
+                file_hash = hashlib.md5()
+                for chunk in iter(lambda: f.read(8192), b''):
+                    file_hash.update(chunk)
+                md5checksums.append([filename, file_hash.hexdigest()])
+        # Saving values into a file:
+        with open(os.path.join(directory,'md5sum.txt'), 'w') as writer:
+            for file in md5checksums:
+                writer.write('{} {}\n'.format(file[1], file[0])) 
         
 
-    def remove_from_ftp(self):
+    def remove_study_from_ftp(self, study):
+        path = self.ftp_studies_dict[study]
+        # check the end of the path is just a studyID
+        if Path(path).name != study:
+            logger.error("Doesn't seem right to remove {}, so I didn't.".format(path))
+            return False
+        try:
+            logger.info("Removing {}".format(path))
+            shutil.rmtree(path, ignore_errors=True)
+        except FileNotFoundError as e:
+            logger.error(e)
+
+    def move_study_from_ftp_to_staging(self, study):
+        source = self.ftp_studies_dict[study]
+        # make nest directory on staging if required
+        pardir = Path(source).parent.name
+        destdir = os.path.join(self.staging_path, pardir)
+        self.make_dir(destdir)
+        dest = os.path.join(destdir, study)
+        self.move_dir(source, dest)
+        
+
+    def sync_to_ftp(self):
+        # api AND staging AND NOT ftp
+        for study in self.to_sync_to_ftp:
+            source = self.staging_studies_dict[study]
+            self._generate_md5sums_for_contents(source)
+            if self._create_pardir_on_dest(source):
+                self._rsync_study_dir(source, study)
+
+    @staticmethod
+    def move_dir(source, dest):
+        logger.info("Moving {} --> {}".format(source, dest))
+        shutil.move(source, dest)
+
+    @staticmethod
+    def make_dir(path):
+        logger.info("mkdir: {}".format(path))
+        Path(path).mkdir(parents=True, exist_ok=True)
+
+    def _create_pardir_on_dest(self, source):
+        pardir = Path(source).parent.name
+        if not re.search(self.nesting_dir_regex, pardir):
+            return False
+        self.destdir = os.path.join(self.ftp_path, pardir)
+        self.make_dir(self.destdir)
+        return True
+
+    def _rsync_study_dir(self, source, study):
+        # rsync is fussy about trailing slashes and we need them in this case.
+        dest = os.path.join(self.destdir, study + "/")
+        source = source + "/"
+        # rsync parameters:
+        # -r - recursive
+        # -v - verbose
+        # -h - human readable output
+        # --size-only - only file size is compared, timestamp is ignored
+        # --delete - delete outstanding files on the target folder
+        # --exclude=harmonised - excluding harmonised folders
+        # --exclude=".*" - excluding hidden files
+        subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
+    
+    def remove_unexepcted_from_ftp(self):
         # NOT api AND ftp
-        pass
-
-
-
-
+        if len(self.remove_from_ftp) > 0:
+            for study in self.remove_from_ftp:
+                if study in self.staging_studies:
+                    self.remove_study_from_ftp(study)
+                else:
+                    self.move_study_from_ftp_to_staging(study)
 
 
 def main():
@@ -125,14 +231,16 @@ def main():
                                      )
 
     sumstats_sync.get_sumstats_status()
-    print("Missing from ftp:")
-    print(len(sumstats_sync.to_sync_to_ftp))
-    print("To remove from ftp:")
-    print(len(sumstats_sync.remove_from_ftp))
-    print("Missing from staging:")
-    print(len(sumstats_sync.missing_from_staging))
-    print("Unexpected on staging:")
-    print(len(sumstats_sync.unexpected_on_staging))
+    logger.info("Missing from ftp:")
+    logger.info(len(sumstats_sync.to_sync_to_ftp))
+    logger.info("To remove from ftp:")
+    logger.info(len(sumstats_sync.remove_from_ftp))
+    logger.info("Missing from staging:")
+    logger.info(len(sumstats_sync.missing_from_staging))
+    logger.info("Unexpected on staging:")
+    logger.info(sumstats_sync.unexpected_on_staging)
+    sumstats_sync.sync_to_ftp()
+    sumstats_sync.remove_unexepcted_from_ftp()
     
 
 
