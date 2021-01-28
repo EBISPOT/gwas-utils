@@ -6,6 +6,7 @@ import json
 import shutil
 import glob
 import argparse
+from sumstats_file_utils import SumStatsFTPClient
 
 
 gwas_rest_url = "https://www.ebi.ac.uk/gwas/rest/api"
@@ -39,7 +40,6 @@ class Study:
             name = "-".join([self.pmid, self.study_id, self.efo, build])
             return name
         return None
-
 
 
 class CurationAPIClient:
@@ -77,32 +77,6 @@ class CurationAPIClient:
         return False
 
 
-class FTPClient:
-    def __init__(self, ftp_path):
-        self.ftp_path = ftp_path
-        self.nesting_dir_pattern = "GCST*-GCST*"
-
-    def get_ftp_contents(self):
-        return self._list_study_dirs(parent=self.ftp_path, 
-                                    pattern=self.nesting_dir_pattern)
-
-    def ftp_study_to_path_dict(self):
-        self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
-        return self.ftp_studies_dict
-
-    @staticmethod
-    def _accessions_from_dirnames(dirnames):
-        # dict of {study_accession: path}
-        return {os.path.basename(directory): directory for directory in dirnames}
-
-    @staticmethod
-    def _list_study_dirs(parent, pattern):
-        # parent = parent dir e.g. staging dir or ftp dir
-        # pattern = globbing pattern of the child dirs
-        # '*/' matches dirs within the child dirs
-        # abspath is very important to make sure that parent paths resolve correctly downstream
-        return glob.glob(os.path.abspath(os.path.join(parent, pattern, '*/')))
-
 
 def identify_files_to_harmonise(public_ftp, depo_source):
     new_studies = os.listdir(depo_source)
@@ -110,7 +84,7 @@ def identify_files_to_harmonise(public_ftp, depo_source):
     curation_client = CurationAPIClient(curation_rest_url)
     #published_studies = curation_client.pmid_w_sumstats_study_list()
     published_studies = api_list.RESP # LOCAL DEVELOPING ONLY
-    ftp_client = FTPClient(public_ftp)
+    ftp_client = SumStatsFTPClient(public_ftp)
     ftp_study_to_path_dict = ftp_client.ftp_study_to_path_dict()
     new_and_published_studies = list(set(new_studies) & set(published_studies))
     for study in new_and_published_studies:
