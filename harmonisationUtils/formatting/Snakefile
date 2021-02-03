@@ -60,6 +60,6 @@ rule move_files:
         to_format=config["to_format"]
     shell:
         """
-        mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv
-        rm -v {params.to_format}/{wildcards.ss_file}.*
+        mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv;
+        find {params.to_format}/ -name '{wildcards.ss_file}.*' -delete
         """
