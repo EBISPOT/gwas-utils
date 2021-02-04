@@ -78,8 +78,9 @@ def main():
             # new_dir exists but f is not pmid
             else:
                 print("{} already exists, removing {} and creating symlink in place".format(new_dir, f))
-                shutil.rmtree(f)
-                os.symlink(new_dir, f, target_is_directory=True)
+                if args.test is False:
+                    shutil.rmtree(f)
+                    os.symlink(new_dir, f, target_is_directory=True)
         else:
             print("Couldn't find a GCST in {}".format(basename))
 
