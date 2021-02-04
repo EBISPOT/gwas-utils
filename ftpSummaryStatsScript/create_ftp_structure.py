@@ -28,8 +28,8 @@ def get_gcst_range(gcst):
     range_str = "GCST{f}-GCST{u}".format(f=str(floor).zfill(6), u=str(upper).zfill(6))
     return range_str
 
-def get_study_entries(ftp_base):
-    dir_list = glob.glob(os.path.join(ftp_base, '*GCST*'))
+def get_study_entries(ftp_base, pattern):
+    dir_list = glob.glob(os.path.join(ftp_base, pattern))
     filtered_list = [d for d in dir_list if "-GCST" not in d]
     return filtered_list
     
@@ -37,12 +37,13 @@ def get_study_entries(ftp_base):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dir', type=str, help='Full path to ftp directory containing sumstats.')
+    parser.add_argument('--pattern', type=str, help='Pattern for the glob matching', default='*GCST*')
     parser.add_argument('--test', action='store_true', help='If test run is specified, nothing is actually done.')
     args = parser.parse_args()
     
     ftp_base = args.dir
     # get gcst
-    sumstats = get_study_entries(ftp_base)
+    sumstats = get_study_entries(ftp_base, args.pattern)
     for f in sumstats:
         print("======== processing... ========")
         print(f)
