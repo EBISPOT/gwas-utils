@@ -55,7 +55,7 @@ class SummaryStatsSync:
     
     def get_curation_published_list(self):
         # First get all accessions for pubmed indexed (published-studies)
-        published_studies_url = urljoin(self.api_url, "published-studies")
+        published_studies_url = urljoin(self.api_url, "studies")
         resp = requests.get(published_studies_url, 
                             params={'size': self.api_page_size}
                             ).json()
