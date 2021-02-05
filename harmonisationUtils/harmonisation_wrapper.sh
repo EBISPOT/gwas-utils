@@ -20,7 +20,7 @@ for f in $toharmonise/*.tsv; do
         h=$n/harmonised.qc.tsv
         # if job already running or snakemake target already exists.
         if bjobs -w | grep -q $n || [ $(find $n -maxdepth 1 -mmin +30 -type f -name harmonised.qc.tsv) ] ; then
-            if snakemake  -n -d $n --configfile $snakemake_dir/config.yaml --profile lsf $h  | tail -n1 | grep "Nothing to be done."; then
+            if snakemake  -n -d $n --configfile $snakemake_dir/config.yaml --profile lsf $h  | tail -n1 | grep -q "Nothing to be done."; then
                 echo "$h --> Ready to release"
 
                 # set vars
@@ -33,11 +33,10 @@ for f in $toharmonise/*.tsv; do
                 mkdir -p $release_dir/$gcst/harmonised
 
                 # compress harmonised file
-                echo "compressing files"
-                gzip -v -c  $n/harmonised.qc.tsv > $release_dir/$gcst/harmonised/$file_id_no_build.h.tsv.gz
+                gzip -c  $n/harmonised.qc.tsv > $release_dir/$gcst/harmonised/$file_id_no_build.h.tsv.gz
                 rsync -pv --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r $n/harmonised.qc.tsv $api_load/$file_id_no_build.tsv
                 # compress associated formatted file
-                gzip -v -c $f > $release_dir/$gcst/harmonised/$file_id.f.tsv.gz
+                gzip -c $f > $release_dir/$gcst/harmonised/$file_id.f.tsv.gz
 
                 # generate md5sums for these files
                 md5sum $release_dir/$gcst/harmonised/$file_id_no_build* > $release_dir/$gcst/harmonised/md5sum.txt
