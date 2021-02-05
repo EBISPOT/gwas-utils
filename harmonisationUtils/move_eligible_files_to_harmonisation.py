@@ -126,7 +126,7 @@ def main():
     argparser.add_argument("-depo_source", help='The source for the submitted files', required=True)
     argparser.add_argument("-public_ftp", help='The public FTP sumstats path', required=True)
     argparser.add_argument("-to_format", help='The path to the formatting directory', required=True)
-    parser.add_argument('-apiURL', type=str, help='URL base for curation REST API')
+    argparser.add_argument('-apiURL', type=str, help='URL base for curation REST API')
     argparser.add_argument("-test", help='Test run, no moving or cleaning', action='store_true', required=False)
             
     args = argparser.parse_args()
