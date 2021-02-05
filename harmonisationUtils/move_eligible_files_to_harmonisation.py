@@ -4,10 +4,15 @@ import requests
 import os
 import json
 import shutil
+import glob
 import argparse
+from sumstats_file_utils import SumStatsFTPClient
 
 
 gwas_rest_url = "https://www.ebi.ac.uk/gwas/rest/api"
+curation_rest_url = ""
+
+import api_list # LOCAL DEVELOPING ONLY
 
 
 class Study:
@@ -37,14 +42,56 @@ class Study:
         return None
 
 
+class CurationAPIClient:
+    def __init__(self, curation_API_url):
+        self.api_url = curation_API_url
+        self.api_page_size = 1000
+
+    def pmid_w_sumstats_study_list(self):
+        # First get all accessions for pubmed indexed (published-studies)
+        published_studies_url = urljoin(self.api_url, "published-studies")
+        resp = requests.get(published_studies_url, 
+                            params={'size': self.api_page_size}
+                            ).json()
+        studies = resp['_embedded']['studies']
+        pmid_studies_w_sumstats = [study['accession_id'] for study in studies 
+                              if self._published_is_true(study)]
+        # and loop through pages
+        for page in range(1, self._last_page(resp)):
+            resp = requests.get(published_studies_url, 
+                                params={'size': self.api_page_size, 'page': page}
+                                ).json()
+            studies = resp['_embedded']['studies']
+            pmid_studies_w_sumstats.extend([study['accession_id'] for study in studies 
+                                       if self._published_is_true(study)])
+        return pmid_studies_w_sumstats
+
+    @staticmethod
+    def _last_page(resp):
+        return resp['page']['totalPages']
+
+    @staticmethod
+    def _published_is_true(study):
+        if study['full_pvalue_set'] == True and study['housekeeping']['is_published'] == True:
+            return True
+        return False
+
+
+
 def identify_files_to_harmonise(public_ftp, depo_source):
     new_studies = os.listdir(depo_source)
-    to_harmonise = {}
-    published_studies = [f for f in os.listdir(public_ftp) if not f.startswith("GCST")] 
-    for f in published_studies:
-        if f.split("_")[-1] in new_studies:
-            if 'harmonised' not in os.listdir(os.path.join(public_ftp, f)):
-                to_harmonise[f.split("_")[-1]] = f
+    to_harmonise = []
+    curation_client = CurationAPIClient(curation_rest_url)
+    #published_studies = curation_client.pmid_w_sumstats_study_list()
+    published_studies = api_list.RESP # LOCAL DEVELOPING ONLY
+    ftp_client = SumStatsFTPClient(public_ftp)
+    ftp_study_to_path_dict = ftp_client.ftp_study_to_path_dict()
+    new_and_published_studies = list(set(new_studies) & set(published_studies))
+    for study in new_and_published_studies:
+        study_dir = ftp_study_to_path_dict[study] if study in ftp_study_to_path_dict.keys() else None
+        if study_dir:
+            if 'harmonised' not in os.listdir(study_dir):
+                to_harmonise.append(study)
     return to_harmonise
 
 
@@ -73,7 +120,6 @@ def move_files(to_harmonise, depo_source, to_format):
             else:
                 print("Unable to generate a name for the sumstats: {}. Leaving it alone.".format(f))
                 
-
 
 def main():
     argparser = argparse.ArgumentParser()

@@ -44,7 +44,7 @@ for f in $toharmonise/*.tsv; do
 
                 # release to FTP
                 # identify the remote directory - this find matches the GCST for the end of the dirname
-                remote=$(find $ftp_dir -maxdepth 1 -type d -name "*_$gcst")
+                remote=$(find $ftp_dir -maxdepth 2 -type d -name "$gcst")
                 if [[ $remote ]]; then
                     echo $remote
                     rsync -prv --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r $release_dir/$gcst/harmonised $remote/
