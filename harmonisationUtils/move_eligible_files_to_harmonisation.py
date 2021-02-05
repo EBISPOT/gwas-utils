@@ -4,6 +4,7 @@ import requests
 import os
 import json
 import shutil
+from urllib.parse import urljoin
 import glob
 import argparse
 from sumstats_file_utils import SumStatsFTPClient
