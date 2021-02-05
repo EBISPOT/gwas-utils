@@ -63,7 +63,7 @@ def sync_files(source_dir, staging_dir, harmonise_dir):
             dest = gcst_range_dir + "/"
             make_dir(gcst_range_dir)
             logger.info("Sync {} --> {}".format(study, dest))
-            subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
+            subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
             move_dir(study, harmonise_dir + "/")
 
 
