@@ -10,9 +10,8 @@ from sumstats_file_utils import SumStatsFTPClient
 
 
 gwas_rest_url = "https://www.ebi.ac.uk/gwas/rest/api"
-curation_rest_url = ""
 
-import api_list # LOCAL DEVELOPING ONLY
+#import api_list # LOCAL DEVELOPING ONLY
 
 
 class Study:
@@ -78,12 +77,12 @@ class CurationAPIClient:
 
 
 
-def identify_files_to_harmonise(public_ftp, depo_source):
+def identify_files_to_harmonise(public_ftp, depo_source, curation_api_url):
     new_studies = os.listdir(depo_source)
     to_harmonise = []
-    curation_client = CurationAPIClient(curation_rest_url)
-    #published_studies = curation_client.pmid_w_sumstats_study_list()
-    published_studies = api_list.RESP # LOCAL DEVELOPING ONLY
+    curation_client = CurationAPIClient(curation_api_url)
+    published_studies = curation_client.pmid_w_sumstats_study_list()
+    #published_studies = api_list.RESP # LOCAL DEVELOPING ONLY
     ftp_client = SumStatsFTPClient(public_ftp)
     ftp_study_to_path_dict = ftp_client.ftp_study_to_path_dict()
     new_and_published_studies = list(set(new_studies) & set(published_studies))
@@ -126,6 +125,7 @@ def main():
     argparser.add_argument("-depo_source", help='The source for the submitted files', required=True)
     argparser.add_argument("-public_ftp", help='The public FTP sumstats path', required=True)
     argparser.add_argument("-to_format", help='The path to the formatting directory', required=True)
+    parser.add_argument('--apiURL', type=str, help='URL base for curation REST API')
     argparser.add_argument("-test", help='Test run, no moving or cleaning', action='store_true', required=False)
             
     args = argparser.parse_args()
@@ -133,9 +133,10 @@ def main():
     depo_source = args.depo_source
     public_ftp = args.public_ftp
     to_format = args.to_format
+    curation_api_url = args.apiURL
     test_run = args.test
     
-    files = identify_files_to_harmonise(public_ftp, depo_source)
+    files = identify_files_to_harmonise(public_ftp, depo_source, curation_api_url)
     print("Files to move:")
     for f in files:
         print(f)
