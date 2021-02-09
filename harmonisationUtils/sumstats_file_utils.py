@@ -35,7 +35,7 @@ class SumStatsFTPClient:
 
 
 def get_gcst_range(gcst):
-    number_part = int(gcst.split("GCST")[1])
+    number_part = int(gcst.split("GCST")[1]) - 1
     floor = int(np.fix(number_part / range_size) * range_size) + 1
     upper = floor + (range_size -1)
     range_str = "GCST{f}-GCST{u}".format(f=str(floor).zfill(6), u=str(upper).zfill(6))
