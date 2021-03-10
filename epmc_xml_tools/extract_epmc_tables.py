@@ -2,112 +2,121 @@
 
 import requests
 import pandas as pd
+import argparse
+import sys
 from bs4 import BeautifulSoup as bs
 
-### Functions ###
 
-def get_pmcid(pmid):
-    '''Calls the NCBI ID Converter API to convert PMID to PMCID'''
-    url = 'https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids=' + pmid + '&format=json&tool=notyetnamed&email=eks@ebi.ac.uk'
-    response = requests.get(url)
-    # parse the JSON
-    a = response.json()
-    # return the pmcid from the JSON response
-    pmcid = a['records'][0]['pmcid']
-    return pmcid
-    
-def get_xml(pmcid):
-    '''Calls the Europe PMC API with a PMCID and returns the raw XML for the article'''
-    url = 'https://www.ebi.ac.uk/europepmc/webservices/rest/' + pmcid + '/fullTextXML'
-    response = requests.get(url)
-    return response.content
+class EPMCClient:
+    def __init__(self, pmid):
+        self.pmid = pmid
 
-def make_soup(xml):
-    '''Given raw XML, returns parsed XML as a beautiful soup object'''
-    return bs(xml, 'lxml')
-
-def format_soup(soup):
-    '''Converts a beautiful soup object to a string with more readable formatting'''
-    return soup.prettify()
-
-def write_xmlfile(xmlstring):
-    '''Writes a formatted XML string to an XML file for reference'''
-    filename = pmid + '.xml'
-    with open(filename, 'w') as xmlfile:
-        xmlfile.write(xmlstring)
-
-def get_tables(xml):
-    '''Returns a list of html tables from an XML file'''
-    return pd.read_html(xml)
-
-def write_to_excel(tables):
-    '''Iterates over tables in a list and writes to excel'''
-    n = 1
-    for table in tables:
-        # write to file then increase filename increment
-        filename = pmid + '_table_' + str(n) + '.xlsx'
-        print('Writing to file', filename)
-        table.to_excel(filename)
-        n += 1
-
-def get_table_summaries(soup):
-    '''Extracts table numbers, titles & legends from beautiful soup object'''
-    # filter soup to select only <div class="table-wrap..."> tags
-    table_soup = soup.find_all("table-wrap")
-    # create empty string to store table details
-    summaries = ''
-    for wrap in table_soup:
-        # extract table number from <label> tag (text only)
-        number = wrap.label.get_text()
-        # extract table title from <caption> tag (text only)
-        title = wrap.caption.get_text()
-        # extract table legend from <table-wrap-foot> tag (text only)
+    def get_xml(self):
+        '''Calls the Europe PMC API with a PMCID and returns the raw XML for the article'''
+        url = 'https://www.ebi.ac.uk/europepmc/webservices/rest/' + self.pmid + '/fullTextXML'
         try:
-            legend = wrap.find("table-wrap-foot").get_text()
-        except:
-            legend = '<no legend>'
-        # append table details to string
-        summaries += number + '\nTitle: ' + title + '\nLegend: ' + legend + '\n\n'
-    return summaries
+            response = requests.get(url)
+            if response.content:
+                return response.content
+            else:
+                print("No content for pmid: {}".format(self.pmid))
+                sys.exit()
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+            sys.exit()
 
-def write_outline(summaries):
-    filename = pmid + '_outline.txt'
-    with open(filename, 'w') as outline:
-        outline.write(summaries)
+    @staticmethod
+    def format_soup(soup):
+        '''Converts a beautiful soup object to a string with more readable formatting'''
+        return soup.prettify()
 
-### Run ###
+    def write_xmlfile(self, xmlstring):
+        '''Writes a formatted XML string to an XML file for reference'''
+        filename = self.pmid + '.xml'
+        with open(filename, 'w') as xmlfile:
+            xmlfile.write(xmlstring)
 
-# try to get PMCID from PMID
-pmid = input('Enter PMID: ')
-try:
-    pmcid = get_pmcid(pmid)
-    print('Found PMCID:', pmcid)
-# if no PMCID found, print error message and quit
-except:
-    print('No PMCID found for this PMID. Full text may not be available.')
-    quit()
+    @staticmethod
+    def get_tables(xml):
+        '''Returns a list of html tables from an XML file'''
+        try:
+            return pd.read_html(xml)
+        except ValueError as e:
+            print(e)
+            sys.exit()
 
-# get the xml file from ePMC
-#pmcid = input('Enter PMCID: ')
-xml = get_xml(pmcid)
-print('Retrieved raw XML.')
+    def write_to_excel(self, tables):
+        '''Iterates over tables in a list and writes to excel'''
+        n = 1
+        for table in tables:
+            # write to file then increase filename increment
+            filename = self.pmid + '_table_' + str(n) + '.xlsx'
+            print('Writing to file', filename)
+            table.to_excel(filename)
+            n += 1
 
-# write xml to file to keep as a reference
-soup = make_soup(xml)
-xmlstring = format_soup(soup)
-write_xmlfile(xmlstring)
-print('XML written to file.')
+    @staticmethod
+    def get_table_summaries(soup):
+        '''Extracts table numbers, titles & legends from beautiful soup object'''
+        # filter soup to select only <div class="table-wrap..."> tags
+        table_soup = soup.find_all("table-wrap")
+        # create empty string to store table details
+        summaries = ''
+        for wrap in table_soup:
+            # extract table number from <label> tag (text only)
+            number = wrap.label.get_text()
+            # extract table title from <caption> tag (text only)
+            title = wrap.caption.get_text()
+            # extract table legend from <table-wrap-foot> tag (text only)
+            table_wrap_foot = wrap.find("table-wrap-foot")
+            legend = table_wrap_foot.get_text() if table_wrap_foot else '<no legend>'
+            # append table details to string
+            summaries += number + '\nTitle: ' + title + '\nLegend: ' + legend + '\n\n'
+        return summaries
 
-# get the list of tables
-tables = get_tables(xml)
-print('Extracted', len(tables), 'tables.')
-# write each table to excel
-write_to_excel(tables)
-print('Tables written to excel.')
+    def write_outline(self, summaries):
+        filename = self.pmid + '_outline.txt'
+        with open(filename, 'w') as outline:
+            outline.write(summaries)
 
-# get the summary text
-summaries = get_table_summaries(soup)
-print('Extracted table summaries:', len(summaries), 'characters.')
-# write to report
-write_outline(summaries)
-print('Table outline written to txt.')
+    @staticmethod
+    def make_soup(xml):
+        '''Given raw XML, returns parsed XML as a beautiful soup object'''
+        return bs(xml, 'lxml')
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-pmid', type=str, help='PMID', default=None, required=False)
+    args = parser.parse_args()
+    pmid = args.pmid if args.pmid else input('Enter PMID: ')
+
+    epmc_client = EPMCClient(pmid=pmid)
+
+    # get the xml file from ePMC
+    xml = epmc_client.get_xml()
+    print('Retrieved raw XML.')
+
+    # write xml to file to keep as a reference
+    soup = epmc_client.make_soup(xml)
+    xmlstring = epmc_client.format_soup(soup)
+    epmc_client.write_xmlfile(xmlstring)
+    print('XML written to file.')
+
+    # get the list of tables
+    tables = epmc_client.get_tables(xml)
+    print('Extracted', len(tables), 'tables.')
+    # write each table to excel
+    epmc_client.write_to_excel(tables)
+    print('Tables written to excel.')
+
+    # get the summary text
+    summaries = epmc_client.get_table_summaries(soup)
+    print('Extracted table summaries:', len(summaries), 'characters.')
+    # write to report
+    epmc_client.write_outline(summaries)
+    print('Table outline written to txt.')
+
+
+if __name__ == '__main__':
+    main()
