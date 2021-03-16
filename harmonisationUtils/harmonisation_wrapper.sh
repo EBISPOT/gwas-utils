@@ -39,7 +39,7 @@ for f in $toharmonise/*.tsv; do
                 gzip -c $f > $release_dir/$gcst/harmonised/$file_id.f.tsv.gz
 
                 # generate md5sums for these files
-                md5sum $release_dir/$gcst/harmonised/$file_id_no_build* > $release_dir/$gcst/harmonised/md5sum.txt
+                md5sum $release_dir/$gcst/harmonised/$file_id_no_build* | sed 's| .*harmonised/| |g' > $release_dir/$gcst/harmonised/md5sum.txt
 
                 # release to FTP
                 # identify the remote directory - this find matches the GCST for the end of the dirname
