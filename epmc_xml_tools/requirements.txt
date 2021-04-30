@@ -5,12 +5,8 @@ chardet
 et-xmlfile==1.0.1
 html5lib
 idna==2.10
-openpyxl==3.0.7
 pandas
-python-dateutil==2.8.1
-pytz==2021.1
-requests==2.25.1
-six==1.15.0
-soupsieve==2.2
-urllib3==1.26.3
-webencodings==0.5.1
+requests
+soupsieve
+urllib3
+webencodings
