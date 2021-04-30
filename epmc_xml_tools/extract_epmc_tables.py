@@ -10,10 +10,35 @@ from bs4 import BeautifulSoup as bs
 class EPMCClient:
     def __init__(self, pmid):
         self.pmid = pmid
+        self.pmcid = None
+        self.base_url = 'https://www.ebi.ac.uk/europepmc/webservices/rest/'
+
+    def get_pmcid(self):
+        '''Calls Europe PMC API with a PMID and retrieves the matching PMCID'''
+        url = self.base_url + 'search?query=SRC%3AMED%20AND%20EXT_ID%3A' + self.pmid + '&resultType=idlist&cursorMark=*&pageSize=25&format=json'
+        try:
+            response = requests.get(url)
+            if response.content:
+                a = response.json()
+                try:
+                    pmcid = a['resultList']['result'][0]['pmcid']
+                    return pmcid
+                except:
+                    print("No pmcid found for pmid: {}".format(self.pmid))
+                    sys.exit()
+            else:
+                print("pmid: {} not found".format(self.pmid))
+                sys.exit()
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+            sys.exit()
+
+    def set_pmcid(self):
+        self.pmcid = self.get_pmcid()
 
     def get_xml(self):
         '''Calls the Europe PMC API with a PMCID and returns the raw XML for the article'''
-        url = 'https://www.ebi.ac.uk/europepmc/webservices/rest/' + self.pmid + '/fullTextXML'
+        url = self.base_url + self.pmcid + '/fullTextXML'
         try:
             response = requests.get(url)
             if response.content:
@@ -93,6 +118,10 @@ def main():
 
     epmc_client = EPMCClient(pmid=pmid)
 
+    # set pmcid for given pmid
+    epmc_client.set_pmcid()
+    print('Set PMCID:', epmc_client.pmcid)
+    
     # get the xml file from ePMC
     xml = epmc_client.get_xml()
     print('Retrieved raw XML.')
