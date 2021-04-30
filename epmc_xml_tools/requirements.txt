@@ -3,7 +3,7 @@ bs4==0.0.1
 certifi==2020.12.5
 chardet
 et-xmlfile==1.0.1
-html5lib==1.1
+html5lib
 idna==2.10
 lxml==4.6.2
 numpy==1.20.1
