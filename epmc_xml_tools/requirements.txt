@@ -1,7 +1,7 @@
 beautifulsoup4==4.9.3
 bs4==0.0.1
 certifi==2020.12.5
-chardet==4.0.0
+chardet
 et-xmlfile==1.0.1
 html5lib==1.1
 idna==2.10
