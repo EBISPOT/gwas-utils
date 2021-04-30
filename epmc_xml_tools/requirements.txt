@@ -5,7 +5,7 @@ chardet
 et-xmlfile==1.0.1
 html5lib
 idna==2.10
-lxml==4.6.2
+lxml
 numpy==1.20.1
 openpyxl==3.0.7
 pandas==1.2.3
