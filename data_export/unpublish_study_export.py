@@ -75,7 +75,7 @@ def build_studies_download(url, outputdir):
                 table['DISEASE/TRAIT'] = study['trait']
                 table['INITIAL SAMPLE SIZE'] = 'not yet curated'
                 table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
-                table['PLATFORM [SNPS PASSING QC]'] = study['array_manufacturer']
+                table['PLATFORM [SNPS PASSING QC]'] = study['array_manufacturer'] + ' [' + study['variant_count'] + ']'
                 table['ASSOCIATION COUNT'] = 'not yet curated'
                 table['MAPPED TRAIT'] = 'not yet curated'
                 table['MAPPED TRAIT URI'] = 'not yet curated'
@@ -87,7 +87,7 @@ def build_studies_download(url, outputdir):
                 table['BACKGROUND TRAIT'] = study['background_trait']
                 table['MAPPED BACKGROUND TRAIT'] = 'not yet curated'
                 table['MAPPED BACKGROUND TRAIT URI'] = 'not yet curated'
-              #  table['STUDY'] = study['study_description']
+                table['STUDY'] = study['study_description']
                 for bodyOfWork in study['body_of_work']:
                     table['PUBMED ID'] = 'not yet curated'
                     table['FIRST AUTHOR'] = bodyOfWork['first_author']
