@@ -1,0 +1,15 @@
+image: ubuntu:18.04
+
+stages:
+  - deploy
+
+run-task:
+  stage: deploy
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - scp -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR
