@@ -3,9 +3,15 @@ import datetime
 import getopt
 import json
 import sys
+import os
+import numpy as np
 import urllib.request
 from collections import defaultdict
 
+
+#Global variables for summary statistics FTP path
+SUMSTAST_FTP_BASE_PATH = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/'
+RANGE_SIZE = 1000
 
 def build_ancestry_download(url, outputdir):
     #STUDY ACCESSION	FIRST AUTHOR	STAGE	NUMBER OF INDIVDUALS	BROAD ANCESTRAL CATEGORY	COUNTRY OF RECRUITMENT	ADDITONAL ANCESTRY DESCRIPTION	Founder/Genetically isolated population	Number of cases	Number of controls	Sample description	DOI
@@ -55,7 +61,6 @@ def build_ancestry_download(url, outputdir):
 
 def build_studies_download(url, outputdir):
     with urllib.request.urlopen(url) as f:
-    #with open('C:/Users/jstewart/IdeaProjects/EBI/goci-new/goci-interfaces/goci-curation/src/main/resources/submissions.json', encoding='UTF-8') as f:
         data = json.load(f)
         print(data)
         with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.tmp.tsv', 'w', newline='') as csvfile:
@@ -81,7 +86,7 @@ def build_studies_download(url, outputdir):
                 table['MAPPED TRAIT URI'] = 'not yet curated'
                 table['STUDY ACCESSION'] = study['study_accession']
                 table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
-                table['SUMMARY STATS LOCATION'] = 'ftp://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/' + study['study_accession']
+                table['SUMMARY STATS LOCATION'] = generate_sumstats_ftp_path(study['study_accession'])
                 table['SUBMISSION DATE'] = datetime.date.fromtimestamp(study['createdDate'] / 1000).isoformat()
                 table['STATISTICAL MODEL'] = study['statistical_model']
                 table['BACKGROUND TRAIT'] = study['background_trait']
@@ -95,6 +100,18 @@ def build_studies_download(url, outputdir):
                     table['JOURNAL'] = 'not yet curated'
                     table['LINK'] = bodyOfWork['doi']
                     writer.writerow(table)
+
+def get_gcst_range(gcst):
+    number_part = int(gcst.split("GCST")[1])
+    floor = int(np.fix(number_part / RANGE_SIZE) * RANGE_SIZE) + 1
+    upper = floor + (RANGE_SIZE -1)
+    range_str = "GCST{f}-GCST{u}".format(f=str(floor).zfill(6), u=str(upper).zfill(6))
+    return range_str
+
+def generate_sumstats_ftp_path(gcst):
+    range_bin = get_gcst_range(gcst)
+    path = os.path.join(SUMSTAST_FTP_BASE_PATH, range_bin, gcst)
+    return path
 
 
 if __name__ == '__main__':

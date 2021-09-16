@@ -103,7 +103,7 @@ class LSF_manager(object):
         output = y.communicate()
         stdout = str(output[0])
         
-        return stdout.split(" ")[2]
+        return stdout.split()[2]
 
     def generate_report(self):
         

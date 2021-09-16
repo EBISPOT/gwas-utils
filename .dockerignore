@@ -1,0 +1,18 @@
+# To prevent storing dev/temporary container data
+.venv/*
+.env/*
+*.csv
+/tmp/*
+*.tsv
+*.h5
+*.tar
+*.gz
+*.tar.gz
+# Python specific files
+.cache
+__pycache__
+.coverage 
+htmlcov
+# test folder
+tests
+

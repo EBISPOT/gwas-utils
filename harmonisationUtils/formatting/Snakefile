@@ -42,7 +42,9 @@ rule format_files:
         """
         echo {input.in_ss};
         export SS_FORMAT_CONFIG_DIR={params.format_configs};
-        tabman -f {input.in_ss} -mode gen -config {wildcards.ss_file}.xlsx;
+        n=$(echo {input.in_ss});
+        if [[ $n == *".tsv"* ]]; then sep="tab"; elif [[ $n == *".csv"* ]]; then sep="comma"; else sep="tab"; fi;
+        tabman -f {input.in_ss} -mode gen -config {wildcards.ss_file}.xlsx -sep $sep;
         tabman -f {input.in_ss} -mode apply -config {wildcards.ss_file}.xlsx;
         rm {params.format_configs}/{wildcards.ss_file}.xlsx
         """
@@ -58,5 +60,6 @@ rule move_files:
         to_format=config["to_format"]
     shell:
         """
-        mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv
+        mv {params.to_format}/formatted_{wildcards.ss_file}.tsv  {params.to_harmonise}/{wildcards.ss_file}.tsv;
+        find {params.to_format}/ -name '{wildcards.ss_file}.*' -delete
         """
