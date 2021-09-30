@@ -10,6 +10,8 @@ from subprocess import Popen, PIPE
 from pathlib import Path
 import logging
 import shutil
+import smtplib
+from email.message import EmailMessage
 
 
 logging.basicConfig(
@@ -235,13 +237,17 @@ class SummaryStatsSync:
                     self.move_study_from_ftp_to_staging(study)
 
 
-def sendEmailReport(logs, emailAddresses):
+def sendEmailReport(logs, emailFrom, emailTo):
     try:
         with open(logs, 'r') as f:
-            report = f.read()
-            mailBody = 'Subject: Summary Stats release report\nTo: {}\n{}'.format(emailAddresses,report)
-            p = Popen(["sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
-            p.communicate(mailBody.encode('utf-8'))
+            msg = EmailMessage()
+            msg.set_content(f.read())
+            msg['Subject'] = 'Summary Stats release report'
+            msg['From'] = emailFrom
+            msg['To'] = emailTo
+            s = smtplib.SMTP('localhost')
+            s.send_message(msg)
+            s.quit()
     except OSError as e:
         logger.error(e)
 
@@ -253,6 +259,7 @@ def main():
     parser.add_argument('--apiURL', type=str, help='URL base for curation REST API')
     parser.add_argument('--test', action='store_true', help='If test run is specified, no release is done just send notification.')
     parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
+    parser.add_argument('--emailFrom', type=str, help='Email address where the notification is from.')
     args = parser.parse_args()
     logger.info("============ FTP sync report =============")
     sumstats_sync = SummaryStatsSync(staging_path = args.stagingDir,
@@ -274,7 +281,7 @@ def main():
     logger.info("==========================================")
     logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
     logger.info("==========================================")
-    sendEmailReport("ftpsync.log", args.emailRecipient) 
+    sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
     
 
 if __name__ == '__main__':
