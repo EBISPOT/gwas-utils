@@ -240,7 +240,7 @@ def sendEmailReport(logs, emailAddresses):
         with open(logs, 'r') as f:
             report = f.read()
             mailBody = 'Subject: Summary Stats release report\nTo: {}\n{}'.format(emailAddresses,report)
-            p = Popen(["/usr/sbin/sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
+            p = Popen(["sendmail", "-t", "-oi", emailAddresses], stdin=PIPE)
             p.communicate(mailBody.encode('utf-8'))
     except OSError as e:
         logger.error(e)
