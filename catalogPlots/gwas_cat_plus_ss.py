@@ -20,17 +20,18 @@ def fetch_gwas_study_table():
     return gwas_study_df
 
 def fetch_sumstats_status():
+    # Fetches those studies with sumstats (full pvalue set == True)
     logger.info("Fetchng study sumstats status from GWAS API")
     study_sumstats_dict = {}
-    api_params = {"size": 1000}
-    request_url = GWAS_API_BASE_URL + "/studies?" + urllib.parse.urlencode(api_params)
+    api_params = {"fullPvalueSet": True, "size": 10}
+    request_url = GWAS_API_BASE_URL + "/studies/search/findByFullPvalueSet?" + urllib.parse.urlencode(api_params)
     logger.debug(request_url)
     api_response = requests.get(request_url).json()
     log_page_info(api_response)
     study_sumstats_dict.update(parse_api_response(api_response))
     while "next" in api_response["_links"]:
         api_response = requests.get(api_response["_links"]["next"]["href"]).json()
-        log_page_info(api_response) 
+        log_page_info(api_response)
         study_sumstats_dict.update(parse_api_response(api_response))
     sumstats_status_df = pd.DataFrame(study_sumstats_dict.items(), 
                                       columns=['study_accession', 'has_sumstats']
@@ -57,6 +58,8 @@ def merge_sumstats_status_with_study_table(gwas_study_df, sumstats_status_df):
                          left_on="STUDY ACCESSION", 
                          right_on="study_accession"
                          ).drop(columns='study_accession')
+    # infer that remaining studies without full pvalue set == true are false
+    merged_df['has_sumstats'] = merged_df['has_sumstats'].fillna(False)
     return merged_df
 
 
