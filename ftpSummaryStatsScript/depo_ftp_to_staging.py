@@ -34,7 +34,7 @@ def get_dirs_to_sync(source_dir):
 
 def get_gcst_range(gcst):
     number_part = int(gcst.split("GCST")[1])
-    floor = int(np.fix(number_part / RANGE_SIZE) * RANGE_SIZE) + 1
+    floor = int(np.fix((number_part - 1) / RANGE_SIZE) * RANGE_SIZE) + 1
     upper = floor + (RANGE_SIZE -1)
     range_str = "GCST{f}-GCST{u}".format(f=str(floor).zfill(6), u=str(upper).zfill(6))
     return range_str    
