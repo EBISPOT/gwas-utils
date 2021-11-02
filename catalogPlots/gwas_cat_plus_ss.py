@@ -23,7 +23,7 @@ def fetch_sumstats_status():
     # Fetches those studies with sumstats (full pvalue set == True)
     logger.info("Fetchng study sumstats status from GWAS API")
     study_sumstats_dict = {}
-    api_params = {"fullPvalueSet": True, "size": 200}
+    api_params = {"fullPvalueSet": True, "size": 10}
     request_url = GWAS_API_BASE_URL + "/studies/search/findByFullPvalueSet?" + urllib.parse.urlencode(api_params)
     logger.debug(request_url)
     api_response = requests.get(request_url).json()
