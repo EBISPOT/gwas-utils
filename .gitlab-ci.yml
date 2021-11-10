@@ -49,7 +49,7 @@ deploy_dev:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR_DEV
+    - scp -r -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR_DEV
   only:
     - master
     - dev
@@ -63,6 +63,6 @@ deploy_prod:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR
+    - scp -r -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR
   only:
     - tags
