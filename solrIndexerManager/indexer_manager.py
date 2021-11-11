@@ -1,15 +1,13 @@
 import argparse
-import pandas as pd
 from datetime import datetime
 from solrWrapper import solrWrapper
 import time
 import os
 
 # Loading components:
-# from components import wrapper_manager
-from components import getUpdated
-from components import solrUpdater
-from components import lsf_manager
+from solrIndexerManager.components import getUpdated
+from solrIndexerManager.components import solrUpdater
+from solrIndexerManager.components import lsf_manager
 
 def job_generator(db_updates, wrapper):
     """
@@ -55,7 +53,7 @@ def manage_lsf_jobs(job_list, workingDir):
         try:
             os.mkdir('{}/{}'.format(workingDir, job_ID))
         except FileExistsError:
-            print('[Warning] folder already exists: {}/{}'.format(logDir, job_ID))
+            print('[Warning] folder already exists: {}/{}'.format(workingDir, job_ID))
 
         # Submit job to farm:
         LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, job_ID), jobname = job_ID)

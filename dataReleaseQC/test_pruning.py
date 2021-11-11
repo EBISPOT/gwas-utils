@@ -1,9 +1,7 @@
-import pandas as pd
 import argparse
-import sys
 
 # Loading custom modules:
-from functions import getDataFromDB
+from dataReleaseQC.functions import getDataFromDB
 
 def main():
     '''

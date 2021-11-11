@@ -1,13 +1,12 @@
 ## This script tests if any study or association is missing from the exported solr.
 ## Also checks if all the exported studies have accession ID.
 
-import pandas as pd
 import numpy as np
 import argparse
 
 
 # Loading custom modules
-from functions import getDataFromDB
+from dataReleaseQC.functions import getDataFromDB
 from solrWrapper import solrWrapper
 
 

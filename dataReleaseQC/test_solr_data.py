@@ -1,9 +1,4 @@
 import pandas as pd
-import requests
-import sys
-import urllib.parse
-import numpy as np
-import dateutil.parser
 import argparse
 import datetime
 import subprocess
