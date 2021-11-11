@@ -29,13 +29,13 @@ Upon initialization it's checked if the server is running and the core is presen
 
 
 ```python
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 
 host = 'http://localhost'
 port = 8983
 core = 'gwas'
 
-solr = solrWrapper(host, port, core)
+solr = solr_wrapper(host, port, core)
 ```
 
 Upon successful initialization, this should be written to the standard output:

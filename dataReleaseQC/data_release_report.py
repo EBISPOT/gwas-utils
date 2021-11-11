@@ -6,7 +6,7 @@ import subprocess
 import datetime
 
 # Loading custom functions:
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 
 def send_report(email = None, outputFile = None, *argv):
     """
@@ -166,11 +166,11 @@ def main():
     outputFile = args.outputFile
 
     # Retrieve data from the old solr:
-    oldSolr = solrWrapper(oldSolrHost, oldSolrPort, solrCore, verbose=False)
+    oldSolr = solr_wrapper(oldSolrHost, oldSolrPort, solrCore, verbose=False)
     oldSolrStudy_df = oldSolr.get_study_table()
 
     # Retrieve data from the new solr:
-    newSolr = solrWrapper(newSolrHost, newSolrPort, solrCore, verbose=False)
+    newSolr = solr_wrapper(newSolrHost, newSolrPort, solrCore, verbose=False)
     newSolrStudy_df = newSolr.get_study_table()
 
     # Extract report for absolute values of the release:

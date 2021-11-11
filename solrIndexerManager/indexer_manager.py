@@ -1,6 +1,6 @@
 import argparse
 from datetime import datetime
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 import time
 import os
 
@@ -133,7 +133,7 @@ def main():
         db_updates = getUpdated.get_db_updates(old_table, new_table)
 
     # Instantiate solr object:
-    solr_object = solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
+    solr_object = solr_wrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
 
     # Removed associations and studies for all updated/deleted studies + removing all trait documents:
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)

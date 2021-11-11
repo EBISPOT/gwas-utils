@@ -7,7 +7,7 @@ import argparse
 
 # Loading custom modules
 from dataReleaseQC.functions import getDataFromDB
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 
 
 def reportSolrVsDatabase(solrDf, databaseDf):
@@ -58,7 +58,7 @@ def main():
     relDB = getDataFromDB.getDataFromDB(instance=releaseDB)
 
     # Initializing solr objects:
-    solr = solrWrapper(solrAddress, solrPort, solrCore)
+    solr = solr_wrapper.solrWrapper(solrAddress, solrPort, solrCore)
 
     # Extracting studies from solr and database:
     solrStudies = solr.get_study_table()
