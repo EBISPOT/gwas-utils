@@ -169,8 +169,7 @@ def send_report(missingEfoTermsReport, mismatchTermsReport, email, host):
     a = subprocess.Popen('cat %s | mutt -s "Data release QC report - %s" -- %s' %(filename, today, email), shell=True)
     a.communicate()
 
-if __name__ == '__main__':
-
+def main():
     # Commandline arguments
     parser = argparse.ArgumentParser(description='This script checks if the release database was properly pruned or not. If the release database contain unpruned studies, this script will exit with a non-zero exit status.')
     parser.add_argument('--solrHost', type = str, help = 'The host where the solr server is running (with http/https).')
@@ -215,3 +214,6 @@ if __name__ == '__main__':
     if missingEfoTermsReport or mismatchTermsReport:
         send_report(missingEfoTermsReport, mismatchTermsReport, email = email, host = '{}:{}/solr/#/{}'.format(host, port, core))
 
+
+if __name__ == '__main__':
+    main()

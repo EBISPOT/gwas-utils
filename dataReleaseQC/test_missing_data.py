@@ -35,18 +35,19 @@ def reportSolrVsDatabase(solrDf, databaseDf):
             pmid, ",".join(missingStudiesDf.loc[missingStudiesDf.PUBMED_ID == pmid, 'ACCESSION_ID'])))
     return report 
 
-
-if __name__ == '__main__':
+def main():
     '''
     Create Solr documents for categories of interest.
     '''
 
     # Commandline arguments
-    parser = argparse.ArgumentParser(description='This script performs a data quality check on the generated solr index after the data release. The old and the new solr indices are compared with the database.')
-    parser.add_argument('--solrAddress', type = str, help = 'The hostname of the new solr index (eg. http://localhost).')
-    parser.add_argument('--solrCore', default='gwas', type = str, help = 'The core of the tested solr core.')
-    parser.add_argument('--solrPort', default='8983', type = str, help = 'The port on which the solr server is listening.')
-    parser.add_argument('--releaseDB', default='spotrel', help='Release database to extract published studies. Default: spotrel.')
+    parser = argparse.ArgumentParser(
+        description='This script performs a data quality check on the generated solr index after the data release. The old and the new solr indices are compared with the database.')
+    parser.add_argument('--solrAddress', type=str, help='The hostname of the new solr index (eg. http://localhost).')
+    parser.add_argument('--solrCore', default='gwas', type=str, help='The core of the tested solr core.')
+    parser.add_argument('--solrPort', default='8983', type=str, help='The port on which the solr server is listening.')
+    parser.add_argument('--releaseDB', default='spotrel',
+                        help='Release database to extract published studies. Default: spotrel.')
 
     args = parser.parse_args()
     solrAddress = args.solrAddress
@@ -56,7 +57,7 @@ if __name__ == '__main__':
 
     # Initializing database objects:
     relDB = getDataFromDB.getDataFromDB(instance=releaseDB)
-    
+
     # Initializing solr objects:
     solr = solrWrapper(solrAddress, solrPort, solrCore)
 
@@ -79,14 +80,17 @@ if __name__ == '__main__':
     if solrAssocCount == dbAssocCount:
         print('[Info] Association count ({}) in solr and release database matches.'.format(dbAssocCount))
     else:
-        print('[Warning] Association count does not match: {} in the release db vs. {} in the solr.'.format(dbAssocCount, solrAssocCount))
+        print(
+            '[Warning] Association count does not match: {} in the release db vs. {} in the solr.'.format(dbAssocCount,
+                                                                                                          solrAssocCount))
         exitCode += 1
 
     # Check if the study counts are matching:
     if solrStudyCount == dbStudyCount:
         print('[Info] Study count ({}) in solr and the release db matches.'.format(dbStudyCount))
     else:
-        print('[Warning] Study count does not match: {} in the release db vs. {} in the solr.'.format(dbStudyCount, solrStudyCount))
+        print('[Warning] Study count does not match: {} in the release db vs. {} in the solr.'.format(dbStudyCount,
+                                                                                                      solrStudyCount))
         exitCode += 1
 
         # Get studies that are missing from the solr index:
@@ -98,3 +102,7 @@ if __name__ == '__main__':
         print('[Info] All tests successfully passed.')
 
     quit(exitCode)
+
+if __name__ == '__main__':
+    main()
+

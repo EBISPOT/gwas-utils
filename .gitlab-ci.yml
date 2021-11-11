@@ -49,7 +49,8 @@ deploy_dev:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -r -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR_DEV
+    - ssh -o StrictHostKeyChecking=no "$USER"@"$SERVER"
+      "source $CONDA_ENV; pip install --force-reinstall git+https://github.com/EBISPOT/gwas-utils.git@$CI_COMMIT_BRANCH"
   only:
     - master
     - dev
@@ -63,6 +64,7 @@ deploy_prod:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -r -o StrictHostKeyChecking=no . $USER@$SERVER:$SW_DIR
+    - ssh -o StrictHostKeyChecking=no "$USER"@"$SERVER"
+      "source $CONDA_ENV; pip install --force-reinstall git+https://github.com/EBISPOT/gwas-utils.git@$CI_COMMIT_TAG"
   only:
     - tags
