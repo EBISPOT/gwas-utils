@@ -1,15 +1,13 @@
 import argparse
-import pandas as pd
 from datetime import datetime
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 import time
 import os
 
 # Loading components:
-# from components import wrapper_manager
-from components import getUpdated
-from components import solrUpdater
-from components import lsf_manager
+from solrIndexerManager.components import getUpdated
+from solrIndexerManager.components import solrUpdater
+from solrIndexerManager.components import lsf_manager
 
 def job_generator(db_updates, wrapper):
     """
@@ -55,7 +53,7 @@ def manage_lsf_jobs(job_list, workingDir):
         try:
             os.mkdir('{}/{}'.format(workingDir, job_ID))
         except FileExistsError:
-            print('[Warning] folder already exists: {}/{}'.format(logDir, job_ID))
+            print('[Warning] folder already exists: {}/{}'.format(workingDir, job_ID))
 
         # Submit job to farm:
         LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, job_ID), jobname = job_ID)
@@ -75,8 +73,7 @@ def manage_lsf_jobs(job_list, workingDir):
         time.sleep(600)
 
 
-if __name__ == '__main__':
-
+def main():
     # Parsing input parameter:
     parser = argparse.ArgumentParser(description='This identifies objects that needs to be updated in the solr.')
 
@@ -91,15 +88,17 @@ if __name__ == '__main__':
 
     # Input related to solr indexer:
     parser.add_argument('--wrapperScript', help='Wrapper script for the solr indexer.')
-    
+
     # Input related to solr indexer:
-    parser.add_argument('--fullIndex', help='Flag to indicate that the entire solr index needs to be wiped off. And the whole index is going to be re-generated.', action = "store_true")
-    
+    parser.add_argument('--fullIndex',
+                        help='Flag to indicate that the entire solr index needs to be wiped off. And the whole index is going to be re-generated.',
+                        action="store_true")
+
     # Location for log files:
     parser.add_argument('--logFolder', help='Folder into which the log files will be generated.')
 
     # Print out excessive reports:
-    parser.add_argument('--verbose', help='Flag to give more informative output.', action = "store_true")
+    parser.add_argument('--verbose', help='Flag to give more informative output.', action="store_true")
     args = parser.parse_args()
 
     # Parser out database instance names:
@@ -126,15 +125,15 @@ if __name__ == '__main__':
     # The update object is generated depending on if the flag is enabled or not:
     if fullIndex:
         db_updates = {
-            "added" : new_table.PUBMED_ID.unique().tolist(), # As if all publications in the new table was newly added
-            "removed" : ['*'], # As if all publications were removed.
-            "updated" : []
+            "added": new_table.PUBMED_ID.unique().tolist(),  # As if all publications in the new table was newly added
+            "removed": ['*'],  # As if all publications were removed.
+            "updated": []
         }
     else:
         db_updates = getUpdated.get_db_updates(old_table, new_table)
 
     # Instantiate solr object:
-    solr_object = solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
+    solr_object = solr_wrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
 
     # Removed associations and studies for all updated/deleted studies + removing all trait documents:
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
@@ -150,8 +149,13 @@ if __name__ == '__main__':
     # Submitting the jobs to the farm:
     manage_lsf_jobs(joblist, logDir)
 
-    # At this point there's no downstream management of the jobs.... just submit and wait. 
+    # At this point there's no downstream management of the jobs.... just submit and wait.
     # we are assuming things went well. If not downstream QC measures will terminate the plan anyway.
     # Later time based on experience this can be made more sophisticated.
+
+
+if __name__ == '__main__':
+    main()
+
 
 

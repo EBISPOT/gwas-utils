@@ -165,13 +165,13 @@ def read_application_properties(fileName):
         
     return properties
 
-
-if __name__ == "__main__":
-
+def main():
     # Commandline arguments
-    parser = argparse.ArgumentParser(description='This script generates stats file as part of the data release process. The stats file then used by the UI application, so the format and content is tightly defined.')
-    parser.add_argument('--propertiesFile', type = str, help = 'The production application properties file.')
-    parser.add_argument('--outputFile', default='gwas-catalog-stats.txt', help='Name of the stats file generated as output.')
+    parser = argparse.ArgumentParser(
+        description='This script generates stats file as part of the data release process. The stats file then used by the UI application, so the format and content is tightly defined.')
+    parser.add_argument('--propertiesFile', type=str, help='The production application properties file.')
+    parser.add_argument('--outputFile', default='gwas-catalog-stats.txt',
+                        help='Name of the stats file generated as output.')
     parser.add_argument('--dbInstance', help='Name of the database instance from which the counts are extracted.')
 
     args = parser.parse_args()
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     statsData['releasedate'] = today.strftime("%Y-%m-%d")
 
     # Extract data from database:
-    # dbInstance = properties['spring.datasource.url'].split(':')[-1] # No longer read from the properties file! 
+    # dbInstance = properties['spring.datasource.url'].split(':')[-1] # No longer read from the properties file!
     connection = DBConnection.gwasCatalogDbConnector(database_name=dbInstance)
 
     # Update dictionary with the counts:
@@ -203,12 +203,15 @@ if __name__ == "__main__":
 
     # Write file:
     with open(StatsFilename, 'w') as statsfile:
-        
         # Write header:
         statsfile.write('# {:%c %z}\n'.format(datetime.now()))
-        
-        for key,value in statsData.items():
+
+        for key, value in statsData.items():
             statsfile.write('{}={}\n'.format(key, value))
 
     print('[Info] Stats file successfully generated.')
+
+
+if __name__ == "__main__":
+    main()
 

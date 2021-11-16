@@ -2,6 +2,7 @@ image: docker:latest
 
 stages:
   - build
+  - deploy
 
 services:
   - docker:dind
@@ -38,3 +39,32 @@ build_release:
    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   only:
    - tags
+
+deploy_dev:
+  stage: deploy
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - ssh -o StrictHostKeyChecking=no "$USER"@"$SERVER"
+      "source $CONDA_PATH; conda activate gwas-utils-dev; pip install --ignore-installed git+https://github.com/EBISPOT/gwas-utils.git@$CI_COMMIT_BRANCH"
+  only:
+    - master
+    - dev
+
+deploy_prod:
+  stage: deploy
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - ssh -o StrictHostKeyChecking=no "$USER"@"$SERVER"
+      "source $CONDA_PATH; conda activate gwas-utils; pip install --ignore-installed git+https://github.com/EBISPOT/gwas-utils.git@$CI_COMMIT_TAG"
+  only:
+    - tags

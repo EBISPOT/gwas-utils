@@ -1,4 +1,4 @@
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 
 
 def removeUpdatedSolrData(solr_object, updated_pmids):

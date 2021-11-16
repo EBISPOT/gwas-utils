@@ -6,7 +6,7 @@ import subprocess
 import datetime
 
 # Loading custom functions:
-from solrWrapper import solrWrapper
+from solrWrapper import solr_wrapper
 
 def send_report(email = None, outputFile = None, *argv):
     """
@@ -129,25 +129,22 @@ def report_studies(newSolrStudy_df, oldSolrStudy_df, test_type = 'new'):
 
     return report
 
-##
-## The following values are read from the command line parameters:
-##
 
-if __name__ == '__main__':
+def main():
     '''
     Create Solr documents for categories of interest.
     '''
 
     # Commandline arguments
-    parser = argparse.ArgumentParser(description='This script generates data release report. The incremental changes are reported based on the comparison of an old and a new solr index.')
-    parser.add_argument('--oldSolrAddress', type = str, help = 'The hostname of solr server (including http/https).')
-    parser.add_argument('--oldSolrPort', type = str, help = 'The port name on which the solr server is listening.')
-    parser.add_argument('--newSolrAddress', type = str, help = 'The hostname of solr server (including http/https).')
-    parser.add_argument('--newSolrPort', type = str, help = 'The port name on which the solr server is listening.')
-    parser.add_argument('--solrCore', default='gwas', type = str, help = 'The core of the tested solr core. Defaule: gwas.')
-    parser.add_argument('--emailAddress', type = str, help='Email address to which the report will be sent.')
-    parser.add_argument('--outputFile', type = str, help='Otput filename into which the report will be saved.')
-    
+    parser = argparse.ArgumentParser(
+        description='This script generates data release report. The incremental changes are reported based on the comparison of an old and a new solr index.')
+    parser.add_argument('--oldSolrAddress', type=str, help='The hostname of solr server (including http/https).')
+    parser.add_argument('--oldSolrPort', type=str, help='The port name on which the solr server is listening.')
+    parser.add_argument('--newSolrAddress', type=str, help='The hostname of solr server (including http/https).')
+    parser.add_argument('--newSolrPort', type=str, help='The port name on which the solr server is listening.')
+    parser.add_argument('--solrCore', default='gwas', type=str, help='The core of the tested solr core. Defaule: gwas.')
+    parser.add_argument('--emailAddress', type=str, help='Email address to which the report will be sent.')
+    parser.add_argument('--outputFile', type=str, help='Otput filename into which the report will be saved.')
 
     args = parser.parse_args()
 
@@ -169,28 +166,33 @@ if __name__ == '__main__':
     outputFile = args.outputFile
 
     # Retrieve data from the old solr:
-    oldSolr = solrWrapper(oldSolrHost, oldSolrPort, solrCore, verbose = False)
+    oldSolr = solr_wrapper(oldSolrHost, oldSolrPort, solrCore, verbose=False)
     oldSolrStudy_df = oldSolr.get_study_table()
 
     # Retrieve data from the new solr:
-    newSolr = solrWrapper(newSolrHost, newSolrPort, solrCore, verbose = False)
+    newSolr = solr_wrapper(newSolrHost, newSolrPort, solrCore, verbose=False)
     newSolrStudy_df = newSolr.get_study_table()
 
     # Extract report for absolute values of the release:
     av_report = report_absolute_values(newSolrStudy_df)
 
     # Get newly added studies:
-    newStudyReport = report_studies(newSolrStudy_df, oldSolrStudy_df, test_type = 'new')
+    newStudyReport = report_studies(newSolrStudy_df, oldSolrStudy_df, test_type='new')
 
     # Get newly added summary stats:
-    newSummaryStatsReport = report_summary_stats(newSolrStudy_df, oldSolrStudy_df, test_type = 'new')
+    newSummaryStatsReport = report_summary_stats(newSolrStudy_df, oldSolrStudy_df, test_type='new')
 
     # Get retracted studies:
-    retractedStudyReport = report_studies(oldSolrStudy_df, newSolrStudy_df, test_type = 'retracted')
+    retractedStudyReport = report_studies(oldSolrStudy_df, newSolrStudy_df, test_type='retracted')
 
     # Get retracted summary stats:
-    retractedSummaryStatsReport = report_summary_stats(oldSolrStudy_df, newSolrStudy_df, test_type = 'retracted')
+    retractedSummaryStatsReport = report_summary_stats(oldSolrStudy_df, newSolrStudy_df, test_type='retracted')
 
     # Compiling all the reports:
-    send_report(emails, outputFile, av_report, newStudyReport, newSummaryStatsReport, retractedStudyReport, retractedSummaryStatsReport)
+    send_report(emails, outputFile, av_report, newStudyReport, newSummaryStatsReport, retractedStudyReport,
+                retractedSummaryStatsReport)
+
+
+if __name__ == '__main__':
+    main()
 

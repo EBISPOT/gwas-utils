@@ -54,7 +54,7 @@ class solrWrapper(object):
         # Is core OK?
         if content['status'] != 'OK':
             print('[Error] Core ({}) is down.'.format(self.__core))
-            retur(1)
+            return(1)
         
         print('[Info] Core ({}) found.'.format(self.__core))
 

@@ -52,7 +52,6 @@ def sync_files(source_dir, staging_dir, harmonise_dir):
     dirs_to_sync = get_dirs_to_sync(source_dir)
     logger.debug(dirs_to_sync)
     for study in dirs_to_sync:
-        gcst = None
         basename = os.path.basename(study)
         gcst_regex = re.search(r'GCST[0-9]+', basename)
         gcst = gcst_regex.group(0) if gcst_regex else None
@@ -64,6 +63,9 @@ def sync_files(source_dir, staging_dir, harmonise_dir):
             make_dir(gcst_range_dir)
             logger.info("Sync {} --> {}".format(study, dest))
             subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
+            gcst_path = os.path.join(harmonise_dir, gcst)
+            if os.path.exists(gcst_path):
+                shutil.rmtree(gcst_path)
             move_dir(study, harmonise_dir + "/")
 
 

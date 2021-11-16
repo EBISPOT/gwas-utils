@@ -113,8 +113,7 @@ def generate_sumstats_ftp_path(gcst):
     path = os.path.join(SUMSTAST_FTP_BASE_PATH, range_bin, gcst)
     return path
 
-
-if __name__ == '__main__':
+def main():
     base_url = 'http://localhost:8080'
     outputdir = "."
     try:
@@ -134,4 +133,8 @@ if __name__ == '__main__':
 
     build_studies_download(url, outputdir)
     build_ancestry_download(url, outputdir)
+
+
+if __name__ == '__main__':
+    main()
 

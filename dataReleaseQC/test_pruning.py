@@ -1,11 +1,9 @@
-import pandas as pd
 import argparse
-import sys
 
 # Loading custom modules:
-from functions import getDataFromDB
+from dataReleaseQC.functions import getDataFromDB
 
-if __name__ == '__main__':
+def main():
     '''
     Create Solr documents for categories of interest.
     '''
@@ -41,7 +39,11 @@ if __name__ == '__main__':
     else:
         print('[Info] All studies have accession ID in the release database ({}). Test passing.'.format(databaseInstance))
 
-    if exitCode == 0: 
+    if exitCode == 0:
         print('[Info] All tests passed successfully. Exiting')
 
     quit(exitCode)
+
+if __name__ == '__main__':
+    main()
+
