@@ -178,7 +178,7 @@ def main():
     core = args.solrCore
     email = args.email
 
-    solrObject = solr_wrapper(host=host, port = port, core=core)
+    solrObject = solr_wrapper.solrWrapper(host=host, port = port, core=core)
 
     # Get number of documents:
     docCount = solrObject.get_all_document_count()
