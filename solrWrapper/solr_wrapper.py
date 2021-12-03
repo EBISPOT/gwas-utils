@@ -99,12 +99,12 @@ class solrWrapper(object):
         '''
 
         if query:
-            doc_count = self.getAllDocumentCount()
+            doc_count = self.get_all_document_count()
             print('[Info] The following documents are deleted from solr: {}'.format(query))
             URL = '{}/update?commit=true'.format(self.base_url)
 
             content = self._submit(URL, jsonData = {"delete":{ "query" : query }})
-            print('[Info] Number of documents in the {} core went from {} to {}'.format(self.__core, doc_count, self.getAllDocumentCount()))
+            print('[Info] Number of documents in the {} core went from {} to {}'.format(self.__core, doc_count, self.get_all_document_count()))
 
         else:
             print('[Info] To delete documents from solr, please specify the query.')

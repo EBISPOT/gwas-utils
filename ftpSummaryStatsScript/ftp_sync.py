@@ -200,6 +200,8 @@ class SummaryStatsSync:
     def make_dir(path):
         logger.debug("mkdir: {}".format(path))
         Path(path).mkdir(parents=True, exist_ok=True)
+        logger.debug("set permissions on {} to 775".format(path))
+        os.chmod(path, 0o775)
 
     def _create_pardir_on_dest(self, source):
         pardir = Path(source).parent.name

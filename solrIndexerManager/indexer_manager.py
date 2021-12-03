@@ -37,10 +37,10 @@ def manage_lsf_jobs(job_list, workingDir):
     '''
 
     # Hardcoded variables:
-    memoryLimit = 4000
+    memoryLimit = 8000
     jobPrefix = 'solr_indexing'
     jobGroup = '/gwas_catalog/solr_indexer'
-    queue = 'production-rh74'
+    queue = 'production'
 
     # Initialize lsf object:
     LSF_obj = lsf_manager.LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir, queue=queue)
@@ -133,7 +133,7 @@ def main():
         db_updates = getUpdated.get_db_updates(old_table, new_table)
 
     # Instantiate solr object:
-    solr_object = solr_wrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
+    solr_object = solr_wrapper.solrWrapper(host=solrHost, port=solrPort, core=solrCore, verbose=True)
 
     # Removed associations and studies for all updated/deleted studies + removing all trait documents:
     solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
