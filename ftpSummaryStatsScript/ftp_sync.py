@@ -157,15 +157,15 @@ class SummaryStatsSync:
                 writer.write('{} {}\n'.format(file[1], file[0])) 
         
 
-    def remove_study_from_ftp(self, study):
+    def remove_external_permissions_to_study_from_ftp(self, study):
         path = self.ftp_studies_dict[study]
         # check the end of the path is just a studyID
         if Path(path).name != study:
             logger.error("Doesn't seem right to remove {}, so I didn't.".format(path))
             return False
         try:
-            logger.info("Removing {}".format(path))
-            shutil.rmtree(path, ignore_errors=True)
+            logger.info("Removing public permissions on {}".format(path))
+            os.chmod(path, 0o770)
             logger.info("==========================================")
         except FileNotFoundError as e:
             logger.error(e)
@@ -218,6 +218,7 @@ class SummaryStatsSync:
             source = source + "/"
             # rsync parameters:
             # -r - recursive
+            # -p - preserve permissions
             # -v - verbose
             # -h - human readable output
             # --size-only - only file size is compared, timestamp is ignored
@@ -225,7 +226,7 @@ class SummaryStatsSync:
             # --exclude=harmonised - excluding harmonised folders
             # --exclude=".*" - excluding hidden files
             logger.info("Sync {} --> {}".format(source, dest))
-            subprocess.call(['rsync', '-rvh','--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
+            subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
         except OSError as e:
             logger.error(e)
     
@@ -234,7 +235,7 @@ class SummaryStatsSync:
         if len(self.remove_from_ftp) > 0:
             for study in self.remove_from_ftp:
                 if study in self.staging_studies:
-                    self.remove_study_from_ftp(study)
+                    self.remove_external_permissions_to_study_from_ftp(study)
                 else:
                     self.move_study_from_ftp_to_staging(study)
 
