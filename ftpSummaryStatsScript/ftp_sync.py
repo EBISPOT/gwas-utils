@@ -1,4 +1,5 @@
 import os
+import stat
 import re
 import argparse
 import requests
@@ -52,8 +53,10 @@ class SummaryStatsSync:
                                     pattern=self.nesting_dir_pattern)
 
     def get_ftp_contents(self):
-        return self._list_study_dirs(parent=self.ftp_path, 
+        ftp_contents = self._list_study_dirs(parent=self.ftp_path,
                                     pattern=self.nesting_dir_pattern)
+        ftp_contents_access_by_others = [f for f in ftp_contents if bool(os.stat(f).st_mode & stat.S_IROTH) is True]
+        return ftp_contents_access_by_others
     
     def get_curation_published_list(self):
         # First get all accessions for pubmed indexed (published-studies)
