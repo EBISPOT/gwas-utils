@@ -100,7 +100,6 @@ def move_files(to_harmonise, depo_source, to_format):
         sumstats_files = [f for f in os.listdir(os.path.join(depo_source, f)) if f.startswith("GCST")]
         if len(sumstats_files) != 1:
             print("There should be one file (and only one) that looks like a sumstast file in {}, but this is not true!".format(os.path.join(depo_source, f)))
-            sys.exit()
         else:
             study = Study(f)
             sumstats_src = os.path.join(depo_source, f, sumstats_files[0])
