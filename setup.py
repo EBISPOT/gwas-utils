@@ -7,7 +7,7 @@ setup(
     description='A variety of utilities for activities involved in the running of the GWAS Catalog',
     name='gwasUtils',
     version='0.1-SNAPSHOT',
-    packages=['dataExport','dataReleaseQC','dataReleaseQC.functions','epmcXMLTools','solrIndexerManager','solrIndexerManager.components','solrWrapper', 'ftpSummaryStatsScript'],
+    packages=['dataExport','dataReleaseQC','dataReleaseQC.functions','epmcXMLTools','solrIndexerManager','solrIndexerManager.components','solrWrapper', 'ftpSummaryStatsScript', 'harmonisationUtils'],
     entry_points={
         "console_scripts": ['unpublish-study-export = dataExport.unpublish_study_export:main',
                             'test-pruning = dataReleaseQC.test_pruning:main',

@@ -7,7 +7,7 @@ import shutil
 from urllib.parse import urljoin
 import glob
 import argparse
-from sumstats_file_utils import SumStatsFTPClient
+from harmonisationUtils.sumstats_file_utils import SumStatsFTPClient
 
 
 gwas_rest_url = "https://www.ebi.ac.uk/gwas/rest/api"
