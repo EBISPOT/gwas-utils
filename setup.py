@@ -17,7 +17,8 @@ setup(
                             'indexer-manager = solrIndexerManager.indexer_manager:main',
                             'stats-file-generator = dataReleaseQC.stats_file_generator:main',
                             'data-release-report = dataReleaseQC.data_release_report:main',
-                            'ftp-sync = ftpSummaryStatsScript.ftp_sync:main'
+                            'ftp-sync = ftpSummaryStatsScript.ftp_sync:main',
+                            'queue-harmonisation = harmonisationUtils.move_eligible_files_to_harmonisation:main'
                             ]
     },
     license='',
