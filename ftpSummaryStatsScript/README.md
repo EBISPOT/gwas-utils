@@ -4,30 +4,33 @@ A Python script to copy summary statistics files from the staging folders to the
 
 ### What it does
 
-* Folders in the staging area follow this pattern: `{Author}_{PMID}_{ACCESSIONID}` for published studies, and `{Author}_{PMID}_{STUDYID}` for studies waiting for publishing. 
-* Upon data release, the script checks if we get a list of all published studies with summary statistics and try to match them on the staging area and copy them to the ftp are if they are not yet there.
-* The script identifies the pattern the folder follows and when it neccessary it renames from `{Author}_{PMID}_{STUDYID}` to `{Author}_{PMID}_{ACCESSIONID}`.
-* It copies all folders to the ftp area that not yet there.
-* Removes summary statistics from the ftp area of unpublished studies or where the summary statitics are revoked.
-* At the end of the process the script sends a detailed report to the defined email address about the actions taken and the missing folders.
+* Based on the following inputs: staging directory, ftp directory and curation API it decides what needs to be released to ftp or removed (permissions revoked) from the ftp. 
+* The API is used to determine if "is_published" AND "full_p_value_set", then if sumstats are on staging AND NOT on ftp --> sync
+* What needs to be removed from ftp? --> NOT ("is_published" AND "full_p_value_set") AND ftp --> remove from ftp
+* "remove from FTP" means that the permissions are adjusted such that the files cannot be accessed by external users
+* A report is generated from what happened and emailed to the `emailRecipient`
 
-### Usage
+### Usage with singularity
 
 ```bash
-python ftp_data_release.py \
-    --releaseDB ${database} \
-    --stagingDir ${stagingDir} \
-    --ftpDir ${ftpDir} \
-    --emailRecipient ${email} \
-    --test
+$ singularity exec docker://ebispot/gwas-utils:latest python /ftpSummaryStatsScript/ftp_sync.py --help
+usage: ftp_sync.py [-h] [--stagingDir STAGINGDIR] [--ftpDir FTPDIR]
+                   [--apiURL APIURL] [--test]
+                   [--emailRecipient EMAILRECIPIENT] [--emailFrom EMAILFROM]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --stagingDir STAGINGDIR
+                        Path to staging directory.
+  --ftpDir FTPDIR       Path to ftp directory.
+  --apiURL APIURL       URL base for curation REST API
+  --test                If test run is specified, no release is done just send
+                        notification.
+  --emailRecipient EMAILRECIPIENT
+                        Email address where the notification is sent.
+  --emailFrom EMAILFROM
+                        Email address where the notification is from.
 ```
-
-**Parameters:**
-
-* *releaseDB* : instance name for the release database. This instance should only contain published studies
-* *stagingDir* : directory where curators copy summary stats files until the corresponding study is published
-* *ftpDir* : directory where the released data will be copyied
-* *test* : flag to indicate test run. If test run is specified, no action is taken, just a report is sent.
 
 ### More information
 
