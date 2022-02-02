@@ -18,6 +18,7 @@ setup(
                             'stats-file-generator = dataReleaseQC.stats_file_generator:main',
                             'data-release-report = dataReleaseQC.data_release_report:main',
                             'ftp-sync = ftpSummaryStatsScript.ftp_sync:main',
+                            'depo-sumstats-sync = ftpSummaryStatsScript.depo_ftp_to_staging:main',
                             'queue-harmonisation = harmonisationUtils.move_eligible_files_to_harmonisation:main'
                             ]
     },
