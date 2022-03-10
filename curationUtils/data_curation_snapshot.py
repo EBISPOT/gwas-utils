@@ -170,45 +170,24 @@ def generate_data_report(data, report_filename):
             fully_curated_yet_to_be_published_studies, published_pubs, published_studies])
 
 
-def send_email(report_filename, sender, recipient):
-    '''
-    Email report file.
-    '''
-
-    # Today's date
+def sendEmailReport(report_filename, emailFrom, emailTo):
     now = datetime.datetime.now()
-    datestamp = str(now.day)+"_"+str(now.strftime("%b"))+"_"+str(now.year)
+    datestamp = str(now.day) + "_" + str(now.strftime("%b")) + "_" + str(now.year)
+    try:
+        with open(report_filename, 'r') as f:
+            attachment = MIMEApplication(f.read(), Name=basename(report_filename))
+            msg = MIMEMultipart()
+            attachment['Content-Disposition'] = 'attachment; filename="%s"' % basename(report_filename)
+            msg.attach(attachment)
+            msg['Subject'] = 'GWAS Weekly Queue Snapshot '+datestamp
+            msg['From'] = emailFrom
+            msg['To'] = emailTo
+            s = smtplib.SMTP('localhost')
+            s.sendmail(emailFrom, emailTo, msg.as_string())
+            s.quit()
+    except OSError as e:
+        print(e)
 
-    with open(report_filename, "rb") as fil:
-        part = MIMEApplication(
-            fil.read(),
-            Name=basename(report_filename)
-        )
-
-    # create a text/plain message
-    msg = MIMEMultipart()
-
-    # msg = MIMEText(fp.read())
-    # fp.close()
-
-
-    # After the file is closed
-    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(report_filename)
-    msg.attach(part)
-
-
-    # create headers
-    me = sender
-    you = recipient
-    msg['Subject'] = 'GWAS Weekly Queue Snapshot '+datestamp
-    msg['From'] = me
-    msg['To'] = ", ".join(you)
-
-    # send the message via our own SMTP server, but don't include the
-    # envelope header
-    s = smtplib.SMTP('localhost')
-    s.sendmail(me, you, msg.as_string())
-    s.quit()
 
 def main():
     '''
