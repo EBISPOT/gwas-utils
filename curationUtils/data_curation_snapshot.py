@@ -210,8 +210,7 @@ def send_email(report_filename, sender, recipient):
     s.sendmail(me, you, msg.as_string())
     s.quit()
 
-
-if __name__ == '__main__':
+def main():
     '''
     Create snapshot of data curation progress.
     '''
@@ -232,7 +231,6 @@ if __name__ == '__main__':
     recipient = args.emailRecipient
     report_filename = args.outfile
 
-
     # Run query to get data
     curation_progress_data = get_data_curation_snapshot(database_name=database)
 
@@ -241,3 +239,8 @@ if __name__ == '__main__':
 
     # Email data to curators
     send_email(report_filename, sender, recipient)
+
+
+if __name__ == '__main__':
+    main()
+

@@ -22,7 +22,8 @@ setup(
                             'queue-harmonisation = harmonisationUtils.move_eligible_files_to_harmonisation:main',
                             'curation-queue = curationUtils.curationQueue.curation_queue_with_ancestry:main',
                             'analyze-reported-traits = curationUtils.reportedTraits.analyze_reported_traits:main',
-                            'study-design-sample-info = curationUtils.studySampleReview.check_studydesign_sampleinfo:main'
+                            'study-design-sample-info = curationUtils.studySampleReview.check_studydesign_sampleinfo:main',
+                            'data-curation-snapshot = curationUtils.data_curation_snapshot:main'
                             ]
     },
     license='',
