@@ -1,15 +1,11 @@
 import cx_Oracle
-import contextlib
 import sys
-import os
 import argparse
-import subprocess
-import json
 import csv
 import logging
 from tqdm import tqdm
 from termcolor import colored
-from datetime import datetime, date
+from datetime import datetime
 from gwas_db_connect import DBConnection
 import Levenshtein
 
@@ -20,8 +16,8 @@ class ReportedTraitData:
         FROM DISEASE_TRAIT
     '''
 
-    def __init__(self, connection, database):
-        self.database = database
+    def __init__(self, db_handler):
+        self.db_handler = db_handler
         # self.logging_level = logging_level
 
         logging.basicConfig(
@@ -30,12 +26,13 @@ class ReportedTraitData:
 
     def get_all_reported_traits(self):
         try:
-            with contextlib.closing(connection.cursor()) as cursor:
-                cursor.execute(self.ALL_REPORTED_TRAITS_SQL)
-                data = cursor.fetchall()
-                # TODO: Decide whether to keep id and trait name
-                self.data = data
-                logging.debug('Successfully extracted reported traits')
+            print(self.db_handler)
+            cursor = self.db_handler.cursor
+            cursor.execute(self.ALL_REPORTED_TRAITS_SQL)
+            data = cursor.fetchall()
+            # TODO: Decide whether to keep id and trait name
+            self.data = data
+            logging.debug('Successfully extracted reported traits')
         except cx_Oracle.DatabaseError as exception:
             logging.error(exception)
 
@@ -167,23 +164,23 @@ class ReportedTraitData:
             else:
                 insert_trait_sql = 'INSERT INTO DISEASE_TRAIT VALUES (NULL, ' + "'" + trait + "'" + ')'
                 try:
-                    with contextlib.closing(connection.cursor()) as cursor:
-                        # Insert trait and return back the "id" primary key for the new row
-                        new_id = cursor.var(cx_Oracle.NUMBER)
-                        sql_event = insert_trait_sql + ' returning id into :new_id'
+                    cursor = self.db_handler.cursor
+                    # Insert trait and return back the "id" primary key for the new row
+                    new_id = cursor.var(cx_Oracle.NUMBER)
+                    sql_event = insert_trait_sql + ' returning id into :new_id'
 
-                        cursor.execute(sql_event, {'new_id': new_id})
+                    cursor.execute(sql_event, {'new_id': new_id})
 
-                        disease_trait_id = new_id.getvalue()
+                    disease_trait_id = new_id.getvalue()
 
-                        print('\n')
-                        logging.info(
-                            'Successfully added trait: ' + "'" + trait + "'" + ' with PK: ' + str(disease_trait_id))
-                        self.database_insert_trait_results.append([trait, 'add', str(disease_trait_id)])
+                    print('\n')
+                    logging.info(
+                        'Successfully added trait: ' + "'" + trait + "'" + ' with PK: ' + str(disease_trait_id))
+                    self.database_insert_trait_results.append([trait, 'add', str(disease_trait_id)])
 
-                        cursor.execute(database_action)
-                        if confirm_action == 'testing':
-                            logging.info('Queries executed in testing mode. No commit action was performed.')
+                    cursor.execute(database_action)
+                    if confirm_action == 'testing':
+                        logging.info('Queries executed in testing mode. No commit action was performed.')
                 except cx_Oracle.DatabaseError as exception:
                     logging.error(exception)
 
@@ -239,15 +236,14 @@ def main():
     # logging_level = args.logging_level
 
     # Open connection:
-    db_object = DBConnection.gwasCatalogDbConnector(database)
-    connection = db_object.connection
+    db_handler = DBConnection.gwasCatalogDbConnector(database)
 
     ######################################
     # Create file of all Reported traits
     ######################################
     if action == 'dump':
         # Instantiate object
-        all_reported_traits_obj = ReportedTraitData(connection, database)
+        all_reported_traits_obj = ReportedTraitData(db_handler)
 
         # Get all reported traits
         all_reported_traits_obj.get_all_reported_traits()
@@ -260,7 +256,7 @@ def main():
     ###################################
     if action == 'analyze':
         # Instantiate object
-        all_reported_traits_obj = ReportedTraitData(connection, database)
+        all_reported_traits_obj = ReportedTraitData(db_handler)
 
         # Get all reported traits
         all_reported_traits_obj.get_all_reported_traits()
@@ -278,7 +274,7 @@ def main():
     #######################################
     if action == 'upload':
         # Instantiate object
-        all_reported_traits_obj = ReportedTraitData(connection, database)
+        all_reported_traits_obj = ReportedTraitData(db_handler)
 
         # Get all reported traits
         all_reported_traits_obj.get_all_reported_traits()

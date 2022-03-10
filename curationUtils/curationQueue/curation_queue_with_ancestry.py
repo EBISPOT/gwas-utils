@@ -199,7 +199,7 @@ def get_timestamp():
     return timestamp
 
 
-def send_email(*args):
+def send_email(report_filename, sender, recipient):
     '''
     Email report file.
     '''
@@ -208,25 +208,23 @@ def send_email(*args):
     now = datetime.datetime.now()
     datestamp = str(now.day)+"_"+str(now.strftime("%b"))+"_"+str(now.year)
 
-    file_name = args[0]
-
-    with open(file_name, "rb") as fil:
+    with open(report_filename, "rb") as fil:
         part = MIMEApplication(
             fil.read(),
-            Name=basename(file_name)
+            Name=basename(report_filename)
         )
 
     # create a text/plain message
     msg = MIMEMultipart()
 
     # After the file is closed
-    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file_name)
+    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(report_filename)
     msg.attach(part)
 
 
     # create headers
-    me = 'spotbot@ebi.ac.uk'
-    you = ['gwas-dev-logs@ebi.ac.uk', 'gwas-curator@ebi.ac.uk']
+    me = sender
+    you = recipient
     msg['Subject'] = 'GWAS Curation Queue '+datestamp
     msg['From'] = me
     msg['To'] = ", ".join(you)
@@ -236,6 +234,7 @@ def send_email(*args):
     s = smtplib.SMTP('localhost')
     s.sendmail(me, you, msg.as_string())
     s.quit()
+
 
 def main():
     '''
