@@ -19,7 +19,6 @@ importlib-metadata==3.4.0
 ipython-genutils==0.2.0
 jsonschema==3.2.0
 jupyter-core==4.7.1
-Levenshtein==0.18.1
 lxml==4.6.2
 nbformat==5.1.2
 numpy==1.18.5
@@ -30,6 +29,7 @@ PuLP==2.4
 pyparsing==2.4.7
 pyrsistent==0.17.3
 python-dateutil==2.8.1
+python-Levenshtein==0.12.2
 pytz==2020.1
 PyYAML==5.4.1
 ratelimiter==1.2.0.post0
