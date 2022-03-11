@@ -227,16 +227,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--database', default='spotpro', choices=['dev3', 'spotpro'],
                         help='Run as (default: spotpro).')
+    parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
+    parser.add_argument('--emailFrom', type=str, help='Email address where the notification is from.')
     args = parser.parse_args()
 
     database_name = args.database
+    sender = args.emailFrom
+    recipient = args.emailRecipien
 
     curation_queue_data = get_curation_queue_data(database_name=database_name)
 
     # Email data to curators
     TIMESTAMP = get_timestamp()
     report_filename = "data_queue_"+TIMESTAMP+".csv"
-    send_email(report_filename)
+    sendEmailReport(report_filename, sender, recipient)
 
 
 if __name__ == '__main__':

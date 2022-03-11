@@ -217,7 +217,7 @@ def main():
     generate_data_report(data=curation_progress_data, report_filename=report_filename)
 
     # Email data to curators
-    send_email(report_filename, sender, recipient)
+    sendEmailReport(report_filename, sender, recipient)
 
 
 if __name__ == '__main__':
