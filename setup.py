@@ -7,7 +7,7 @@ setup(
     description='A variety of utilities for activities involved in the running of the GWAS Catalog',
     name='gwasUtils',
     version='0.1-SNAPSHOT',
-    packages=['curationUtils', 'curationUtils.curationQueue', 'curationUtils.reportedTraits', 'curationUtils.studySampleReview', 'dataExport','dataReleaseQC','dataReleaseQC.functions','epmcXMLTools','solrIndexerManager','solrIndexerManager.components','solrWrapper', 'ftpSummaryStatsScript', 'harmonisationUtils'],
+    packages=['gwasAssociationFilter','curationUtils', 'curationUtils.curationQueue', 'curationUtils.reportedTraits', 'curationUtils.studySampleReview', 'dataExport','dataReleaseQC','dataReleaseQC.functions','epmcXMLTools','solrIndexerManager','solrIndexerManager.components','solrWrapper', 'ftpSummaryStatsScript', 'harmonisationUtils'],
     entry_points={
         "console_scripts": ['unpublish-study-export = dataExport.unpublish_study_export:main',
                             'test-pruning = dataReleaseQC.test_pruning:main',
@@ -23,7 +23,8 @@ setup(
                             'curation-queue = curationUtils.curationQueue.curation_queue_with_ancestry:main',
                             'analyze-reported-traits = curationUtils.reportedTraits.analyze_reported_traits:main',
                             'study-design-sample-info = curationUtils.studySampleReview.check_studydesign_sampleinfo:main',
-                            'data-curation-snapshot = curationUtils.data_curation_snapshot:main'
+                            'data-curation-snapshot = curationUtils.data_curation_snapshot:main',
+                            'peak-finder = gwasAssociationFilter.peak_finder:main'
                             ]
     },
     license='',
