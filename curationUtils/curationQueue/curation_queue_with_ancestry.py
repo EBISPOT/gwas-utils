@@ -233,7 +233,7 @@ def main():
 
     database_name = args.database
     sender = args.emailFrom
-    recipient = args.emailRecipien
+    recipient = args.emailRecipient
 
     curation_queue_data = get_curation_queue_data(database_name=database_name)
 
