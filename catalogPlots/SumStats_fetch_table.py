@@ -1,4 +1,4 @@
-import DBConnection
+from gwas_db_connect import DBConnection
 import argparse
 import pandas as pd
 
