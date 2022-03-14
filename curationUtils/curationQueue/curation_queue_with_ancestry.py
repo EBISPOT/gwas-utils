@@ -199,43 +199,24 @@ def get_timestamp():
     return timestamp
 
 
-def send_email(*args):
-    '''
-    Email report file.
-    '''
-
-    # Today's date
+def sendEmailReport(report_filename, emailFrom, emailTo):
     now = datetime.datetime.now()
-    datestamp = str(now.day)+"_"+str(now.strftime("%b"))+"_"+str(now.year)
+    datestamp = str(now.day) + "_" + str(now.strftime("%b")) + "_" + str(now.year)
+    try:
+        with open(report_filename, 'r') as f:
+            attachment = MIMEApplication(f.read(), Name=basename(report_filename))
+            msg = MIMEMultipart()
+            attachment['Content-Disposition'] = 'attachment; filename="%s"' % basename(report_filename)
+            msg.attach(attachment)
+            msg['Subject'] = 'GWAS Curation Queue '+datestamp
+            msg['From'] = emailFrom
+            msg['To'] = emailTo
+            s = smtplib.SMTP('localhost')
+            s.sendmail(emailFrom, emailTo, msg.as_string())
+            s.quit()
+    except OSError as e:
+        print(e)
 
-    file_name = args[0]
-
-    with open(file_name, "rb") as fil:
-        part = MIMEApplication(
-            fil.read(),
-            Name=basename(file_name)
-        )
-
-    # create a text/plain message
-    msg = MIMEMultipart()
-
-    # After the file is closed
-    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file_name)
-    msg.attach(part)
-
-
-    # create headers
-    me = 'spotbot@ebi.ac.uk'
-    you = ['gwas-dev-logs@ebi.ac.uk', 'gwas-curator@ebi.ac.uk']
-    msg['Subject'] = 'GWAS Curation Queue '+datestamp
-    msg['From'] = me
-    msg['To'] = ", ".join(you)
-
-    # send the message via our own SMTP server, but don't include the
-    # envelope header
-    s = smtplib.SMTP('localhost')
-    s.sendmail(me, you, msg.as_string())
-    s.quit()
 
 def main():
     '''
@@ -246,16 +227,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--database', default='spotpro', choices=['dev3', 'spotpro'],
                         help='Run as (default: spotpro).')
+    parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
+    parser.add_argument('--emailFrom', type=str, help='Email address where the notification is from.')
     args = parser.parse_args()
 
     database_name = args.database
+    sender = args.emailFrom
+    recipient = args.emailRecipient
 
     curation_queue_data = get_curation_queue_data(database_name=database_name)
 
     # Email data to curators
     TIMESTAMP = get_timestamp()
     report_filename = "data_queue_"+TIMESTAMP+".csv"
-    send_email(report_filename)
+    sendEmailReport(report_filename, sender, recipient)
 
 
 if __name__ == '__main__':

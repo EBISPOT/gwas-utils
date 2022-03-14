@@ -1,4 +1,4 @@
-import DBConnection
+from gwas_db_connect import DBConnection
 import argparse
 import pandas as pd
 
@@ -33,8 +33,8 @@ getTableSQL = '''select T1.YEAR, T1.STUDY, T2.SS_STUDY, T1.PUBLICATION, T2.SS_PU
       ) T2
     ON T1.YEAR = T2.YEAR'''
 
-if __name__ == '__main__':
 
+def main():
     # Parsing command line arguments:
     parser = argparse.ArgumentParser(description='This script fetches the yearly count of studies and publication with and without summary stats.')
     parser.add_argument('--filename', type = str, required=True, help = 'Output filename.')
@@ -53,5 +53,5 @@ if __name__ == '__main__':
     df.to_csv(filename, index=None, na_rep=0)
 
 
-
-
+if __name__ == '__main__':
+    main()
