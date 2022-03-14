@@ -4,6 +4,45 @@ This repository is a collection for scripts and small applications we are using 
 
 For detailed description of the content of this repository see the individual readme files within each folder or the documentation on [Confluence](https://www.ebi.ac.uk/seqdb/confluence/display/GOCI/GWAS+Catalog+tools+and+scripts). 
 
+## Installation/execution
+
+First thing to note is that many of the utils have a hard dependency on the curation database. This make the portability of those utils troublesome and they cannot be run off the network (i.e. locally).  
+
+### With Docker
+```
+docker run -it ebispot/gwas-utils <entry_point> [options]
+```
+e.g.
+```
+docker run -it ebispot/gwas-utils python /catalogPlots/gwas_cat_plus_ss.py
+```
+
+### With conda
+```
+git clone git@github.com:EBISPOT/gwas-utils.git
+cd gwas-utils
+conda env create -f conda_env.yml
+conda activate gwas-utils
+pip install .
+```
+
+### With virtualenv
+```
+git clone git@github.com:EBISPOT/gwas-utils.git
+cd gwas-utils
+python3 -m venv .venv
+source .venv/bin/activate
+pip install .
+```
+
+### User/system wide
+```
+git clone git@github.com:EBISPOT/gwas-utils.git
+cd gwas-utils
+pip install .
+```
+
+
 ## Contents
 
 ### [Plotter scripts](https://github.com/EBISPOT/gwas-utils/tree/master/catalogPlots)
