@@ -140,6 +140,19 @@ Period                 download  REST    search
 2018-08-01-2018-08-31  7623      604860  172902
 ```
 
+### Sumstats log analysis
+```
+usage: sumstats-log-parser [-h] -f F [-min MIN]
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -f F        The path to the summary statistics ftp log csv
+  -min MIN    Minimum Bytes to be considered a valid sumstats file, default is
+              99999
+```
+
+see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=64720227) for step by step use in the GWAS Catalog
+
 ## More information
 
 On the [Confluence page](https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=64720227) of the catalog statistics there might be further information.

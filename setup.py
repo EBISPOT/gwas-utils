@@ -22,7 +22,8 @@ setup(
               'solrWrapper',
               'ftpSummaryStatsScript',
               'harmonisationUtils',
-              'catalogPlots'],
+              'catalogPlots',
+              'log_analysis'],
     entry_points={
         "console_scripts": ['unpublish-study-export = dataExport.unpublish_study_export:main',
                             'test-pruning = dataReleaseQC.test_pruning:main',
@@ -41,7 +42,8 @@ setup(
                             'data-curation-snapshot = curationUtils.data_curation_snapshot:main',
                             'peak-finder = gwasAssociationFilter.peak_finder:main',
                             'gwas-Rplotter = catalogPlots.r_plotter:main',
-                            'sumstats-fetch-table = catalogPlots.SumStats_fetch_table:main'
+                            'sumstats-fetch-table = catalogPlots.SumStats_fetch_table:main',
+                            'sumstats-log-parser = log_analysis.parse_sumstats_ftp_logs:main'
                             ]
     },
     license='',
