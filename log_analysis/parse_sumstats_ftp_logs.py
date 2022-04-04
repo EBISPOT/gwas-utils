@@ -17,15 +17,15 @@ def main():
                            help='The path to the summary statistics ftp log csv',
                            required=True)
     argparser.add_argument("-min",
-                           help='Minimum Bytes to be considered a valid sumstats file, default is 99999',
+                           help='Minimum Bytes to be considered a valid sumstats file, default is 1000000',
                            required=False,
-                           default=99999)
+                           default=1000000)
 
     args = argparser.parse_args()
 
     df = pd.read_csv(args.f, header=0, names=['resource', 'file_size', 'count'], dtype={"resource": str})
 
-    df = df[df.file_size > args.min]
+    df = df[df.file_size > int(args.min)]
     print(df.resource)
     df.resource = df.resource.str.replace('/pub/databases/gwas/summary_statistics/','')
     df = df.drop(columns=['file_size'])
