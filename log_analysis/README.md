@@ -1,4 +1,4 @@
-# Log file analyis
+# Log file analysis
 
 This repository contains scripts to analyse site access logs based on the provided criteria in a defined period of time.
 
