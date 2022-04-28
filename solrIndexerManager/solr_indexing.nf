@@ -18,11 +18,12 @@ process get_updates {
   errorStrategy { task.exitStatus in 2..140 ? 'retry' : 'terminate' }
 
   output:
-  stdout into db_updates
+  file 'db_updates.json' into db_updates
 
   """
   #!/usr/bin/env python
 
+  import json
   from solrIndexerManager.components import getUpdated
   from solrWrapper import solr_wrapper
   from solrIndexerManager.components import solrUpdater
@@ -43,16 +44,56 @@ process get_updates {
   solr_object = solr_wrapper.solrWrapper(host="$params.solrHost", port="$params.solrPort", core="$params.solrCore", verbose=True)
   solrUpdater.removeUpdatedSolrData(solr_object, db_updates)
 
-  print(db_updates)
+  with open('db_updates.json', 'w') as f:
+      json.dump(db_updates, f)
+  """
+}
+
+
+// ------------------------------------------------------------- //
+// Run the solr indexer                                          //
+// ------------------------------------------------------------- //
+
+process solr_indexer {
+
+  memory { 2.GB * task.attempt }
+  time { 4.hour * task.attempt }
+  maxRetries 3
+  errorStrategy { task.exitStatus in 2..140 ? 'retry' : 'terminate' }
+
+  input:
+  file db_updates_file from db_updates
+
+  output:
+  stdout into ch
+
+  """
+  #!/usr/bin/env python
+
+  import json
+
+
+  db_updates = None
+  with open("${db_updates_file}") as f:
+      db_updates = json.load(f)
+
+  def job_generator(db_updates, wrapper):
+      # Indexing jobs with associations and studies for each pubmed ID:
+      jobs = {pmid : '{} -d -e -p {}'.format(wrapper, pmid) for x in db_updates.values() for pmid in x if pmid != '*'}
+      # Indexing job to generate disease trait and efo trait documents:
+      jobs['efo_traits'] = '{} -a -s -d '.format(wrapper)
+      jobs['disease_traits'] = '{} -a -s -e '.format(wrapper)
+      return jobs
+
+  joblist = job_generator(db_updates, "$params.wrapperScript")
+  print(joblist)
   """
 }
 
 
 
 
-
-
-db_updates.view { it }
+ch.view { it }
 
 
 
