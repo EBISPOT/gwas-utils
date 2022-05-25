@@ -81,6 +81,11 @@ def get_db_counts(connection):
     
     return returnData
 
+def get_efo_info():
+    try:
+        return requests.get('https://api.github.com/repos/EBISPOT/efo/releases/latest').json()['tag_name']
+    except:
+        print('[Warning] Failed to retrieve EFO version from Github API.')
 
 def get_ensembl_info(ensembl_url):
     
@@ -189,6 +194,8 @@ def main():
 
     # Fetch data from Ensembl:
     statsData = get_ensembl_info(ensUrl)
+    # Fetch EFO release data from Github:
+    statsData['efo_version'] = get_efo_info()
 
     # Adding date of release:
     today = datetime.now()
