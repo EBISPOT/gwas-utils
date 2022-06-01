@@ -7,7 +7,7 @@ certifi==2020.6.20
 chardet==3.0.4
 ConfigArgParse==1.2.3
 coverage==5.5
-cx-Oracle==7.3.0
+cx-Oracle>=7.3.0
 datrie==0.8.2
 docutils==0.16
 et-xmlfile==1.0.1
