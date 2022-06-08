@@ -109,53 +109,8 @@ class IndexerManager:
                                   jm=self.job_file)
         print("Running nextflow: {}".format(nextflow_cmd))
         subproc_cmd = nextflow_cmd.split()
-        process = subprocess.run(subproc_cmd)
+        process = subprocess.run(subproc_cmd, check=True)
         print(process.stdout)
-
-
-#def manage_lsf_jobs(job_map, workingDir):
-#    '''
-#    This function handles the lsf jobs. Monitors their progression and decides when to exit and how.... boy it needs to be improved.
-#    '''
-#
-#    # Hardcoded variables:
-#    memoryLimit = 8000
-#    jobPrefix = 'solr_indexing'
-#    jobGroup = '/gwas_catalog/solr_indexer'
-#    queue = 'production'
-#
-#    # Initialize lsf object:
-#    LSF_obj = lsf_manager.LSF_manager(memory=memoryLimit, job_prefix=jobPrefix, job_group=jobGroup, workingDir=workingDir, queue=queue)
-#
-#    # Looping though all jobs:
-#    folder_index = 0
-#
-#    # Looping through all the jobs, create separate folders and submit each to the farm:
-#    for job_ID, job in job_list.items():
-#        try:
-#            os.mkdir('{}/{}'.format(workingDir, job_ID))
-#        except FileExistsError:
-#            print('[Warning] folder already exists: {}/{}'.format(workingDir, job_ID))
-#
-#        # Submit job to farm:
-#        LSF_obj.submit_job(job, workingDir='{}/{}'.format(workingDir, job_ID), jobname = job_ID)
-#
-#    # Wait until all jobs are finished or terminated:
-#    while True:
-#        report = LSF_obj.generate_report()
-#
-#        print('[Info] Checking statuses of the submitted jobs at: {:%b %d %H:%M}'.format(datetime.now()))
-#        for status, count in report.items():
-#            print("\t{}: {}".format(status, count))
-#
-#        if 'RUN' not in report and 'PEND' not in report and 'EXIT' not in report:
-#            print('[Info] No running or pending jobs were found. Exiting.')
-#            break
-#
-#        time.sleep(600)
-
-
-
 
 
 def main():
