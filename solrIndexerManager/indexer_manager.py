@@ -3,6 +3,7 @@ from datetime import datetime
 from solrWrapper import solr_wrapper
 import time
 import os
+import sys
 import json
 import subprocess
 
@@ -100,8 +101,12 @@ class IndexerManager:
         
     def run_indexer(self):
         nextflow_cmd = """
-                       nextflow {nf} --job_map_file {jm}
-                       """.format(nf=self.nfScriptPath, jm=self.job_file)
+                       nextflow -log {logs} \
+                       run {nf} \
+                       --job_map_file {jm}
+                       """.format(logs=os.path.join(self.logDir, "nextflow.log"), 
+                                  nf=self.nfScriptPath, 
+                                  jm=self.job_file)
         print("Running nextflow: {}".format(nextflow_cmd))
         subproc_cmd = nextflow_cmd.split()
         process = subprocess.run(subproc_cmd)
@@ -176,7 +181,7 @@ def main():
 
     # Location for log files:
     parser.add_argument('--logFolder', help='Folder into which the log files will be generated.', default="./")
-    parser.add_argument('--nfScript', help='Nextflow script path', default="solrIndexerManager/solr_indexing.nf")
+    parser.add_argument('--nfScript', help='Nextflow script path', default=os.path.join(sys.prefix,"nf/solr_indexing.nf"))
     # Print out excessive reports:
     parser.add_argument('--verbose', help='Flag to give more informative output.', action="store_true")
     args = parser.parse_args()
