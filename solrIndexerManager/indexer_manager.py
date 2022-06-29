@@ -10,7 +10,6 @@ import subprocess
 # Loading components:
 from solrIndexerManager.components import getUpdated
 from solrIndexerManager.components import solrUpdater
-from solrIndexerManager.components import lsf_manager
 
 class IndexerManager:
     def __init__(self, 
@@ -100,6 +99,9 @@ class IndexerManager:
         solrUpdater.removeUpdatedSolrData(solr_object, self.db_updates)
         
     def run_indexer(self):
+        """
+        Indexing is managed by a Nextflow workflow
+        """
         nextflow_cmd = """
                        nextflow -log {logs} \
                        run {nf} \
