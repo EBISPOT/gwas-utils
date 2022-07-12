@@ -1,4 +1,4 @@
-# Log file analyis
+# Log file analysis
 
 This repository contains scripts to analyse site access logs based on the provided criteria in a defined period of time.
 
@@ -139,6 +139,19 @@ Period                 download  REST    search
 2018-07-01-2018-07-31  7098      364450  152316
 2018-08-01-2018-08-31  7623      604860  172902
 ```
+
+### Sumstats log analysis
+```
+usage: sumstats-log-parser [-h] -f F [-min MIN]
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -f F        The path to the summary statistics ftp log csv
+  -min MIN    Minimum Bytes to be considered a valid sumstats file, default is
+              99999
+```
+
+see [confluence page](https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=64720227) for step by step use in the GWAS Catalog
 
 ## More information
 

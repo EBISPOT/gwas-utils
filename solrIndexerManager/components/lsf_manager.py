@@ -82,6 +82,7 @@ class LSF_manager(object):
                 'working_dir' : workingDir, 
                 'job_name' : jobname
             })
+
     def kill_job(self, jobID):
         x = Popen(['bkill', jobID], stdout=PIPE, stderr=PIPE)
 
@@ -99,11 +100,10 @@ class LSF_manager(object):
         x = Popen(['bjobs', '-a', jobID], stdout=PIPE, stderr=PIPE)
         y = Popen(['tail', '-n+2'], stdin=x.stdout, stdout=PIPE)
         x.stdout.close()
-        
         output = y.communicate()
-        stdout = str(output[0])
-        
-        return stdout.split()[2]
+        stdout = str(output[0].decode())
+        status = stdout.split()[2] if stdout else None
+        return status
 
     def generate_report(self):
         

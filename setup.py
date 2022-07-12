@@ -7,7 +7,8 @@ setup(
     description='A variety of utilities for activities involved in the running of the GWAS Catalog',
     name='gwasUtils',
     version='0.1-SNAPSHOT',
-    data_files=[('r_scripts',['catalogPlots/dataReleaseTimer.R', 'catalogPlots/SumStats_plotter.R', 'catalogPlots/TA_vs_GWAS_publication.R'])],
+    data_files=[('r_scripts',['catalogPlots/dataReleaseTimer.R', 'catalogPlots/SumStats_plotter.R', 'catalogPlots/TA_vs_GWAS_publication.R']),
+                ('nf', ['solrIndexerManager/solr_indexing.nf'])],
     packages=['gwasAssociationFilter',
               'curationUtils',
               'curationUtils.curationQueue',
@@ -22,7 +23,8 @@ setup(
               'solrWrapper',
               'ftpSummaryStatsScript',
               'harmonisationUtils',
-              'catalogPlots'],
+              'catalogPlots',
+              'log_analysis'],
     entry_points={
         "console_scripts": ['unpublish-study-export = dataExport.unpublish_study_export:main',
                             'test-pruning = dataReleaseQC.test_pruning:main',
@@ -41,7 +43,8 @@ setup(
                             'data-curation-snapshot = curationUtils.data_curation_snapshot:main',
                             'peak-finder = gwasAssociationFilter.peak_finder:main',
                             'gwas-Rplotter = catalogPlots.r_plotter:main',
-                            'sumstats-fetch-table = catalogPlots.SumStats_fetch_table:main'
+                            'sumstats-fetch-table = catalogPlots.SumStats_fetch_table:main',
+                            'sumstats-log-parser = log_analysis.parse_sumstats_ftp_logs:main'
                             ]
     },
     license='',

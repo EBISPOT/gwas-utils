@@ -4,16 +4,26 @@ This application flags peak associations in a distance based fashion.
 
 ## Usage
 
-1. Activate virtual env:
-
-```bash
-source ${scriptDir}/.env/bin/activate
 ```
+usage: peak-finder [-h] [-f INPUT] [-o OUTPUT] [-w WINDOW] [-t THRESHOLD] [-p]
 
-2. Call script:
+This script finds the most significant association within a defined range
+(100kbp by default).
 
-```bash
-${scriptDir}/peak_finder.py -f test.input.txt -o test.output.txt -t 1e-2 -w 100000 -p
+optional arguments:
+  -h, --help            show this help message and exit
+  -f INPUT, --input INPUT
+                        Input file name with table of associations.
+  -o OUTPUT, --output OUTPUT
+                        Output file name.
+  -w WINDOW, --window WINDOW
+                        Window size.
+  -t THRESHOLD, --threshold THRESHOLD
+                        p-value threshold.
+  -p, --prune           Prune out sub significant associations from the
+                        output.
+e.g:
+peak_finder -f test.input.txt -o test.output.txt -t 1e-2 -w 100000 -p
 ```
 
 Where:

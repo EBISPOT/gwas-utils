@@ -7,7 +7,17 @@ Collection of scripts to generate various plots based on the data stored in the 
 
 `SumStats_fetch_table.py` fetches a table from the production database containing the number of studies and publications published in each year. Also studies and publications with summary statistics. The extracted table is saved in a comma separated format eg.: `examples/SummaryStats_table.2019-05-05.csv`.
 
-**Usage:** `python ./SumStats_fetch_table.py --filename  ${filename}`
+### Usage
+```
+usage: sumstats-fetch-table [-h] --filename FILENAME
+
+This script fetches the yearly count of studies and publication with and
+without summary stats.
+
+optional arguments:
+  -h, --help           show this help message and exit
+  --filename FILENAME  Output filename.
+```
 
 The resulting data looks like this:
 
@@ -90,3 +100,26 @@ Input data looks like this (`examples/TA_vs_GWAS.csv`):
 | 2019 | 20 | 117 |
 
 ![TA vs GWAS](./examples/TA_vs_GWAS.png)
+
+## Note on running R scripts in conda installation
+
+Any R libraries are to be installed with R e.g. `install.packages("stringr")`
+
+For running from a conda environment a Python entrypoint has been provided:
+```
+usage: gwas-Rplotter [-h] --plotter {sumstats,ta_vs_gwas}
+                     [other_args [other_args ...]]
+
+positional arguments:
+  other_args
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --plotter {sumstats,ta_vs_gwas}
+                        Plotter to use. Choose `sumstats` for
+                        SumStats_plotter.Rl; choose `ta_vs_gwas` for
+                        TA_vs_GWAS_publication.R
+```
+
+For example: `gwas-Rplotter --plotter sumstats 2019 ssplot.csv` is the equivalent to running `Rscript --vanilla ./SumStats_plotter.R "2019" "ssplot.csv"` \
+but can be run directly from conda. This is advantageous when we do not have access to the script paths.
