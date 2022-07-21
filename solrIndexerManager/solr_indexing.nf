@@ -11,7 +11,6 @@ params.log_path = ''
 process run_solr_indexer {
   tag "$id"
   memory { 4.GB * task.attempt }
-  time { 6.hour * task.attempt }
   maxRetries 3
   errorStrategy { task.exitStatus in 2..140 ? 'retry' : 'terminate' }
 
