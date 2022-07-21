@@ -1,4 +1,5 @@
 import os
+import datetime
 import stat
 import re
 import argparse
@@ -39,17 +40,46 @@ logger = logging.getLogger(__name__)
 
 
 class SummaryStatsSync:
-    def __init__(self, staging_path, ftp_path, api_url):
+    def __init__(self, staging_path, ftp_path, api_url, harmonise_path, lastrun_file):
         self.staging_path = staging_path
         self.ftp_path = ftp_path
+        self.harmonise_path = harmonise_path
         self.api_url = api_url
         self.api_page_size = 1000 # can configure if necessary
         self.nesting_dir_pattern = "GCST*-GCST*"
         self.nesting_dir_regex = "^GCST[0-9]+-GCST[0-9]+$"
+        self.lastrun_file = lastrun_file
+        self.modified_files = []
+        self.staging_studies_dict = None
+        self.staging_studies = None
+        self.modified_studies_dict = None
+        self.modified_studies = None
+        self.ftp_studies_dict = None
+        self.ftp_studies = None
+        self.curation_published = None
+        self.to_release = None
+        self.remove_from_ftp = None
+        self.missing_from_staging = None
+        self.unexpected_on_staging = None
+        self.studies_to_release_published = None
+        self.studies_to_release_unpublished = None
 
+    def get_lastrun_date(self):
+        lastrun_date = self.get_last_row_from_file(self.lastrun_file)
+        return lastrun_date
+
+    @staticmethod
+    def get_last_row_from_file(file):
+        last_line = None
+        if os.path.exists(file):
+            with open(file, "r") as f:
+                lines = f.readlines()
+                if lines:
+                    last_line = lines[-1].strip()
+        return last_line
 
     def get_staging_contents(self):
-        return self._list_study_dirs(parent=self.staging_path, 
+        return self._list_study_dirs(parent=self.staging_path,
                                     pattern=self.nesting_dir_pattern)
 
     def get_ftp_contents(self):
@@ -57,42 +87,48 @@ class SummaryStatsSync:
                                     pattern=self.nesting_dir_pattern)
         ftp_contents_access_by_others = [f for f in ftp_contents if bool(os.stat(f).st_mode & stat.S_IROTH) is True]
         return ftp_contents_access_by_others
-    
+
     def get_curation_published_list(self):
         # First get all accessions for pubmed indexed (published-studies)
+        self.studies_to_release_published = self.get_published_studies()
+        # Then get add accessions for non-pubmed indexed (unpublished-studies)
+        self.studies_to_release_unpublished = self.get_unpublished_studies()
+        studies_to_release = self.studies_to_release_published + self.studies_to_release_unpublished
+        # remove potential duplicates...just in case ;P
+        return list(set(studies_to_release))
+
+    def get_published_studies(self):
         published_studies_url = urljoin(self.api_url, "studies")
-        resp = requests.get(published_studies_url, 
+        resp = requests.get(published_studies_url,
                             params={'size': self.api_page_size}
                             ).json()
         studies = resp['_embedded']['studies']
-        studies_to_release = [study['accession_id'] for study in studies 
+        studies_to_release = [study['accession_id'] for study in studies
                               if self._published_is_true(study)]
         # and loop through pages
         for page in range(1, self._last_page(resp)):
-            resp = requests.get(published_studies_url, 
+            resp = requests.get(published_studies_url,
                                 params={'size': self.api_page_size, 'page': page}
                                 ).json()
             studies = resp['_embedded']['studies']
-            studies_to_release.extend([study['accession_id'] for study in studies 
+            studies_to_release.extend([study['accession_id'] for study in studies
                                        if self._published_is_true(study)])
+        return studies_to_release
 
-        # Then get add accessuins for non-pubmed indexed (unpublished-studies)
+    def get_unpublished_studies(self):
         unpublished_studies_url = urljoin(self.api_url, "unpublished-studies")
         resp = requests.get(unpublished_studies_url,
                             params={'size': self.api_page_size}
                             ).json()
-        last_page = resp['page']['totalPages']
         studies = resp['_embedded']['unpublishedStudies']
-        studies_to_release.extend([study['study_accession'] for study in studies])
+        studies_to_release = ([study['study_accession'] for study in studies])
         for page in range(1, self._last_page(resp)):
             resp = requests.get(unpublished_studies_url,
                                 params={'size': self.api_page_size, 'page': page}
                                 ).json()
-            studies = resp['_embedded']['unpublishedStudies']        
+            studies = resp['_embedded']['unpublishedStudies']
             studies_to_release.extend([study['study_accession'] for study in studies])
-        
-        # remove potential duplicates...just in case ;P
-        return list(set(studies_to_release))
+        return studies_to_release
 
     @staticmethod
     def _last_page(resp):
@@ -100,9 +136,8 @@ class SummaryStatsSync:
 
     @staticmethod
     def _published_is_true(study):
-        if study['full_pvalue_set'] == True and study['housekeeping']['is_published'] == True:
-            return True
-        return False
+        status = study['full_pvalue_set']
+        return status
 
     @staticmethod
     def _list_study_dirs(parent, pattern):
@@ -114,7 +149,7 @@ class SummaryStatsSync:
 
     @staticmethod
     def _list_files_in_dir(directory):
-        only_files = [f for f in os.listdir(directory) 
+        only_files = [f for f in os.listdir(directory)
                      if os.path.isfile(os.path.join(directory, f))]
         return only_files
 
@@ -122,16 +157,56 @@ class SummaryStatsSync:
     def get_sumstats_status(self, get_curation_status=True):
         self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
         self.staging_studies = set(self.staging_studies_dict.keys())
+
+        self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
+        self.modified_studies = set(self.modified_studies_dict.keys())
+        logger.info("New and modified files: {}".format(self.modified_studies))
+
         self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
         self.ftp_studies = set(self.ftp_studies_dict.keys())
+
         if get_curation_status:
             self.curation_published = set(self.get_curation_published_list())
-            #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
-        self.to_sync_to_ftp = (self.curation_published & self.staging_studies) - self.ftp_studies
+        #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
+        logger.info("published: {}".format(self.studies_to_release_published))
+
+        #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
+        self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
+
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
         self.unexpected_on_staging = self.staging_studies - self.curation_published
         return True
+
+    def get_new_and_modified_files(self):
+        timestamp = self.get_lastrun_date()
+        modified_files = []
+        if timestamp:
+            cmd = ['find', self.staging_path,
+                   '-maxdepth', '3', '-mindepth', '3', '-type', 'f', '-name',
+                   'GCST*', '-newermt', timestamp]
+            logger.info("Checking for files modified since {}".format(timestamp))
+            j = subprocess.run(cmd, stdout=subprocess.PIPE)
+            modified_files = j.stdout.decode().split()
+        # only return the parent study directories
+        modified_studies = [ os.path.abspath(os.path.join(i, os.pardir)) for i in modified_files ]
+        return list(set(modified_studies))
+
+    def release_files_for_harmonisation(self):
+        for study in self.get_files_to_harmonise():
+            logger.info("{} --> harmonisation queue".format(study))
+            source = self.staging_studies_dict[study]
+            dest_dir = self.harmonise_path + "/"
+            self.rsync_dir(source, dest_dir)
+
+    def update_lastrun_file(self):
+        datestamp = self.generate_datestamp()
+        with open(file, "a+") as f:
+            f.write(datestamp + '\n')
+
+    @staticmethod
+    def generate_datestamp():
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     @staticmethod
     def _accessions_from_dirnames(dirnames):
@@ -147,7 +222,7 @@ class SummaryStatsSync:
             if 'md5' in file.lower():
                 return None
         md5checksums = []
-        # Loopthrough the files and calculate md5sum:
+        # Loop through the files and calculate md5sum:
         for filename in only_files:
             with open(os.path.join(directory, filename),"rb") as f:
                 file_hash = hashlib.md5()
@@ -157,8 +232,8 @@ class SummaryStatsSync:
         # Saving values into a file:
         with open(os.path.join(directory,'md5sum.txt'), 'w') as writer:
             for file in md5checksums:
-                writer.write('{} {}\n'.format(file[1], file[0])) 
-        
+                writer.write('{} {}\n'.format(file[1], file[0]))
+
 
     def remove_external_permissions_to_study_from_ftp(self, study):
         path = self.ftp_studies_dict[study]
@@ -182,16 +257,21 @@ class SummaryStatsSync:
         dest = os.path.join(destdir, study)
         logger.info("Moving {} --> {}".format(source, dest))
         self.move_dir(source, dest)
-        
+
+    def get_files_to_harmonise(self):
+        eligible_files = set(self.studies_to_release_published) & self.modified_studies
+        return eligible_files
 
     def sync_to_ftp(self):
         # api AND staging AND NOT ftp
-        for study in self.to_sync_to_ftp:
+        for study in self.to_release:
             logger.info("{} --> FTP".format(study))
             source = self.staging_studies_dict[study]
             self._generate_md5sums_for_contents(source)
-            if self._create_pardir_on_dest(source):
-                self._rsync_study_dir(source, study)
+            pardir = self._create_pardir_on_dest(source)
+            if pardir:
+                dest_dir = os.path.join(self.pardir, study + "/")
+                self.rsync_dir(source, dest_dir)
         logger.info("==========================================")
 
     @staticmethod
@@ -210,14 +290,14 @@ class SummaryStatsSync:
         pardir = Path(source).parent.name
         if not re.search(self.nesting_dir_regex, pardir):
             return False
-        self.destdir = os.path.join(self.ftp_path, pardir)
-        self.make_dir(self.destdir)
-        return True
+        destdir = os.path.join(self.ftp_path, pardir)
+        self.make_dir(destdir)
+        return destdir
 
-    def _rsync_study_dir(self, source, study):
+    @staticmethod
+    def rsync_dir(source, dest):
         try:
             # rsync is fussy about trailing slashes and we need them in this case.
-            dest = os.path.join(self.destdir, study + "/")
             source = source + "/"
             # rsync parameters:
             # -r - recursive
@@ -232,7 +312,7 @@ class SummaryStatsSync:
             subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
         except OSError as e:
             logger.error(e)
-    
+
     def remove_unexepcted_from_ftp(self):
         # NOT api AND ftp
         if len(self.remove_from_ftp) > 0:
@@ -262,33 +342,48 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--stagingDir', type=str, help='Path to staging directory.')
     parser.add_argument('--ftpDir', type=str, help='Path to ftp directory.')
+    parser.add_argument('--harmoniseDir', type=str, help='Path to harmonisation directory.')
+    parser.add_argument('--lastrunFile', type=str, help='Path to file containing the timestamp of the last run')
     parser.add_argument('--apiURL', type=str, help='URL base for curation REST API')
     parser.add_argument('--test', action='store_true', help='If test run is specified, no release is done just send notification.')
     parser.add_argument('--emailRecipient', type=str, help='Email address where the notification is sent.')
     parser.add_argument('--emailFrom', type=str, help='Email address where the notification is from.')
     args = parser.parse_args()
+    staging_path = args.stagingDir
+    ftp_path = args.ftpDir
+    api_url = args.apiURL
+    harmonise_path = args.harmoniseDir
+    lastrun_file = args.lastrunFile
+
     logger.info("============ FTP sync report =============")
-    sumstats_sync = SummaryStatsSync(staging_path = args.stagingDir,
-                                     ftp_path = args.ftpDir,
-                                     api_url = args.apiURL
+    sumstats_sync = SummaryStatsSync(staging_path = staging_path,
+                                     ftp_path = ftp_path,
+                                     api_url = api_url,
+                                     harmonise_path = harmonise_path,
+                                     lastrun_file = lastrun_file
                                      )
+
     if sumstats_sync.get_sumstats_status():
         if not args.test:
             logger.info("Sync with FTP...")
             sumstats_sync.sync_to_ftp()
             sumstats_sync.remove_unexepcted_from_ftp()
             logger.info("This is not a test.")
+            if harmonise_path:
+                sumstats_sync.release_files_for_harmonisation()
+            sumstats_sync.update_lastrun_file()
         else:
             logger.info("This is a test. Nothing will happen.")
-    sumstats_sync.get_sumstats_status(get_curation_status=False)
-    logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_sync_to_ftp)))
+    #sumstats_sync.get_sumstats_status(get_curation_status=False)
+    logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_release)))
     logger.info("==========================================")
     logger.info("Missing from staging: {}".format(list(sumstats_sync.missing_from_staging)))
     logger.info("==========================================")
     logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
     logger.info("==========================================")
+    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.get_files_to_harmonise())))
     sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
-    
+
 
 if __name__ == '__main__':
     main()
