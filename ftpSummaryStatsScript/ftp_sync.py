@@ -61,9 +61,11 @@ class SummaryStatsSync:
         self.remove_from_ftp = None
         self.missing_from_staging = None
         self.unexpected_on_staging = None
+        self.studies_to_release_published = None
+        self.studies_to_release_unpublished = None
 
     def get_lastrun_date(self):
-        lastrun_date = get_last_row_from_file(self.lastrun_file)
+        lastrun_date = self.get_last_row_from_file(self.lastrun_file)
         return lastrun_date
 
     @staticmethod
@@ -71,13 +73,13 @@ class SummaryStatsSync:
         last_line = None
         if os.path.exists(file):
             with open(file, "r") as f:
-                lines = f.readlines() 
+                lines = f.readlines()
                 if lines:
-                    last_line = lines[-1]
+                    last_line = lines[-1].strip()
         return last_line
-    
+
     def get_staging_contents(self):
-        return self._list_study_dirs(parent=self.staging_path, 
+        return self._list_study_dirs(parent=self.staging_path,
                                     pattern=self.nesting_dir_pattern)
 
     def get_ftp_contents(self):
@@ -85,12 +87,13 @@ class SummaryStatsSync:
                                     pattern=self.nesting_dir_pattern)
         ftp_contents_access_by_others = [f for f in ftp_contents if bool(os.stat(f).st_mode & stat.S_IROTH) is True]
         return ftp_contents_access_by_others
-    
+
     def get_curation_published_list(self):
         # First get all accessions for pubmed indexed (published-studies)
-        studies_to_release = self.get_published_studies()
+        self.studies_to_release_published = self.get_published_studies()
         # Then get add accessions for non-pubmed indexed (unpublished-studies)
-        studies_to_release.extend(self.get_unpublished_studies())
+        self.studies_to_release_unpublished = self.get_unpublished_studies()
+        studies_to_release = self.studies_to_release_published + self.studies_to_release_unpublished
         # remove potential duplicates...just in case ;P
         return list(set(studies_to_release))
 
@@ -111,7 +114,7 @@ class SummaryStatsSync:
             studies_to_release.extend([study['accession_id'] for study in studies
                                        if self._published_is_true(study)])
         return studies_to_release
-    
+
     def get_unpublished_studies(self):
         unpublished_studies_url = urljoin(self.api_url, "unpublished-studies")
         resp = requests.get(unpublished_studies_url,
@@ -119,7 +122,7 @@ class SummaryStatsSync:
                             ).json()
         studies = resp['_embedded']['unpublishedStudies']
         studies_to_release = ([study['study_accession'] for study in studies])
-        for page in range(1, self.last_page(resp)):
+        for page in range(1, self._last_page(resp)):
             resp = requests.get(unpublished_studies_url,
                                 params={'size': self.api_page_size, 'page': page}
                                 ).json()
@@ -146,7 +149,7 @@ class SummaryStatsSync:
 
     @staticmethod
     def _list_files_in_dir(directory):
-        only_files = [f for f in os.listdir(directory) 
+        only_files = [f for f in os.listdir(directory)
                      if os.path.isfile(os.path.join(directory, f))]
         return only_files
 
@@ -154,20 +157,22 @@ class SummaryStatsSync:
     def get_sumstats_status(self, get_curation_status=True):
         self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
         self.staging_studies = set(self.staging_studies_dict.keys())
-        
+
         self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
         self.modified_studies = set(self.modified_studies_dict.keys())
-        
+        logger.info("New and modified files: {}".format(self.modified_studies))
+
         self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
         self.ftp_studies = set(self.ftp_studies_dict.keys())
-        
+
         if get_curation_status:
             self.curation_published = set(self.get_curation_published_list())
         #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
-        
+        logger.info("published: {}".format(self.studies_to_release_published))
+
         #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
         self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
-        
+
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
         self.unexpected_on_staging = self.staging_studies - self.curation_published
@@ -180,6 +185,7 @@ class SummaryStatsSync:
             cmd = ['find', self.staging_path,
                    '-maxdepth', '3', '-mindepth', '3', '-type', 'f', '-name',
                    'GCST*', '-newermt', timestamp]
+            logger.info("Checking for files modified since {}".format(timestamp))
             j = subprocess.run(cmd, stdout=subprocess.PIPE)
             modified_files = j.stdout.decode().split()
         # only return the parent study directories
@@ -226,8 +232,8 @@ class SummaryStatsSync:
         # Saving values into a file:
         with open(os.path.join(directory,'md5sum.txt'), 'w') as writer:
             for file in md5checksums:
-                writer.write('{} {}\n'.format(file[1], file[0])) 
-        
+                writer.write('{} {}\n'.format(file[1], file[0]))
+
 
     def remove_external_permissions_to_study_from_ftp(self, study):
         path = self.ftp_studies_dict[study]
@@ -251,9 +257,9 @@ class SummaryStatsSync:
         dest = os.path.join(destdir, study)
         logger.info("Moving {} --> {}".format(source, dest))
         self.move_dir(source, dest)
-    
+
     def get_files_to_harmonise(self):
-        eligible_files = set(self.get_published_studies()) & self.modified_studies
+        eligible_files = set(self.studies_to_release_published) & self.modified_studies
         return eligible_files
 
     def sync_to_ftp(self):
@@ -306,7 +312,7 @@ class SummaryStatsSync:
             subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
         except OSError as e:
             logger.error(e)
-    
+
     def remove_unexepcted_from_ftp(self):
         # NOT api AND ftp
         if len(self.remove_from_ftp) > 0:
@@ -377,7 +383,7 @@ def main():
     logger.info("==========================================")
     logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.get_files_to_harmonise())))
     sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
-    
+
 
 if __name__ == '__main__':
     main()
