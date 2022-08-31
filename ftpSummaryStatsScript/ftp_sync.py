@@ -196,7 +196,8 @@ class SummaryStatsSync:
         for study in self.get_files_to_harmonise():
             logger.info("{} --> harmonisation queue".format(study))
             source = self.staging_studies_dict[study]
-            dest_dir = self.harmonise_path + "/"
+            dest_dir = os.path.join(self.harmonise_path, study)
+            self.make_dir(dest_dir)
             self.rsync_dir(source, dest_dir)
 
     def update_lastrun_file(self):
