@@ -196,12 +196,13 @@ class SummaryStatsSync:
         for study in self.get_files_to_harmonise():
             logger.info("{} --> harmonisation queue".format(study))
             source = self.staging_studies_dict[study]
-            dest_dir = self.harmonise_path + "/"
+            dest_dir = os.path.join(self.harmonise_path, study)
+            self.make_dir(dest_dir)
             self.rsync_dir(source, dest_dir)
 
     def update_lastrun_file(self):
         datestamp = self.generate_datestamp()
-        with open(file, "a+") as f:
+        with open(self.lastrun_file, "a+") as f:
             f.write(datestamp + '\n')
 
     @staticmethod
@@ -270,7 +271,7 @@ class SummaryStatsSync:
             self._generate_md5sums_for_contents(source)
             pardir = self._create_pardir_on_dest(source)
             if pardir:
-                dest_dir = os.path.join(self.pardir, study + "/")
+                dest_dir = os.path.join(pardir, study + "/")
                 self.rsync_dir(source, dest_dir)
         logger.info("==========================================")
 
