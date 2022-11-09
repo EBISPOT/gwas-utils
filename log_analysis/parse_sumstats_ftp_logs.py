@@ -32,7 +32,6 @@ def main():
 
 
     raw = df[~df.resource.str.contains('harmonised')]
-    raw.resource = raw.resource.str.replace('/.*','')
     raw = raw.groupby('resource').agg('max')
 
     f_and_h = df[df.resource.str.contains('harmonised')]
