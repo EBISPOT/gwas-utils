@@ -12,7 +12,7 @@ process run_solr_indexer {
   tag "$id"
   memory { 4.GB * task.attempt }
   maxRetries 3
-  errorStrategy { task.exitStatus in 137..255 ? 'retry' : 'terminate' }
+  errorStrategy { task.exitStatus in 129..255 ? 'retry' : 'terminate' }
 
   input:
   tuple val(id), val(cmd)
