@@ -6,6 +6,7 @@ ftp=$3
 failed=$4
 version=$5
 wd=$6
+mail_add=$7
 
 # ENV VARS
 
@@ -17,6 +18,9 @@ module load openjdk-16.0.2-gcc-9.3.0-xyn6nf5
 module load nextflow-21.10.6-gcc-9.3.0-tkuemwd
 module load singularity-3.7.0-gcc-9.3.0-dp5ffrp
 
+# Update local nf repo from public
+
+NXF_VER=22.05.0-edge nextflow pull EBISPOT/gwas-sumstats-harmoniser
 
 # Nextflow command
 
@@ -24,6 +28,7 @@ cd $wd
 
 NXF_VER=22.05.0-edge nextflow run EBISPOT/gwas-sumstats-harmoniser\
  -r $version\
+ -N $mail_add\
  --ref $ref\
  --all_harm_folder $all_harm_folder\
  --ftp $ftp\
