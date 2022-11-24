@@ -199,6 +199,7 @@ class SummaryStatsSync:
             date_today = datetime.datetime.now().strftime("%Y%m%d")
             dest_dir = os.path.join(self.harmonise_path, date_today)
             self.make_dir(dest_dir)
+            self.rsync_pattern(source, dest_dir, pattern="GCST*")
             self.rsync_dir(source, dest_dir)
 
     def update_lastrun_file(self):
@@ -322,7 +323,7 @@ class SummaryStatsSync:
             logger.info("Sync {} --> {}".format(source, dest))
             subprocess.call(
                 ['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only',
-                 f'--include={pattern}', source, dest])
+                 f'--include={pattern}', '--exclude=*', source, dest])
         except OSError as e:
             logger.error(e)
 
