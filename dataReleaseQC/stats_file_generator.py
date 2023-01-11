@@ -90,7 +90,7 @@ def get_db_counts(connection):
             AND S.FULL_PVALUE_SET = 1;
         '''
     connection.cursor.execute(publishedSsCountSql)
-    publishedSsCountSql = connection.cursor.fetchall()[0][0]
+    publishedSsCount = connection.cursor.fetchall()[0][0]
 
     unpublishedSsCountSql = '''
         SELECT COUNT(*)
@@ -98,7 +98,7 @@ def get_db_counts(connection):
         WHERE SUMMARY_STATS_FILE IS NOT NULL;
         '''
     connection.cursor.execute(unpublishedSsCountSql)
-    returnData['sscount'] = connection.cursor.fetchall()[0][0] + publishedSsCountSql;
+    returnData['sscount'] = connection.cursor.fetchall()[0][0] + publishedSsCount;
     
     return returnData
 
