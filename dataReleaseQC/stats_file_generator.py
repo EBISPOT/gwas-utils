@@ -87,7 +87,7 @@ def get_db_counts(connection):
         WHERE S.HOUSEKEEPING_ID = HK.ID
             AND S.PUBLICATION_ID = P.ID
             AND HK.IS_PUBLISHED = 1
-            AND S.FULL_PVALUE_SET = 1;
+            AND S.FULL_PVALUE_SET = 1
         '''
     connection.cursor.execute(publishedSsCountSql)
     publishedSsCount = connection.cursor.fetchall()[0][0]
@@ -95,10 +95,10 @@ def get_db_counts(connection):
     unpublishedSsCountSql = '''
         SELECT COUNT(*)
         FROM UNPUBLISHED_STUDY
-        WHERE SUMMARY_STATS_FILE IS NOT NULL;
+        WHERE SUMMARY_STATS_FILE IS NOT NULL
         '''
     connection.cursor.execute(unpublishedSsCountSql)
-    returnData['sscount'] = connection.cursor.fetchall()[0][0] + publishedSsCount;
+    returnData['sscount'] = connection.cursor.fetchall()[0][0] + publishedSsCount
     
     return returnData
 
