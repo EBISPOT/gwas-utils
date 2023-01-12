@@ -79,6 +79,27 @@ def get_db_counts(connection):
     connection.cursor.execute(snpCountSql)
     returnData['snpcount'] = connection.cursor.fetchall()[0][0]
     
+    publishedSsCountSql = '''
+        SELECT COUNT(*)
+        FROM STUDY S,
+            PUBLICATION P,
+            HOUSEKEEPING HK
+        WHERE S.HOUSEKEEPING_ID = HK.ID
+            AND S.PUBLICATION_ID = P.ID
+            AND HK.IS_PUBLISHED = 1
+            AND S.FULL_PVALUE_SET = 1
+        '''
+    connection.cursor.execute(publishedSsCountSql)
+    publishedSsCount = connection.cursor.fetchall()[0][0]
+
+    unpublishedSsCountSql = '''
+        SELECT COUNT(*)
+        FROM UNPUBLISHED_STUDY
+        WHERE SUMMARY_STATS_FILE IS NOT NULL
+        '''
+    connection.cursor.execute(unpublishedSsCountSql)
+    returnData['sscount'] = connection.cursor.fetchall()[0][0] + publishedSsCount
+    
     return returnData
 
 
