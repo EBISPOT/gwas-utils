@@ -200,7 +200,6 @@ class SummaryStatsSync:
             dest_dir = os.path.join(self.harmonise_path, date_today)
             self.make_dir(dest_dir)
             self.rsync_pattern(source, dest_dir, pattern="GCST*")
-            self.rsync_dir(source, dest_dir)
 
     def update_lastrun_file(self):
         datestamp = self.generate_datestamp()
