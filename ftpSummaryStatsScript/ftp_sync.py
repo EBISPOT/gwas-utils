@@ -193,7 +193,7 @@ class SummaryStatsSync:
         return list(set(modified_studies))
 
     def release_files_for_harmonisation(self):
-        for study in self.get_files_to_harmonise():
+        for study in self.modified_studies:
             logger.info("{} --> harmonisation queue".format(study))
             source = self.staging_studies_dict[study]
             date_today = datetime.datetime.now().strftime("%Y%m%d")
@@ -259,10 +259,6 @@ class SummaryStatsSync:
         dest = os.path.join(destdir, study)
         logger.info("Moving {} --> {}".format(source, dest))
         self.move_dir(source, dest)
-
-    def get_files_to_harmonise(self):
-        eligible_files = set(self.studies_to_release_published) & self.modified_studies
-        return eligible_files
 
     def sync_to_ftp(self):
         # api AND staging AND NOT ftp
@@ -394,7 +390,7 @@ def main():
     logger.info("==========================================")
     logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
     logger.info("==========================================")
-    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.get_files_to_harmonise())))
+    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies())))
     sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
 
 
