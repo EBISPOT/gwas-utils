@@ -390,7 +390,7 @@ def main():
     logger.info("==========================================")
     logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
     logger.info("==========================================")
-    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies())))
+    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies)))
     sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
 
 
