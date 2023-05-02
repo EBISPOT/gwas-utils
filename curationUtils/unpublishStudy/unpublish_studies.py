@@ -2,7 +2,7 @@ import argparse
 from gwas_db_connect import DBConnection
 
 
-class unpublishStudies(dbInstanceName):
+class unpublishStudies:
 
     __unpublished__ = '''
         update housekeeping set catalog_unpublish_date = sysdate, last_update_date = sysdate, 
@@ -39,7 +39,7 @@ def main():
     args = parser.parse_args()
     dbInstanceName = args.dbInstanceName
     pmid = args.pmid
-    dbhandler = unpublishStudies(dbInstanceName)
+    dbhandler = unpublishStudies(dbInstanceName = dbInstanceName)
     dbhandler.unpublishPmid(pmid)
     # Setting exit status:
     exitCode = 0
