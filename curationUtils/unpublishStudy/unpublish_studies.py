@@ -16,8 +16,7 @@ class unpublishStudies:
     def __init__(self, dbInstanceName):
 
         # Opening connection to database
-        connectionObject = DBConnection.gwasCatalogDbConnector(dbInstanceName)
-        self.__connection__ = connectionObject.connection
+        self.__connection__ = DBConnection.gwasCatalogDbConnector(dbInstanceName)
         self.__cursor__ = self.__connection__.cursor()
 
     def unpublishPmid(self, pmid):
