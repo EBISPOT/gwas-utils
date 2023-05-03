@@ -22,7 +22,7 @@ class unpublishStudies:
     def unpublishPmid(self, pmid):
 
         self.__cursor__.execute(self.__unpublished__, {'pmid': pmid})
-        self.__connection__.commit()
+        self.__connection__.connection.commit()
         self.__connection__.close()
 
 
