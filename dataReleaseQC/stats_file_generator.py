@@ -219,7 +219,7 @@ def main():
     statsData = get_ensembl_info(ensUrl)
     
     # Fetch EFO Version from GitHub
-    statsData['efoversion'] = get_efo_info();
+    statsData['efoversion'] = get_efo_info()
 
     # Adding date of release:
     today = datetime.now()
