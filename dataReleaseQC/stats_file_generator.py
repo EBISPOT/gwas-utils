@@ -17,6 +17,7 @@ genomebuild=GRCh38.p12
 releasedate=2019-09-24
 snpcount=107486
 ensemblbuild=96
+efoversion=v3.54.0
 """
 
 def get_db_counts(connection):
@@ -157,6 +158,12 @@ def get_ensembl_info(ensembl_url):
         print('[Warning] Could not retrieve dbSNP version from Ensembl\'s REST API.')    
     return returnData
 
+def get_efo_info():
+    try:
+        return requests.get('https://api.github.com/repos/EBISPOT/efo/releases/latest').json()['tag_name']
+    except:
+        print('[Warning] Failed to retrieve EFO version from Github API.')
+        return '-'
 
 def read_application_properties(fileName):
     """
@@ -210,6 +217,9 @@ def main():
 
     # Fetch data from Ensembl:
     statsData = get_ensembl_info(ensUrl)
+    
+    # Fetch EFO Version from GitHub
+    statsData['efoversion'] = get_efo_info()
 
     # Adding date of release:
     today = datetime.now()
