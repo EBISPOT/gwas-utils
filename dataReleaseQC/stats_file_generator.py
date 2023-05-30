@@ -160,12 +160,10 @@ def get_ensembl_info(ensembl_url):
 
 def get_efo_info():
     try:
-        version = requests.get('https://api.github.com/repos/EBISPOT/efo/releases/latest').json()['tag_name']
-        returnData['efoversion'] = version
+        return requests.get('https://api.github.com/repos/EBISPOT/efo/releases/latest').json()['tag_name']
     except:
         print('[Warning] Failed to retrieve EFO version from Github API.')
-    return returnData
-
+        return '-'
 
 def read_application_properties(fileName):
     """
@@ -221,7 +219,7 @@ def main():
     statsData = get_ensembl_info(ensUrl)
     
     # Fetch EFO Version from GitHub
-    statsData = get_efo_info();
+    statsData['efoversion'] = get_efo_info();
 
     # Adding date of release:
     today = datetime.now()
