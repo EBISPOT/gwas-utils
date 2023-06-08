@@ -46,9 +46,18 @@ def make_dir(path):
 def move_dir(source, dest):
     logger.debug("Moving {} --> {}".format(source, dest))
     shutil.move(source, dest)
+    
+def rm_dir(path) -> None:
+    """Remove a directory
 
+    Arguments:
+        path -- path to remove
+    """
+    logger.info(f"Removing path: {path}")
+    shutil.rmtree(path=path)
+    
 
-def sync_files(source_dir, staging_dir, harmonise_dir):
+def sync_files(source_dir, staging_dir):
     dirs_to_sync = get_dirs_to_sync(source_dir)
     logger.debug(dirs_to_sync)
     for study in dirs_to_sync:
@@ -63,10 +72,7 @@ def sync_files(source_dir, staging_dir, harmonise_dir):
             make_dir(gcst_range_dir)
             logger.info("Sync {} --> {}".format(study, dest))
             subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
-            gcst_path = os.path.join(harmonise_dir, gcst)
-            if os.path.exists(gcst_path):
-                shutil.rmtree(gcst_path)
-            move_dir(study, harmonise_dir + "/")
+            rm_dir(path=study)
 
 
 def main():
@@ -77,8 +83,7 @@ def main():
     args = parser.parse_args()
 
     sync_files(source_dir=args.sourceDir, 
-               staging_dir=args.stagingDir, 
-               harmonise_dir=args.harmoniseDir)
+               staging_dir=args.stagingDir)
 
         
 
