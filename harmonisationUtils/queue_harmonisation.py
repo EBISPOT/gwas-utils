@@ -2,8 +2,9 @@ import os
 import time
 import numpy as np
 import re
+import sys
 import argparse
-import glob
+from glob import glob
 import subprocess
 from pathlib import Path
 import logging
@@ -12,9 +13,9 @@ from enum import Enum
 from dataclasses import dataclass
 
 
-class HarmonisationType(Enum):
-    V1: 'v1'
-    V0: 'v0'
+class HarmonisationType(Enum):  
+    GWAS_SSF_1: 'v1'
+    PRE_GWAS_SSF: 'v0'
     NOT_TO_HARMONISE: 'not_harm'
 
 
@@ -30,6 +31,7 @@ class Study:
     study_id: str
     harmonisation_type: HarmonisationType = 'not_harm'
     is_harmonised: bool = False
+    in_progress: bool = False
     priority: Priority = 2
 
 
@@ -57,6 +59,23 @@ class HarmonisationQueuer:
         directory, so that they can be harmonised."""
         pass
     
+    def add_studies_to_queue(
+        self,
+        study_ids: list,
+        priority: Priority = 2,
+        harmonisation_type: HarmonisationType = 'v0'
+    ) -> None:
+        """Add/modify studies"""
+        pass
+    
+    def rebuild_harmonisation_queue(self) -> None:
+        """Start from scratch and rebuild the entire queue.
+        1. get all studies
+        2. get all harmonised
+        3. get the difference
+        """
+        pass
+    
     def _refresh_harmonisation_queue(self) -> None:
         pass
 
@@ -75,22 +94,64 @@ class HarmonisationQueuer:
     def _harmonisation_type_from_metadata(self, study_id) -> HarmonisationType:
         pass
     
+    
+def list_folder_names(parent: Path, pattern: str) -> list:
+    """List folder names
+
+    Arguments:
+        parent -- parent dir e.g. staging dir or ftp dir
+        pattern -- globbing pattern of the child dirs
+    """
+    return glob(os.path.abspath(os.path.join(parent, pattern, '*/')))
+
 
 def arg_checker(args) -> bool:
+    """Check arguments are ok for the particular
+    action specified.
+
+    Arguments:
+        args -- arguments
+
+    Returns:
+        True if arguments are ok.
+    """
     if args.action == 'update':
-        all(args.source_dir,
-            args.harmonisation_dir,
-            args.ftp_dir)
-    
+        args_ok = all(args.source_dir,
+                      args.harmonisation_dir,
+                      args.ftp_dir)
+    if args.action == 'release':
+        args_ok = all(args.source_dir,
+                      args.harmonisation_dir,
+                      args.number)
+    if args.action == 'add':
+        args_ok = all(args.source_dir,
+                      args.study,
+                      args.priority)
+    if args.action == 'rebuild':
+        args_ok = all(args.source_dir,
+                      args.harmonisation_dir,
+                      args.ftp_dir)
+    return args_ok
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', type=str, choices=['update', 'release', 'add'], required=True)
-    parser.add_argument('--source_dir', type=str, help='Path to source directory.')
+    parser.add_argument('action', type=str, choices=['update', 'release', 'add', 'rebuild'], 
+                        help=('update: update the harmonisation queue with newly submitted studies; '
+                              'release: release the next batch of files from the queue; '
+                              'add: add a specific study to the harmonisation queue; '
+                              'rebuild: rebuild the entire harmonisation queue based on the files on the file system'
+                              ),
+                        required=True)
+    parser.add_argument('--study', type=list, help='Specific study accession ids to add to the queue.')
+    parser.add_argument('--priority', type=int, choices=[1,2,3], help='Set the priority for a study')
+    parser.add_argument('--source_dir', type=str, help='Path to source directory.', required=True)
     parser.add_argument('--harmonisation_dir', type=str, help='Path to harmonisation directory.')
     parser.add_argument('--ftp_dir', type=str, help='Path to ftp dir')
     parser.add_argument('--number', type=int, help='Number of files to harmonise', default=200)
     args = parser.parse_args()
-
+    if arg_checker() is False:
+        sys.exit("Args not sufficient for the action")
 
     queuer = HarmonisationQueuer(
         sumstats_parent_dir=args.source_dir,
