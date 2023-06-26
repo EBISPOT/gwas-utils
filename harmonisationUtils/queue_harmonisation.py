@@ -1,14 +1,8 @@
 import os
-import time
-import numpy as np
-import re
 import sys
 import argparse
 from glob import glob
-import subprocess
 from pathlib import Path
-import logging
-import shutil
 from enum import Enum
 from dataclasses import dataclass
 
@@ -35,6 +29,25 @@ class Study:
     priority: Priority = 2
 
 
+class FileSystemStudies:
+    def __init__(
+        self,
+        sumstats_parent_dir: Path,
+        ftp_dir: Path
+        ) -> None:
+        self.sumstats_parent_dir: Path = sumstats_parent_dir
+        self.ftp_dir: Path = ftp_dir
+        self.all : set = {}
+        self.harmonised : set = {}
+    
+    def get_all(self, pattern: str = "GCST*-GCST*") -> set:
+        self.all = set([Path(s) for s in list_folder_names(self.sumstats_parent_dir, pattern)])
+        return self.all
+        
+    def get_harmonised(self) -> set:
+        return self.harmonised
+        
+
 class HarmonisationQueuer:
     """Class for queueing summary stats files for Harmonisation."""
     def __init__(
@@ -48,6 +61,7 @@ class HarmonisationQueuer:
         self.sumstats_parent_dir: Path = sumstats_parent_dir
         self.harmonisatoin_dir: Path = harmonisation_dir
         self.ftp_dir: Path = ftp_dir
+        self.fs_studies = FileSystemStudies(sumstats_parent_dir, ftp_dir)
          
     def update_harmonisation_queue(self) -> None:
         """Updates the harmonisation queue based on the files on the file system."""
@@ -70,11 +84,15 @@ class HarmonisationQueuer:
     
     def rebuild_harmonisation_queue(self) -> None:
         """Start from scratch and rebuild the entire queue.
-        1. get all studies
-        2. get all harmonised
-        3. get the difference
+        1. get all studies from file system
+        2. get all harmonised from file system
+        3. store statuses in the database
         """
-        pass
+        all_fs_studies = self.fs_studies.get_all()
+        harmonised_fs_studies = self.fs_studies.get_harmonised()
+        unharmonised_fs_studies = all_fs_studies - harmonised_fs_studies
+        
+        
     
     def _refresh_harmonisation_queue(self) -> None:
         pass
@@ -95,7 +113,7 @@ class HarmonisationQueuer:
         pass
     
     
-def list_folder_names(parent: Path, pattern: str) -> list:
+def list_folder_names(parent: Path, pattern: str) -> list(Path):
     """List folder names
 
     Arguments:
