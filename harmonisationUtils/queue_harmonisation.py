@@ -1,22 +1,23 @@
-import os
 import sys
 import argparse
-from glob import glob
+from typing import List, Union
 from pathlib import Path
 from enum import Enum
 from dataclasses import dataclass
+from harmonisationUtils.sumstats_file_utils import get_gcst_range
+import sqlite3
 
 
 class HarmonisationType(Enum):  
-    GWAS_SSF_1: 'v1'
-    PRE_GWAS_SSF: 'v0'
-    NOT_TO_HARMONISE: 'not_harm'
+    GWAS_SSF_1 = 'v1'
+    PRE_GWAS_SSF = 'v0'
+    NOT_TO_HARMONISE = 'not_harm'
 
 
 class Priority(Enum):
-    HIGH: 1
-    MED: 2
-    LOW: 3
+    HIGH = 1
+    MED = 2
+    LOW = 3
 
 
 @dataclass
@@ -27,7 +28,64 @@ class Study:
     is_harmonised: bool = False
     in_progress: bool = False
     priority: Priority = 2
+    
+    def as_tuple(self) -> tuple:
+        return tuple([self.study_id,
+                     self.harmonisation_type,
+                     self.is_harmonised,
+                     self.in_progress,
+                     self.priority])
 
+
+class SqliteClient():
+    """
+    Minimal sqlite3 client.
+    """
+    DB_SCHEMA = """
+            CREATE TABLE IF NOT EXISTS studies (
+            study TEXT NOT NULL UNIQUE,
+            harmType TEXT,
+            isHarm BOOL,
+            inProg BOOL,
+            priority INT
+            );
+            """
+            
+    def __init__(self, database: Path = "hq.db") -> None:
+        self.database = database
+        self.conn = self.create_conn()
+        self.cur = self.conn.cursor()
+        if self.conn:
+            self.create_tables()
+
+    def create_conn(self) -> Union[sqlite3.Connection, None]:
+        try:
+            conn = sqlite3.connect(self.database)
+            conn.row_factory = sqlite3.Row
+            return conn
+        except NameError as e:
+            print(e)
+        return None
+
+    def insert_new_study(self, study: Study) -> None:
+        self.cur.execute("""
+                         INSERT OR IGNORE INTO studies(
+                         study,
+                         harmType,
+                         isHarm,
+                         inProg,
+                         priority)
+                         VALUES (?,?,?,?,?)
+                         """,
+                         study.as_tuple())
+        self.commit()
+    
+    def commit(self) -> None:
+        self.cur.execute("COMMIT")
+
+    def create_tables(self) -> None:
+        self.cur.executescript(self.DB_SCHEMA)
+        
 
 class FileSystemStudies:
     def __init__(
@@ -35,18 +93,51 @@ class FileSystemStudies:
         sumstats_parent_dir: Path,
         ftp_dir: Path
         ) -> None:
-        self.sumstats_parent_dir: Path = sumstats_parent_dir
-        self.ftp_dir: Path = ftp_dir
-        self.all : set = {}
-        self.harmonised : set = {}
+        self.sumstats_parent_dir: Path = Path(sumstats_parent_dir)
+        self.ftp_dir: Path = Path(ftp_dir)
+        self.all: Union[set, None] = None
+        self.harmonised: Union[set, None] = None
     
-    def get_all(self, pattern: str = "GCST*-GCST*") -> set:
-        self.all = set([Path(s) for s in list_folder_names(self.sumstats_parent_dir, pattern)])
+    def get_all(self, pattern: str = "GCST*") -> set:
+        """Get all studies. The default pattern for globing is 
+        the 1000 study bins, then a wildcard to match the directory
+        of the study, e.g. <sumstats parent dir>/GCST0001-GCST1000/GCST0500.
+
+        Keyword Arguments:
+            pattern -- pattern for matching (default: {"GCST*-GCST*/GCST*/"})
+
+        Returns:
+            Study accessions that have summary statistics
+            directories on the file system.
+        """
+        all_studies = []
+        if self.all is None:
+            for study_bin in self._get_bins():
+                path = self.sumstats_parent_dir.joinpath(study_bin)
+                all_studies.extend(s.name for s in get_folder_names(path, pattern))
+            self.all = set(all_studies)
         return self.all
-        
-    def get_harmonised(self) -> set:
+
+    def get_harmonised(self, pattern: str = "GCST*/harmonised") -> set:
+        """Get the studies that have harmonised directories on the public FTP.
+
+        Keyword Arguments:
+            pattern -- pattern for matching (default: {"GCST*-GCST*/GCST*/harmonised"})
+
+        Returns:
+            Study accessions
+        """
+        harmonised = []
+        if self.harmonised is None:
+            for study_bin in self._get_bins():
+                path = self.ftp_dir.joinpath(study_bin)
+                harmonised.extend(s.parent.name for s in get_folder_names(path, pattern))
+            self.harmonised = set(harmonised)
         return self.harmonised
-        
+
+    def _get_bins(self, pattern: str = "GCST*-GCST*") -> set:
+        return set(Path(s).name for s in get_folder_names(self.sumstats_parent_dir, pattern))
+    
 
 class HarmonisationQueuer:
     """Class for queueing summary stats files for Harmonisation."""
@@ -55,13 +146,17 @@ class HarmonisationQueuer:
         sumstats_parent_dir: Path,
         harmonisation_dir: Path,
         ftp_dir: Path,
-        number_to_queue: int = 200
+        number_to_queue: int = 200,
+        database: Path = "hq.db"
     ) -> None:
         self.number_to_queue: int = number_to_queue
         self.sumstats_parent_dir: Path = sumstats_parent_dir
         self.harmonisatoin_dir: Path = harmonisation_dir
         self.ftp_dir: Path = ftp_dir
         self.fs_studies = FileSystemStudies(sumstats_parent_dir, ftp_dir)
+        self.harmonised: list = []
+        self.unharmonised: list = []
+        self.db = SqliteClient(database=database)
          
     def update_harmonisation_queue(self) -> None:
         """Updates the harmonisation queue based on the files on the file system."""
@@ -88,12 +183,18 @@ class HarmonisationQueuer:
         2. get all harmonised from file system
         3. store statuses in the database
         """
-        all_fs_studies = self.fs_studies.get_all()
-        harmonised_fs_studies = self.fs_studies.get_harmonised()
-        unharmonised_fs_studies = all_fs_studies - harmonised_fs_studies
         
+        all_fs_studies: set = self.fs_studies.get_all()
+        harmonised: list = [Study(study_id=study, harmonisation_type='v0', is_harmonised=True)
+                                       for study in self.fs_studies.get_harmonised()]
+        unharmonised_fs_studies = list(all_fs_studies - self.fs_studies.harmonised)
+        unharmonised_fs_studies.sort(reverse=True)
+        unharmonised: list = [Study(study_id=study, is_harmonised=False)
+                              for study in unharmonised_fs_studies]
+        studies: list = harmonised + unharmonised
+        for study in studies:
+            self.db.insert_new_study(study=study)
         
-    
     def _refresh_harmonisation_queue(self) -> None:
         pass
 
@@ -113,14 +214,15 @@ class HarmonisationQueuer:
         pass
     
     
-def list_folder_names(parent: Path, pattern: str) -> list(Path):
+def get_folder_names(parent: Path, pattern: str) -> List[Path]:
     """List folder names
 
     Arguments:
         parent -- parent dir e.g. staging dir or ftp dir
         pattern -- globbing pattern of the child dirs
     """
-    return glob(os.path.abspath(os.path.join(parent, pattern, '*/')))
+    return list(Path(parent).glob(pattern))
+
 
 
 def arg_checker(args) -> bool:
@@ -177,7 +279,8 @@ def main():
         ftp_dir=args.ftp_dir,
         number_to_queue=args.number
         )
-    queuer.queue_next_studies()
+    if args.action == 'rebuild':
+        queuer.rebuild_harmonisation_queue()
 
 
 if __name__ == '__main__':
