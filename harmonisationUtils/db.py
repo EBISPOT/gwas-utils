@@ -72,7 +72,7 @@ class SqliteClient():
         flattened_args = list(itertools.chain.from_iterable(args))
         self.cur.execute(sql, flattened_args)
         data = self.cur.fetchmany(size=limit)
-        return [i[0:] for i in data]
+        return [tuple(i[0],bool(i[1]),i[2], bool(i[3]), i[4]) for i in data]
 
     def commit(self) -> None:
         self.cur.execute("COMMIT")

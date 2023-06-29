@@ -24,11 +24,11 @@ class Priority(Enum):
 class Study:
     """Class for study harmonisation status."""
     study_id: str
-    harmonisation_type: HarmonisationType = 'not_harm'
+    harmonisation_type: HarmonisationType = HarmonisationType.NOT_TO_HARMONISE.value
     is_harmonised: bool = False
     in_progress: bool = False
-    priority: Priority = 2
-        
+    priority: Priority = Priority.MED.value
+
 
 class FileSystemStudies:
     def __init__(
@@ -86,9 +86,9 @@ class HarmonisationQueuer:
     """Class for queueing summary stats files for Harmonisation."""
     def __init__(
         self,
-        sumstats_parent_dir: Path,
-        harmonisation_dir: Path,
-        ftp_dir: Path,
+        sumstats_parent_dir: Path = "./sumstats",
+        harmonisation_dir: Path = "./harmonisation",
+        ftp_dir: Path = "./ftp",
         database: Path = "hq.db"
     ) -> None:
         self.sumstats_parent_dir: Path = sumstats_parent_dir
@@ -147,17 +147,17 @@ class HarmonisationQueuer:
 
     def _get_study_ids_from_db(
         self,
-        study: Union[str, None] = None,
+        study: Union[list, None] = None,
         harmonised_only: bool = False,
-        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType]
+        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
         limit: Union[int, None] = 200,
         in_progress: bool = False,
         priority: List[Priority] = [e.value for e in Priority]
-    ) -> List(Study):
+    ) -> List[Study]:
         """Get a list of studies from the db.
 
         Keyword Arguments:
-            study -- Specify a study accession (default: None)
+            study -- Specify a list of study accession (default: None)
             harmonised_only -- Get harmonised only (default: {False})
             limit -- number to limit by, or no limit if None (default: {200})
             in_progress -- Get those that are in progress (default: {False})
@@ -166,7 +166,22 @@ class HarmonisationQueuer:
         Returns:
             List of studies
         """
-        self.db.
+        result = self.db.select_by(study=study,
+                                   harmonised_only=harmonised_only,
+                                   harmonisation_type=harmonisation_type,
+                                   limit=limit,
+                                   in_progress=in_progress,
+                                   priority=priority)
+        studies = []
+        for i in result:    
+            studies.append(Study(study_id=i[0],
+                                 harmonisation_type=i[1],
+                                 is_harmonised=i[2],
+                                 in_progress=i[3],
+                                 priority=i[4])
+                           )
+        return studies
+        
         
         
     
