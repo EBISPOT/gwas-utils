@@ -1,5 +1,7 @@
 import sys
 import argparse
+import shutil
+import subprocess
 from typing import List, Union
 from pathlib import Path
 from enum import Enum
@@ -103,12 +105,34 @@ class HarmonisationQueuer:
         """Updates the harmonisation queue based on the files on the file system."""
         pass
     
-    def release_files_from_queue(self) -> list:
+    def release_files_from_queue(
+        self,
+        studies: Union[list, None] = None,
+        harmonised_only: bool = False,
+        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
+        limit: Union[int, None] = 200,
+        in_progress: bool = False,
+        priority: List[Priority] = [e.value for e in Priority]
+        ) -> None:
         """Releases the next batch of files from the harmonisation queue.
         This copies the files at the front of the queue to the harmonisation
-        directory, so that they can be harmonised."""
-        pass
-    
+        directory, so that they can be harmonised.
+        1. get list
+        2. copy to harmonsation dir
+        3. set to in_progress
+        """
+        study_list = self._get_studies_from_db(studies=studies,
+                                                 harmonised_only=harmonised_only,
+                                                 harmonisation_type=harmonisation_type,
+                                                 limit=limit,
+                                                 in_progress=in_progress,
+                                                 priority=priority)
+        for study in study_list:
+            source = self._get_path_for_study_dir(study.study_id)
+            rsync(source=source, dest=self.harmonisatoin_dir, pattern="GCST*")
+            study.in_progress = True
+            self.db.insert_study(study=astuple(study))
+                
     def add_studies_to_queue(
         self,
         study_ids: list,
@@ -134,53 +158,50 @@ class HarmonisationQueuer:
                               for study in unharmonised_fs_studies]
         studies: list = harmonised + unharmonised
         for study in studies:
-            self.db.insert_new_study(study=astuple(study))
+            self.db.insert_study(study=astuple(study))
 
     def _refresh_harmonisation_queue(self) -> None:
         pass
 
-    def _copy_files_to_harmonisation_dir(self) -> None:
-        pass
-
     def _get_path_for_study_dir(self, study_id: str) -> Path:
-        pass
+        return self.sumstats_parent_dir.joinpath(get_gcst_range(study_id), study_id)
 
-    def _get_study_ids_from_db(
+    def _get_studies_from_db(
         self,
-        study: Union[list, None] = None,
-        harmonised_only: bool = False,
-        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
-        limit: Union[int, None] = 200,
-        in_progress: bool = False,
-        priority: List[Priority] = [e.value for e in Priority]
+        studies: Union[list, None],
+        harmonised_only: bool,
+        harmonisation_type: List[HarmonisationType],
+        limit: Union[int, None],
+        in_progress: bool,
+        priority: List[Priority]
     ) -> List[Study]:
         """Get a list of studies from the db.
 
         Keyword Arguments:
-            study -- Specify a list of study accession (default: None)
-            harmonised_only -- Get harmonised only (default: {False})
-            limit -- number to limit by, or no limit if None (default: {200})
-            in_progress -- Get those that are in progress (default: {False})
-            priority -- Filter by priority (default: {[Priority.HIGH, Priority.MED, Priority.LOW]})
+            studies -- Specify a list of study accessions
+            harmonised_only -- Get harmonised only
+            limit -- number to limit by, or no limit if None 
+            in_progress -- Get those that are in progress 
+            priority -- Filter by priority 
 
         Returns:
             List of studies
         """
-        result = self.db.select_by(study=study,
+        result = self.db.select_by(study=studies,
                                    harmonised_only=harmonised_only,
                                    harmonisation_type=harmonisation_type,
                                    limit=limit,
                                    in_progress=in_progress,
                                    priority=priority)
-        studies = []
+        study_list = []
         for i in result:    
-            studies.append(Study(study_id=i[0],
+            study_list.append(Study(study_id=i[0],
                                  harmonisation_type=i[1],
                                  is_harmonised=i[2],
                                  in_progress=i[3],
                                  priority=i[4])
                            )
-        return studies
+        return study_list
         
         
         
@@ -198,6 +219,22 @@ def get_folder_names(parent: Path, pattern: str) -> List[Path]:
     """
     return list(Path(parent).glob(pattern))
 
+
+def rsync(source: Path, dest: Path, pattern: str = "*"):
+    source_str = str(source) + "/"
+    dest_str = str(dest) + "/"
+    try:
+        subprocess.call(['rsync',
+                         '-rpvh',
+                         '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r',
+                         '--size-only',
+                         f'--include={pattern}',
+                         '--exclude=*',
+                         source_str,
+                         dest_str]
+                        )
+    except OSError as e:
+        print(e)
 
 
 def arg_checker(args) -> bool:

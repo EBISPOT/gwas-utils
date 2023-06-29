@@ -34,9 +34,9 @@ class SqliteClient():
             print(e)
         return None
 
-    def insert_new_study(self, study: tuple) -> None:
+    def insert_study(self, study: tuple) -> None:
         self.cur.execute("""
-                         INSERT OR IGNORE INTO studies(
+                         INSERT OR REPLACE INTO studies(
                          study,
                          harmType,
                          isHarm,
@@ -46,7 +46,16 @@ class SqliteClient():
                          """,
                          study)
         self.commit()
-        
+
+    def select_studies(self, studies: list) -> list:
+        sql = f"""
+               SELECT * FROM studies
+               WHERE study in ({','.join(['?']*len(studies))})
+               """
+        self.cur.execute(sql, studies)
+        data = self.cur.fetchall()
+        return [self._int_to_bool(i) for i in data]
+
     def select_by(
         self,
         study: Union[list, None],
@@ -72,7 +81,10 @@ class SqliteClient():
         flattened_args = list(itertools.chain.from_iterable(args))
         self.cur.execute(sql, flattened_args)
         data = self.cur.fetchmany(size=limit)
-        return [tuple(i[0],bool(i[1]),i[2], bool(i[3]), i[4]) for i in data]
+        return [self._int_to_bool(i) for i in data]
+
+    def _int_to_bool(row: tuple) -> tuple:
+        return (row[0], row[1], bool(row[2]), bool(row[3]), row[4])
 
     def commit(self) -> None:
         self.cur.execute("COMMIT")
