@@ -16,6 +16,10 @@ class SqliteClient():
             inProg BOOL,
             priority INT
             );
+            
+            CREATE TABLE IF NOT EXISTS last_run (
+            date TEXT
+            );
             """
             
     def __init__(self, database: Path) -> None:
@@ -83,6 +87,7 @@ class SqliteClient():
         data = self.cur.fetchmany(size=limit)
         return [self._int_to_bool(i) for i in data]
 
+    @staticmethod
     def _int_to_bool(row: tuple) -> tuple:
         return (row[0], row[1], bool(row[2]), bool(row[3]), row[4])
 

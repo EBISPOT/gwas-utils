@@ -1,11 +1,12 @@
 import sys
 import argparse
-import shutil
 import subprocess
-from typing import List, Union
+import yaml
+from typing import List, Union, Any
 from pathlib import Path
 from enum import Enum
 from dataclasses import dataclass, astuple
+
 from harmonisationUtils.sumstats_file_utils import get_gcst_range
 from harmonisationUtils.db import SqliteClient
 
@@ -59,7 +60,7 @@ class FileSystemStudies:
         if self.all is None:
             for study_bin in self._get_bins():
                 path = self.sumstats_parent_dir.joinpath(study_bin)
-                all_studies.extend(s.name for s in get_folder_names(path, pattern))
+                all_studies.extend(s.name for s in get_folder_contents(path, pattern))
             self.all = set(all_studies)
         return self.all
 
@@ -76,12 +77,20 @@ class FileSystemStudies:
         if self.harmonised is None:
             for study_bin in self._get_bins():
                 path = self.ftp_dir.joinpath(study_bin)
-                harmonised.extend(s.parent.name for s in get_folder_names(path, pattern))
+                harmonised.extend(s.parent.name for s in get_folder_contents(path, pattern))
             self.harmonised = set(harmonised)
         return self.harmonised
+    
+    def metadata_file_from_study_id(self, study_id: str) -> Union[Path, None]:
+        study_dir = self.get_path_for_study_dir(study_id=study_id)
+        matches = get_folder_contents(parent=study_dir, pattern="GCST*-meta.yaml")
+        return matches[0] if matches else None
+
+    def get_path_for_study_dir(self, study_id: str) -> Path:
+        return self.sumstats_parent_dir.joinpath(get_gcst_range(study_id), study_id)
 
     def _get_bins(self, pattern: str = "GCST*-GCST*") -> set:
-        return set(Path(s).name for s in get_folder_names(self.sumstats_parent_dir, pattern))
+        return set(Path(s).name for s in get_folder_contents(self.sumstats_parent_dir, pattern))
     
 
 class HarmonisationQueuer:
@@ -122,13 +131,13 @@ class HarmonisationQueuer:
         3. set to in_progress
         """
         study_list = self._get_studies_from_db(studies=studies,
-                                                 harmonised_only=harmonised_only,
-                                                 harmonisation_type=harmonisation_type,
-                                                 limit=limit,
-                                                 in_progress=in_progress,
-                                                 priority=priority)
+                                               harmonised_only=harmonised_only,
+                                               harmonisation_type=harmonisation_type,
+                                               limit=limit,
+                                               in_progress=in_progress,
+                                               priority=priority)
         for study in study_list:
-            source = self._get_path_for_study_dir(study.study_id)
+            source = self.fs_studies.get_path_for_study_dir(study.study_id)
             rsync(source=source, dest=self.harmonisatoin_dir, pattern="GCST*")
             study.in_progress = True
             self.db.insert_study(study=astuple(study))
@@ -148,7 +157,6 @@ class HarmonisationQueuer:
         2. get all harmonised from file system
         3. store statuses in the database
         """
-        
         all_fs_studies: set = self.fs_studies.get_all()
         harmonised: list = [Study(study_id=study, harmonisation_type='v0', is_harmonised=True)
                                        for study in self.fs_studies.get_harmonised()]
@@ -160,11 +168,7 @@ class HarmonisationQueuer:
         for study in studies:
             self.db.insert_study(study=astuple(study))
 
-    def _refresh_harmonisation_queue(self) -> None:
-        pass
 
-    def _get_path_for_study_dir(self, study_id: str) -> Path:
-        return self.sumstats_parent_dir.joinpath(get_gcst_range(study_id), study_id)
 
     def _get_studies_from_db(
         self,
@@ -202,20 +206,38 @@ class HarmonisationQueuer:
                                  priority=i[4])
                            )
         return study_list
-        
-        
-        
-    
+
     def _harmonisation_type_from_metadata(self, study_id) -> HarmonisationType:
-        pass
+        metadata_file = self.fs_studies.metadata_file_from_study_id(study_id)
+        value_from_metadata()
+    
+
+def value_from_metadata(metadata_file: Path, field: str) -> Any:
+    """Get a value from the metadata
+
+    Arguments:
+        metadata_file -- metadata Yaml file
+        field -- field name to extract the value from
+
+    Returns:
+        Value or None
+    """
+    
+    if not Path(metadata_file).exists():
+        return None
+    else:
+        with open(metadata_file, "r") as fh:
+            meta_dict = yaml.safe_load(fh)
+            return meta_dict.get(field)
     
     
-def get_folder_names(parent: Path, pattern: str) -> List[Path]:
-    """List folder names
+    
+def get_folder_contents(parent: Path, pattern: str) -> List[Path]:
+    """List folder contents where globbing pattern matches.
 
     Arguments:
         parent -- parent dir e.g. staging dir or ftp dir
-        pattern -- globbing pattern of the child dirs
+        pattern -- globbing pattern 
     """
     return list(Path(parent).glob(pattern))
 
