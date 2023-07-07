@@ -67,13 +67,13 @@ class SqliteClient():
         harmonisation_type: list,
         limit: Union[int, None],
         in_progress: bool,
-        priority: list
+        priority: int
         ) -> list:
-        args = [[harmonised_only], harmonisation_type, [in_progress], priority]
+        args = [[harmonised_only], harmonisation_type, [in_progress], [priority]]
         conditions = ["isHarm is ?",
                       f"harmType in ({','.join(['?']*len(harmonisation_type))})",
                       "inProg is ?",
-                      f"priority in ({','.join(['?']*len(priority))})"]
+                      f"priority <= ?"]
         sql = f"""
                SELECT * FROM studies
                WHERE
@@ -83,6 +83,7 @@ class SqliteClient():
             sql += f" AND study in ({','.join(['?']*len(study))})"
             args.append(study)
         flattened_args = list(itertools.chain.from_iterable(args))
+        print(flattened_args)
         self.cur.execute(sql, flattened_args)
         data = self.cur.fetchmany(size=limit)
         return [self._int_to_bool(i) for i in data]

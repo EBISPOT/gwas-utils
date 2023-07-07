@@ -37,7 +37,7 @@ setup(
                             'data-release-report = dataReleaseQC.data_release_report:main',
                             'ftp-sync = ftpSummaryStatsScript.ftp_sync:main',
                             'depo-sumstats-sync = ftpSummaryStatsScript.depo_ftp_to_staging:main',
-                            'queue-harmonisation = harmonisationUtils.move_eligible_files_to_harmonisation:main',
+                            'queue-harmonisation = harmonisationUtils.queue_harmonisation:main',
                             'curation-queue = curationUtils.curationQueue.curation_queue_with_ancestry:main',
                             'analyze-reported-traits = curationUtils.reportedTraits.analyze_reported_traits:main',
                             'unpublish-studies = curationUtils.unpublishStudy.unpublish_studies:main',

@@ -103,7 +103,7 @@ class HarmonisationQueuer:
         database: Path = "hq.db"
     ) -> None:
         self.sumstats_parent_dir: Path = sumstats_parent_dir
-        self.harmonisatoin_dir: Path = harmonisation_dir
+        self.harmonisation_dir: Path = harmonisation_dir
         self.ftp_dir: Path = ftp_dir
         self.fs_studies = FileSystemStudies(sumstats_parent_dir, ftp_dir)
         self.harmonised: list = []
@@ -111,7 +111,11 @@ class HarmonisationQueuer:
         self.db = SqliteClient(database=database)
          
     def update_harmonisation_queue(self) -> None:
-        """Updates the harmonisation queue based on the files on the file system."""
+        """Updates the harmonisation queue based on the files on the file system.
+        1. check for new on staging
+        2. add to db
+        3. check for if in_progress are harmonise -> update 
+        """
         pass
     
     def release_files_from_queue(
@@ -121,7 +125,7 @@ class HarmonisationQueuer:
         harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
         limit: Union[int, None] = 200,
         in_progress: bool = False,
-        priority: List[Priority] = [e.value for e in Priority]
+        priority: int = 3
         ) -> None:
         """Releases the next batch of files from the harmonisation queue.
         This copies the files at the front of the queue to the harmonisation
@@ -130,26 +134,44 @@ class HarmonisationQueuer:
         2. copy to harmonsation dir
         3. set to in_progress
         """
-        study_list = self._get_studies_from_db(studies=studies,
-                                               harmonised_only=harmonised_only,
-                                               harmonisation_type=harmonisation_type,
-                                               limit=limit,
-                                               in_progress=in_progress,
-                                               priority=priority)
+        print(studies)
+        print(harmonised_only)
+        print(harmonisation_type)
+        print(limit)
+        print(in_progress)
+        print(priority)
+        study_list = self._get_from_db(studies=studies,
+                                       harmonised_only=harmonised_only,
+                                       harmonisation_type=harmonisation_type,
+                                       limit=limit,
+                                       in_progress=in_progress,
+                                       priority=priority)
         for study in study_list:
             source = self.fs_studies.get_path_for_study_dir(study.study_id)
-            rsync(source=source, dest=self.harmonisatoin_dir, pattern="GCST*")
+            rsync(source=source, dest=self.harmonisation_dir, pattern="GCST*")
             study.in_progress = True
             self.db.insert_study(study=astuple(study))
+            print(study)
                 
     def add_studies_to_queue(
         self,
         study_ids: list,
         priority: Priority = 2,
-        harmonisation_type: HarmonisationType = 'v0'
+        harmonisation_type: HarmonisationType = 'v0',
+        is_harmonised: bool = False,
+        in_progress: bool = False
     ) -> None:
         """Add/modify studies"""
-        pass
+        for study_id in study_ids:
+            study = Study(
+                study_id=study_id,
+                priority=priority,
+                harmonisation_type=harmonisation_type,
+                is_harmonised=is_harmonised,
+                in_progress=in_progress
+                )
+            self.db.insert_study(study=astuple(study))
+            print(study)
     
     def rebuild_harmonisation_queue(self) -> None:
         """Start from scratch and rebuild the entire queue.
@@ -168,16 +190,21 @@ class HarmonisationQueuer:
         for study in studies:
             self.db.insert_study(study=astuple(study))
 
-
-
-    def _get_studies_from_db(
+    def get_studies(
         self,
-        studies: Union[list, None],
-        harmonised_only: bool,
-        harmonisation_type: List[HarmonisationType],
-        limit: Union[int, None],
-        in_progress: bool,
-        priority: List[Priority]
+        studies: Union[list, None] = None
+    ) -> List[Study]:
+        result = self.db.select_studies(studies=studies)
+        return self._db_study_to_object(result)
+
+    def _get_from_db(
+        self,
+        studies: Union[list, None] = None,
+        harmonised_only: bool = False,
+        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
+        limit: Union[int, None] = None,
+        in_progress: bool = False,
+        priority: int = 3
     ) -> List[Study]:
         """Get a list of studies from the db.
 
@@ -197,8 +224,11 @@ class HarmonisationQueuer:
                                    limit=limit,
                                    in_progress=in_progress,
                                    priority=priority)
+        return self._db_study_to_object(result)
+    
+    def _db_study_to_object(self, db_result: list) -> List[Study]:
         study_list = []
-        for i in result:    
+        for i in db_result:    
             study_list.append(Study(study_id=i[0],
                                  harmonisation_type=i[1],
                                  is_harmonised=i[2],
@@ -207,9 +237,18 @@ class HarmonisationQueuer:
                            )
         return study_list
 
+
     def _harmonisation_type_from_metadata(self, study_id) -> HarmonisationType:
+        harm_type = HarmonisationType.NOT_TO_HARMONISE
         metadata_file = self.fs_studies.metadata_file_from_study_id(study_id)
-        value_from_metadata()
+        if metadata_file:
+            file_type = value_from_metadata(metadata_file=metadata_file, field="fileType")
+            if file_type is not None:
+                if file_type.startswith("GWAS-SSF"):
+                    harm_type = HarmonisationType.GWAS_SSF_1
+                elif file_type.startswith("pre-GWAS-SSF"):
+                    harm_type = HarmonisationType.PRE_GWAS_SSF
+        return harm_type 
     
 
 def value_from_metadata(metadata_file: Path, field: str) -> Any:
@@ -243,7 +282,7 @@ def get_folder_contents(parent: Path, pattern: str) -> List[Path]:
 
 
 def rsync(source: Path, dest: Path, pattern: str = "*"):
-    source_str = str(source) + "/"
+    source_str = str(source)
     dest_str = str(dest) + "/"
     try:
         subprocess.call(['rsync',
@@ -269,52 +308,81 @@ def arg_checker(args) -> bool:
     Returns:
         True if arguments are ok.
     """
-    if args.action == 'update':
-        args_ok = all(args.source_dir,
-                      args.harmonisation_dir,
-                      args.ftp_dir)
+    if args.action == 'refresh':
+        args_ok = all([args.source_dir,
+                       args.harmonisation_dir,
+                       args.ftp_dir])
     if args.action == 'release':
-        args_ok = all(args.source_dir,
-                      args.harmonisation_dir,
-                      args.number)
+        args_ok = all([args.source_dir,
+                       args.harmonisation_dir,
+                       args.number])
     if args.action == 'add':
-        args_ok = all(args.source_dir,
-                      args.study,
-                      args.priority)
+        args_ok = all([args.source_dir,
+                       args.study,
+                       args.priority])
     if args.action == 'rebuild':
-        args_ok = all(args.source_dir,
-                      args.harmonisation_dir,
-                      args.ftp_dir)
+        args_ok = all([args.source_dir,
+                       args.harmonisation_dir,
+                       args.ftp_dir])
+    if args.action == 'status':
+        args_ok = all([args.study])
+    if args.action == 'update':
+        args_ok = all([args.study])
     return args_ok
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', type=str, choices=['update', 'release', 'add', 'rebuild'], 
-                        help=('update: update the harmonisation queue with newly submitted studies; '
+    parser.add_argument('--action', type=str, choices=['refresh', 'release', 'add', 'rebuild', 'status', 'update'], 
+                        help=('refresh: update the harmonisation queue with newly submitted studies; '
                               'release: release the next batch of files from the queue; '
                               'add: add a specific study to the harmonisation queue; '
-                              'rebuild: rebuild the entire harmonisation queue based on the files on the file system'
+                              'rebuild: rebuild the entire harmonisation queue based on the files on the file system; '
+                              'status: get the status of a list of studies; '
+                              'update: update a list of studies'
                               ),
                         required=True)
-    parser.add_argument('--study', type=list, help='Specific study accession ids to add to the queue.')
-    parser.add_argument('--priority', type=int, choices=[1,2,3], help='Set the priority for a study')
-    parser.add_argument('--source_dir', type=str, help='Path to source directory.', required=True)
-    parser.add_argument('--harmonisation_dir', type=str, help='Path to harmonisation directory.')
-    parser.add_argument('--ftp_dir', type=str, help='Path to ftp dir')
+    parser.add_argument('--study', nargs='*', help='Specific study accession ids.', default=None)
+    parser.add_argument('--priority', type=int, choices=[e.value for e in Priority], help='Set the priority for a study', default=2)
+    parser.add_argument('--source_dir', type=str, help='Path to source directory.', default="./staging")
+    parser.add_argument('--harmonisation_dir', type=str, help='Path to harmonisation directory.', default="./toharm")
+    parser.add_argument('--ftp_dir', type=str, help='Path to ftp dir', default="./ftp")
     parser.add_argument('--number', type=int, help='Number of files to harmonise', default=200)
+    parser.add_argument('--harmonisation_type', type=str, choices=[e.value for e in HarmonisationType], help='harmonisation type', default='v0')
+    parser.add_argument('--is_harmonised', action="store_true", help='Is harmonised', default=False)
+    parser.add_argument('--in_progress', action="store_true", help='Is in progress', default=False)
     args = parser.parse_args()
-    if arg_checker() is False:
+    if arg_checker(args) is False:
         sys.exit("Args not sufficient for the action")
 
     queuer = HarmonisationQueuer(
         sumstats_parent_dir=args.source_dir,
         harmonisation_dir=args.harmonisation_dir,
-        ftp_dir=args.ftp_dir,
-        number_to_queue=args.number
+        ftp_dir=args.ftp_dir
         )
     if args.action == 'rebuild':
         queuer.rebuild_harmonisation_queue()
+    if args.action == 'status':
+        studies = queuer.get_studies(studies=args.study)
+        for study in studies:
+            print(study)
+    if args.action == 'update':
+        queuer.add_studies_to_queue(
+            study_ids=args.study,
+            priority=args.priority,
+            harmonisation_type=args.harmonisation_type,
+            is_harmonised=args.is_harmonised,
+            in_progress=args.in_progress
+            )
+    if args.action == 'release':
+        queuer.release_files_from_queue(studies=args.study,
+                                        priority=args.priority,
+                                        harmonisation_type=[args.harmonisation_type],
+                                        harmonised_only=args.is_harmonised,
+                                        in_progress=args.in_progress,
+                                        limit=args.number)
+        
+        
 
 
 if __name__ == '__main__':
@@ -330,68 +398,5 @@ if __name__ == '__main__':
 # 	3. get_harmonisation_type(study) -> HarmonisationType 
 # 	4. refresh_to_harmonise_list()
 # 		1. identify studies that have not been harmonised
-
-
-
-
-
-
-
-
-
-
-
-# logging.basicConfig(
-#     level=logging.DEBUG,
-#     format="%(asctime)s [%(levelname)s] %(message)s",
-#     handlers=[
-#         logging.StreamHandler()
-#     ]
-# )
-# logger = logging.getLogger(__name__)
-
-# # number of seconds since modification that a file should be left alone
-# # in case of latency for writing the file.
-
-# MOD_THRESHOLD_SEC = 3600
-# #MOD_THRESHOLD_SEC = 36 # DEV ONLY
-# RANGE_SIZE = 1000
-
-
-# def get_dirs_to_sync(source_dir):
-#     dirs = glob.glob(os.path.join(source_dir, 'GCST*'))
-#     dirs_older_than_1hr = [d for d in dirs if (time.time() - os.path.getmtime(d)) > MOD_THRESHOLD_SEC]
-#     return dirs_older_than_1hr
-
-# # find all changed files since lastrun - subtract an hour from window to allow for latency - so it's a window 1 hour back.
-# cmd = ['find', '/nfs/production/parkinso/spot/gwas/prod/data/summary_statistics', '-type', 'f', '-name',
-#            'GCST*.tsv*', '-newermt', '2022-06-30 23:01:59']
-# j = subprocess.run(cmd, stdout=subprocess.PIPE)
-# modified_files = j.stdout.decode().split()
-# # modified_files is a list of files to sync to FTP, whether they exist on the FTP or not
-# k = [f for f in modified_files if valid_for_harmonisation(f)]
-
-# # valid_for_harmonisation will take a file determine if is sumstats GCST*.tsv* or YAML and based on the YAML decide check if valid, if so move to harmonise queue
-# # right now, we can't do that, so instead we will check if sumstats (GCST*.tsv|csv|txt*) and check it is part of a publication, if so move to harmonise queue
-
-# def main():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--sourceDir', type=str, help='Path to source directory.')
-#     parser.add_argument('--destDir', type=str, help='Path to destination directory.')
-#     parser.add_argument('--lastRun', type=str, help='Path to last run file', default='.lastrun')
-#     args = parser.parse_args()
-
-#     source_dir = args.sourceDir
-#     dest_dir = args.destDir
-#     last_run = args.lastRun
-
-#     # read last run - get last run timestamp
-#     # identify files for queue
-#     # read yaml OR api
-#     # cp file to dest
-#     sync_files(source_dir=args.sourceDir,
-#                staging_dir=args.stagingDir,
-#                harmonise_dir=args.harmoniseDir)
-
 
 
