@@ -142,10 +142,13 @@ class HarmonisationQueuer:
                                        priority=priority)
         for study in study_list:
             source = self.fs_studies.get_path_for_study_dir(study.study_id)
-            rsync(source=source, dest=self.harmonisation_dir, pattern="GCST*")
+            transferred = rsync(source=source, dest=self.harmonisation_dir, pattern="GCST*")
             study.in_progress = True
             self.db.insert_study(study=astuple(study))
-            print(study)
+            if transferred:
+                print(f"Transferred {study.study_id}")
+            else:
+                print(f"Failed to transfer {study.study_id}")
                 
     def add_studies_to_queue(
         self,
@@ -275,21 +278,23 @@ def get_folder_contents(parent: Path, pattern: str) -> List[Path]:
     return list(Path(parent).glob(pattern))
 
 
-def rsync(source: Path, dest: Path, pattern: str = "*"):
+def rsync(source: Path, dest: Path, pattern: str = "*") -> bool:
     source_str = str(source)
     dest_str = str(dest) + "/"
     try:
-        subprocess.call(['rsync',
+        subprocess.run(['rsync',
                          '-rph',
                          '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r',
                          '--size-only',
                          f'--include={pattern}',
                          '--exclude=*',
                          source_str,
-                         dest_str]
+                         dest_str],
+                       check=True
                         )
-    except OSError as e:
-        print(e)
+        return True
+    except subprocess.CalledProcessError as e:
+        return False
 
 
 def arg_checker(args) -> bool:
@@ -310,10 +315,6 @@ def arg_checker(args) -> bool:
         args_ok = all([args.source_dir,
                        args.harmonisation_dir,
                        args.number])
-    if args.action == 'add':
-        args_ok = all([args.source_dir,
-                       args.study,
-                       args.priority])
     if args.action == 'rebuild':
         args_ok = all([args.source_dir,
                        args.harmonisation_dir,
@@ -330,10 +331,9 @@ def main():
     parser.add_argument('--action', type=str, choices=['refresh', 'release', 'add', 'rebuild', 'status', 'update'], 
                         help=('refresh: update the harmonisation queue with newly submitted studies; '
                               'release: release the next batch of files from the queue; '
-                              'add: add a specific study to the harmonisation queue; '
                               'rebuild: rebuild the entire harmonisation queue based on the files on the file system; '
                               'status: get the status of a list of studies; '
-                              'update: update a list of studies'
+                              'update: add/update a list of studies'
                               ),
                         required=True)
     parser.add_argument('--study', nargs='*', help='Specific study accession ids.', default=None)
@@ -375,6 +375,8 @@ def main():
                                         harmonised_only=args.is_harmonised,
                                         in_progress=args.in_progress,
                                         limit=args.number)
+    if args.action == 'refresh':
+        queuer.update_harmonisation_queue()
         
         
 
