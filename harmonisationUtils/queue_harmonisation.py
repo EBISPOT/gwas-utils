@@ -134,12 +134,6 @@ class HarmonisationQueuer:
         2. copy to harmonsation dir
         3. set to in_progress
         """
-        print(studies)
-        print(harmonised_only)
-        print(harmonisation_type)
-        print(limit)
-        print(in_progress)
-        print(priority)
         study_list = self._get_from_db(studies=studies,
                                        harmonised_only=harmonised_only,
                                        harmonisation_type=harmonisation_type,
@@ -286,7 +280,7 @@ def rsync(source: Path, dest: Path, pattern: str = "*"):
     dest_str = str(dest) + "/"
     try:
         subprocess.call(['rsync',
-                         '-rpvh',
+                         '-rph',
                          '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r',
                          '--size-only',
                          f'--include={pattern}',

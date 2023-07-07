@@ -83,7 +83,6 @@ class SqliteClient():
             sql += f" AND study in ({','.join(['?']*len(study))})"
             args.append(study)
         flattened_args = list(itertools.chain.from_iterable(args))
-        print(flattened_args)
         self.cur.execute(sql, flattened_args)
         data = self.cur.fetchmany(size=limit)
         return [self._int_to_bool(i) for i in data]
