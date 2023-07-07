@@ -86,6 +86,9 @@ class SqliteClient():
         self.cur.execute(sql, flattened_args)
         data = self.cur.fetchmany(size=limit)
         return [self._int_to_bool(i) for i in data]
+    
+    def last_run(self):
+        return "2023-07-07 00:06:23"
 
     @staticmethod
     def _int_to_bool(row: tuple) -> tuple:

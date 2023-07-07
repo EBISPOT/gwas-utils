@@ -1,4 +1,5 @@
 import sys
+import os
 import argparse
 import subprocess
 import yaml
@@ -92,6 +93,18 @@ class FileSystemStudies:
     def _get_bins(self, pattern: str = "GCST*-GCST*") -> set:
         return set(Path(s).name for s in get_folder_contents(self.sumstats_parent_dir, pattern))
     
+    def get_files_since_timestamp(self, timestamp: str) -> list:
+        modified_files = []
+        if timestamp:
+            cmd = ['find', str(self.sumstats_parent_dir),
+                   '-maxdepth', '3', '-mindepth', '3', '-type', 'f', '-name',
+                   'GCST*', '-newermt', timestamp]
+            j = subprocess.run(cmd, stdout=subprocess.PIPE)
+            modified_files = j.stdout.decode().split()
+        # only return the parent study directories
+        modified_studies = [os.path.abspath(os.path.join(i, os.pardir)) for i in modified_files ]
+        return list(set(modified_studies))
+    
 
 class HarmonisationQueuer:
     """Class for queueing summary stats files for Harmonisation."""
@@ -116,7 +129,12 @@ class HarmonisationQueuer:
         2. add to db
         3. check for if in_progress are harmonise -> update 
         """
-        pass
+        study_dirs = self.fs_studies.get_files_since_timestamp(timestamp=self.db.last_run())
+        study_ids = [Path(i).name for i in study_dirs]
+        for study_id in study_ids:
+            self.add_studies_to_queue(study_ids=[study_id],
+                                      harmonisation_type=self._harmonisation_type_from_metadata(study_id)
+                                      )
     
     def release_files_from_queue(
         self,
@@ -236,15 +254,15 @@ class HarmonisationQueuer:
 
 
     def _harmonisation_type_from_metadata(self, study_id) -> HarmonisationType:
-        harm_type = HarmonisationType.NOT_TO_HARMONISE
+        harm_type = HarmonisationType.NOT_TO_HARMONISE.value
         metadata_file = self.fs_studies.metadata_file_from_study_id(study_id)
         if metadata_file:
-            file_type = value_from_metadata(metadata_file=metadata_file, field="fileType")
+            file_type = value_from_metadata(metadata_file=metadata_file, field="file_type")
             if file_type is not None:
                 if file_type.startswith("GWAS-SSF"):
-                    harm_type = HarmonisationType.GWAS_SSF_1
+                    harm_type = HarmonisationType.GWAS_SSF_1.value
                 elif file_type.startswith("pre-GWAS-SSF"):
-                    harm_type = HarmonisationType.PRE_GWAS_SSF
+                    harm_type = HarmonisationType.PRE_GWAS_SSF.value
         return harm_type 
     
 
