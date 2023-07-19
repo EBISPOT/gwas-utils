@@ -87,8 +87,27 @@ class SqliteClient():
         data = self.cur.fetchmany(size=limit)
         return [self._int_to_bool(i) for i in data]
     
-    def last_run(self):
-        return "2023-07-07 00:06:23"
+    def last_run(self) -> Union[str, None]:
+        sql = """
+              SELECT date FROM last_run
+              WHERE rowid = 1
+              """
+        self.cur.execute(sql)
+        results = self.cur.fetchone()
+        if len(results):
+            return results[0]
+        return None
+    
+    def reset_last_run(self, timestamp: str) -> None:
+        self.cur.execute("""
+                         INSERT OR REPLACE INTO last_run(
+                         rowid,
+                         date)
+                         VALUES (?,?)
+                         """,
+                         (1, timestamp)
+                         )
+        self.commit()
 
     @staticmethod
     def _int_to_bool(row: tuple) -> tuple:

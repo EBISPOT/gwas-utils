@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 import subprocess
+import datetime
 import yaml
 from typing import List, Union, Any
 from pathlib import Path
@@ -129,12 +130,16 @@ class HarmonisationQueuer:
         2. add to db
         3. check for if in_progress are harmonise -> update 
         """
-        study_dirs = self.fs_studies.get_files_since_timestamp(timestamp=self.db.last_run())
+        timestamp = self.db.last_run()
+        if timestamp is None:
+            timestamp = generate_datestamp()
+        study_dirs = self.fs_studies.get_files_since_timestamp(timestamp=timestamp)
         study_ids = [Path(i).name for i in study_dirs]
         for study_id in study_ids:
             self.add_studies_to_queue(study_ids=[study_id],
                                       harmonisation_type=self._harmonisation_type_from_metadata(study_id)
                                       )
+        self.db.reset_last_run(timestamp=generate_datestamp())
     
     def release_files_from_queue(
         self,
@@ -204,6 +209,7 @@ class HarmonisationQueuer:
         studies: list = harmonised + unharmonised
         for study in studies:
             self.db.insert_study(study=astuple(study))
+        self.db.reset_last_run(timestamp=generate_datestamp())
 
     def get_studies(
         self,
@@ -313,6 +319,15 @@ def rsync(source: Path, dest: Path, pattern: str = "*") -> bool:
         return True
     except subprocess.CalledProcessError as e:
         return False
+
+
+def generate_datestamp() -> str:
+    """Generate a datestamp string 
+
+    Returns:
+        datestamp string
+    """
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def arg_checker(args) -> bool:
