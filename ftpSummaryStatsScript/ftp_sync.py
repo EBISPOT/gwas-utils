@@ -192,14 +192,14 @@ class SummaryStatsSync:
         modified_studies = [ os.path.abspath(os.path.join(i, os.pardir)) for i in modified_files ]
         return list(set(modified_studies))
 
-    def release_files_for_harmonisation(self):
-        for study in self.modified_studies:
-            logger.info("{} --> harmonisation queue".format(study))
-            source = self.staging_studies_dict[study]
-            date_today = datetime.datetime.now().strftime("%Y%m%d")
-            dest_dir = os.path.join(self.harmonise_path, date_today)
-            self.make_dir(dest_dir)
-            self.rsync_pattern(source, dest_dir, pattern="GCST*")
+    #def release_files_for_harmonisation(self):
+    #    for study in self.modified_studies:
+    #        logger.info("{} --> harmonisation queue".format(study))
+    #        source = self.staging_studies_dict[study]
+    #        date_today = datetime.datetime.now().strftime("%Y%m%d")
+    #        dest_dir = os.path.join(self.harmonise_path, date_today)
+    #        self.make_dir(dest_dir)
+    #        self.rsync_pattern(source, dest_dir, pattern="GCST*")
 
     def update_lastrun_file(self):
         datestamp = self.generate_datestamp()
@@ -297,7 +297,7 @@ class SummaryStatsSync:
         try:
             # rsync is fussy about trailing slashes and we need them in this case.
             source = source + "/"
-            # rsync parameters:
+            # rsync parametii
             # -r - recursive
             # -p - preserve permissions
             # -v - verbose
@@ -378,8 +378,8 @@ def main():
             sumstats_sync.sync_to_ftp()
             sumstats_sync.remove_unexepcted_from_ftp()
             logger.info("This is not a test.")
-            if harmonise_path:
-                sumstats_sync.release_files_for_harmonisation()
+            #if harmonise_path:
+            #    sumstats_sync.release_files_for_harmonisation()
             sumstats_sync.update_lastrun_file()
         else:
             logger.info("This is a test. Nothing will happen.")
@@ -389,8 +389,8 @@ def main():
     logger.info("Missing from staging: {}".format(list(sumstats_sync.missing_from_staging)))
     logger.info("==========================================")
     logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
-    logger.info("==========================================")
-    logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies)))
+    #logger.info("==========================================")
+    #logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies)))
     sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
 
 
