@@ -306,7 +306,7 @@ def get_folder_contents(parent: Path, pattern: str) -> List[Path]:
 
 
 def rsync(source: Path, dest: Path, pattern: str = "*") -> bool:
-    source_str = str(source)
+    source_str = str(source) + "/"
     dest_str = str(dest) + "/"
     try:
         subprocess.run(['rsync',
