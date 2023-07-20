@@ -204,7 +204,10 @@ class HarmonisationQueuer:
                                        for study in self.fs_studies.get_harmonised()]
         unharmonised_fs_studies = list(all_fs_studies - self.fs_studies.harmonised)
         unharmonised_fs_studies.sort(reverse=True)
-        unharmonised: list = [Study(study_id=study, is_harmonised=False)
+        unharmonised: list = [Study(study_id=study,
+                                    is_harmonised=False,
+                                    harmonisation_type=self._harmonisation_type_from_metadata(study)
+                                    )
                               for study in unharmonised_fs_studies]
         studies: list = harmonised + unharmonised
         for study in studies:
