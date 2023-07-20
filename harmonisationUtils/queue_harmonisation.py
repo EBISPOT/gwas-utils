@@ -139,8 +139,13 @@ class HarmonisationQueuer:
             self.add_studies_to_queue(study_ids=[study_id],
                                       harmonisation_type=self._harmonisation_type_from_metadata(study_id)
                                       )
+        harmonised: list = [Study(study_id=study, in_progress=False, is_harmonised=True)
+                                       for study in self.fs_studies.get_harmonised()]
+        for study in harmonised:
+            self.db.update_harmonisation_status(study_id=study.study_id, status=True)
+            self.db.update_in_progress_status(study_id=study.study_id, status=False)
         self.db.reset_last_run(timestamp=generate_datestamp())
-    
+        
     def release_files_from_queue(
         self,
         studies: Union[list, None] = None,
