@@ -50,6 +50,22 @@ class SqliteClient():
                          """,
                          study)
         self.commit()
+        
+    def update_harmonisation_status(self, study_id: str, status: bool) -> None:
+        self.cur.execute("""
+                         UPDATE studies
+                         SET isHarm = ?
+                         WHERE study = ?
+                         """,
+                         (status, study_id))
+        
+    def update_in_progress_status(self, study_id: str, status: bool) -> None:
+        self.cur.execute("""
+                         UPDATE studies
+                         SET inProg = ?
+                         WHERE study = ?
+                         """,
+                         (status, study_id))
 
     def select_studies(self, studies: list) -> list:
         sql = f"""
