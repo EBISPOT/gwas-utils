@@ -219,13 +219,27 @@ class HarmonisationQueuer:
             self.db.insert_study(study=astuple(study))
         self.db.reset_last_run(timestamp=generate_datestamp())
 
+
     def get_studies(
         self,
-        studies: Union[list, None] = None
-    ) -> List[Study]:
-        result = self.db.select_studies(studies=studies)
+        studies: Union[list, None] = None,
+        harmonised_only: Union[bool, None] = None,
+        harmonisation_type: List[HarmonisationType] = [e.value for e in HarmonisationType],
+        limit: int = 200,
+        in_progress: Union[bool, None] = None,
+        priority: int = 3
+        ) -> List[Study]:
+        result = self.db.select_by(study=studies,
+                                   harmonised_only=harmonised_only,
+                                   harmonisation_type=harmonisation_type,
+                                   limit=limit,
+                                   in_progress=in_progress,
+                                   priority=priority)
         return self._db_study_to_object(result)
 
+    def get_harmonised_list(self) -> list:
+        return self.get_studies(harmonised_only=True)
+    
     def _get_from_db(
         self,
         studies: Union[list, None] = None,
@@ -348,6 +362,7 @@ def arg_checker(args) -> bool:
     Returns:
         True if arguments are ok.
     """
+    args_ok = True
     if args.action == 'refresh':
         args_ok = all([args.source_dir,
                        args.harmonisation_dir,
@@ -360,8 +375,6 @@ def arg_checker(args) -> bool:
         args_ok = all([args.source_dir,
                        args.harmonisation_dir,
                        args.ftp_dir])
-    if args.action == 'status':
-        args_ok = all([args.study])
     if args.action == 'update':
         args_ok = all([args.study])
     return args_ok
@@ -369,12 +382,13 @@ def arg_checker(args) -> bool:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--action', type=str, choices=['refresh', 'release', 'add', 'rebuild', 'status', 'update'], 
+    parser.add_argument('--action', type=str, choices=['refresh', 'release', 'rebuild', 'status', 'update', 'harmonised_list'], 
                         help=('refresh: update the harmonisation queue with newly submitted studies; '
                               'release: release the next batch of files from the queue; '
                               'rebuild: rebuild the entire harmonisation queue based on the files on the file system; '
                               'status: get the status of a list of studies; '
-                              'update: add/update a list of studies'
+                              'update: add/update a list of studies; '
+                              'harmonised_list: list of harmonised studies'
                               ),
                         required=True)
     parser.add_argument('--study', nargs='*', help='Specific study accession ids.', default=None)
@@ -398,7 +412,14 @@ def main():
     if args.action == 'rebuild':
         queuer.rebuild_harmonisation_queue()
     if args.action == 'status':
-        studies = queuer.get_studies(studies=args.study)
+        if args.study:
+            studies = queuer.get_studies(studies=args.study)
+        else:
+            studies = queuer.get_studies(priority=args.priority,
+                                         harmonisation_type=[args.harmonisation_type],
+                                         harmonised_only=args.is_harmonised,
+                                         in_progress=args.in_progress,
+                                         limit=args.number)
         for study in studies:
             print(study)
     if args.action == 'update':
@@ -418,8 +439,10 @@ def main():
                                         limit=args.number)
     if args.action == 'refresh':
         queuer.update_harmonisation_queue()
-        
-        
+    if args.action == 'harmonised_list':
+        hl = queuer.get_harmonised_list()
+        for study in hl:
+            print(study)
 
 
 if __name__ == '__main__':

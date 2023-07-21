@@ -79,17 +79,26 @@ class SqliteClient():
     def select_by(
         self,
         study: Union[list, None],
-        harmonised_only: bool,
-        harmonisation_type: list,
-        limit: Union[int, None],
-        in_progress: bool,
-        priority: int
+        harmonised_only: Union[bool, None],
+        harmonisation_type: Union[list, None],
+        limit: int,
+        in_progress: Union[bool, None],
+        priority: Union[int, None]
         ) -> list:
-        args = [[harmonised_only], harmonisation_type, [in_progress], [priority]]
-        conditions = ["isHarm is ?",
-                      f"harmType in ({','.join(['?']*len(harmonisation_type))})",
-                      "inProg is ?",
-                      f"priority <= ?"]
+        args = []
+        conditions = []
+        if harmonised_only is not None:
+            args.append([harmonised_only])
+            conditions.append("isHarm is ?")
+        if harmonisation_type is not None:
+            args.append(harmonisation_type)
+            conditions.append(f"harmType in ({','.join(['?']*len(harmonisation_type))})")
+        if in_progress is not None:
+            args.append([in_progress])
+            conditions.append("inProg is ?")
+        if priority is not None:
+            args.append([priority])
+            conditions.append(f"priority <= ?")
         sql = f"""
                SELECT * FROM studies
                WHERE
