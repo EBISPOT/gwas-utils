@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 import argparse
 import subprocess
 import datetime
@@ -95,17 +96,30 @@ class FileSystemStudies:
         return set(Path(s).name for s in get_folder_contents(self.sumstats_parent_dir, pattern))
     
     def get_files_since_timestamp(self, timestamp: str) -> list:
+        """List of studies that have been added since timestamp
+        on the FTP (i.e. non-embargoed)
+
+        Arguments:
+            timestamp -- timestamp e.g. '2023-10-13 12:52:19'
+
+        Returns:
+            list of study accessions
+        """
         modified_files = []
+        gcst_regex = re.compile('^GCST[0-9]+$')
         if timestamp:
-            cmd = ['find', str(self.sumstats_parent_dir),
+            cmd = ['find', str(self.ftp_dir),
                    '-maxdepth', '3', '-mindepth', '3', '-type', 'f', '-name',
                    'GCST*', '-newermt', timestamp]
             j = subprocess.run(cmd, stdout=subprocess.PIPE)
             modified_files = j.stdout.decode().split()
         # only return the parent study directories
-        modified_studies = [os.path.abspath(os.path.join(i, os.pardir)) for i in modified_files ]
-        return list(set(modified_studies))
-    
+        modified_studies = [os.path.abspath(os.path.join(i, os.pardir))
+                            for i in modified_files]
+        study_ids = [Path(i).name for i in modified_studies
+                     if gcst_regex.match(Path(i).name)]
+        return list(set(study_ids))
+
 
 class HarmonisationQueuer:
     """Class for queueing summary stats files for Harmonisation."""
