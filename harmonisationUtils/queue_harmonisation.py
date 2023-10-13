@@ -318,15 +318,16 @@ def value_from_metadata(metadata_file: Path, field: str) -> Any:
     Returns:
         Value or None
     """
-    
     if not Path(metadata_file).exists():
         return None
     else:
-        with open(metadata_file, "r") as fh:
-            meta_dict = yaml.safe_load(fh)
-            return meta_dict.get(field)
-    
-    
+        try:
+            with open(metadata_file, "r") as fh:
+                meta_dict = yaml.safe_load(fh)
+                return meta_dict.get(field)
+        except yaml.parser.ParserError:
+            return None
+
     
 def get_folder_contents(parent: Path, pattern: str) -> List[Path]:
     """List folder contents where globbing pattern matches.
