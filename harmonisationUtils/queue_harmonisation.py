@@ -48,21 +48,21 @@ class FileSystemStudies:
         self.harmonised: Union[set, None] = None
     
     def get_all(self, pattern: str = "GCST*") -> set:
-        """Get all studies. The default pattern for globing is 
+        """Get all released (unembargoed) studies. The default pattern for globing is 
         the 1000 study bins, then a wildcard to match the directory
         of the study, e.g. <sumstats parent dir>/GCST0001-GCST1000/GCST0500.
 
         Keyword Arguments:
             pattern -- pattern for matching (default: {"GCST*-GCST*/GCST*/"})
 
-        Returns:
-            Study accessions that have summary statistics
-            directories on the file system.
+        returns:
+            study accessions that have summary statistics
+            directories on the on the filesystem.
         """
         all_studies = []
         if self.all is None:
             for study_bin in self._get_bins():
-                path = self.sumstats_parent_dir.joinpath(study_bin)
+                path = self.ftp_dir.joinpath(study_bin)
                 all_studies.extend(s.name for s in get_folder_contents(path, pattern))
             self.all = set(all_studies)
         return self.all
