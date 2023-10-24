@@ -176,7 +176,7 @@ def build_studies_download_new(url, outputdir):
                 table['MAPPED BACKGROUND TRAIT'] = 'not yet curated'
                 table['MAPPED BACKGROUND TRAIT URI'] = 'not yet curated'
                 table['COHORT'] = study['cohort']
-                table['FULL SUMMARY STATISTICS'] = study['fullPvalueSet']
+                table['FULL SUMMARY STATISTICS'] = 'no' if not(study['summary_statistics_file']) else 'yes'
                 table['SUMMARY STATS LOCATION'] = generate_sumstats_ftp_path(study['study_accession'])
 
                 for bodyOfWork in study['body_of_work']:
