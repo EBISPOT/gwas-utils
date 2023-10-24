@@ -220,6 +220,8 @@ def main():
 
     build_studies_download(url, outputdir)
     build_ancestry_download(url, outputdir)
+    build_studies_download_new(url, outputdir)
+    build_ancestry_download_new(url, outputdir)
 
 
 if __name__ == '__main__':
