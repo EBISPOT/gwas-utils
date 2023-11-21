@@ -6,7 +6,7 @@ This scripts allows incremental solr indexing to speed up data release.
 
 The script takes two database instances, determins the newly added, updated and deleted studies. The updated and deleted studies and associations are deleted from the solr index. All efo traits and disease traits are also deleted from the solr index. The pubmed ID of the newly added and updated studies are passed to the solr indexer application for indexing. 
 
-For a single pubmed ID, a single LSF job is started, where only association and study documents are generated. Two jobs are started up to generate efo and disease trait documents. The script keeps track of running jobs and provides a constant update. When all running jobs are finished the script exits. 
+For a single pubmed ID, a single Nextflow job is started, where only association and study documents are generated. Two jobs are started up to generate efo and disease trait documents. The script keeps track of running jobs and provides a constant update. When all running jobs are finished the script exits. 
 
 **Warning!!**: the sript DOES NOT checks the output status of the jobs. It is not yet implemented as there are downstream QC processed to check the document counts.
 
@@ -22,10 +22,6 @@ The following custom packages needs to be installed:
 Other packages:
 
 * `pandas` : tables are manipulated and compared using pandas dataframes.
-
-LSF group:
-
-* `/gwas_catalog/solr_indexer` This group has set 30 running jobs as limit. If this group is not yet created on LSF it will be generated dynamicaly for the jobs.
 
 ## Usage:
 
