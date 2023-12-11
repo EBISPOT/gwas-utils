@@ -1,6 +1,6 @@
 *.png
 *.csv
-*.sh
+# *.sh
 *.tsv
 *.txt
 *.log
