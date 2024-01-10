@@ -108,7 +108,7 @@ def build_studies_download(url, outputdir):
         with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.tmp.tsv', 'w', newline='') as csvfile:
             fieldnames = ['DATE ADDED TO CATALOG', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'JOURNAL', 'LINK', 'STUDY',
                           'DISEASE/TRAIT', 'INITIAL SAMPLE SIZE', 'REPLICATION SAMPLE SIZE',
-                          'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED TRAIT', 'MAPPED TRAIT URI',
+                          'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED_TRAIT', 'MAPPED_TRAIT_URI',
                           'STUDY ACCESSION', 'GENOTYPING TECHNOLOGY', 'SUMMARY STATS LOCATION', 'SUBMISSION DATE',
                           'STATISTICAL MODEL', 'BACKGROUND TRAIT', 'MAPPED BACKGROUND TRAIT',
                           'MAPPED BACKGROUND TRAIT URI']
@@ -124,8 +124,8 @@ def build_studies_download(url, outputdir):
                 table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
                 table['PLATFORM [SNPS PASSING QC]'] = (study['array_manufacturer'] or 'NR') + ' [' + str(study['variant_count'] or 'NR') + ']'
                 table['ASSOCIATION COUNT'] = 'not yet curated'
-                table['MAPPED TRAIT'] = 'not yet curated'
-                table['MAPPED TRAIT URI'] = 'not yet curated'
+                table['MAPPED_TRAIT'] = 'not yet curated'
+                table['MAPPED_TRAIT_URI'] = 'not yet curated'
                 table['STUDY ACCESSION'] = study['study_accession']
                 table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
                 table['SUMMARY STATS LOCATION'] = generate_sumstats_ftp_path(study['study_accession'])
@@ -150,7 +150,7 @@ def build_studies_download_new(url, outputdir):
         with open(outputdir + '/gwas-catalog-unpublished-studies-v1.0.3.1.tmp.tsv', 'w', newline='') as csvfile:
             fieldnames = ['DATE ADDED TO CATALOG', 'PUBMED ID', 'FIRST AUTHOR', 'DATE', 'JOURNAL', 'LINK', 'STUDY',
                           'DISEASE/TRAIT', 'INITIAL SAMPLE SIZE', 'REPLICATION SAMPLE SIZE',
-                          'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED TRAIT', 'MAPPED TRAIT URI',
+                          'PLATFORM [SNPS PASSING QC]', 'ASSOCIATION COUNT', 'MAPPED_TRAIT', 'MAPPED_TRAIT_URI',
                           'STUDY ACCESSION', 'GENOTYPING TECHNOLOGY', 'SUBMISSION DATE',
                           'STATISTICAL MODEL', 'BACKGROUND TRAIT', 'MAPPED BACKGROUND TRAIT','MAPPED BACKGROUND TRAIT URI',
                           'COHORT', 'FULL SUMMARY STATISTICS', 'SUMMARY STATS LOCATION']
@@ -166,8 +166,8 @@ def build_studies_download_new(url, outputdir):
                 table['REPLICATION SAMPLE SIZE'] = 'not yet curated'
                 table['PLATFORM [SNPS PASSING QC]'] = (study['array_manufacturer'] or 'NR') + ' [' + str(study['variant_count'] or 'NR') + ']'
                 table['ASSOCIATION COUNT'] = 'not yet curated'
-                table['MAPPED TRAIT'] = 'not yet curated'
-                table['MAPPED TRAIT URI'] = 'not yet curated'
+                table['MAPPED_TRAIT'] = 'not yet curated'
+                table['MAPPED_TRAIT_URI'] = 'not yet curated'
                 table['STUDY ACCESSION'] = study['study_accession']
                 table['GENOTYPING TECHNOLOGY'] = study['genotyping_technology']
                 table['SUBMISSION DATE'] = datetime.date.fromtimestamp(study['createdDate'] / 1000).isoformat()
