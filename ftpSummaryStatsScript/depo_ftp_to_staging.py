@@ -62,7 +62,7 @@ def sync_files(source_dir, staging_dir):
     logger.debug(dirs_to_sync)
     for study in dirs_to_sync:
         basename = os.path.basename(study)
-        gcst_regex = re.search(r'GCST[0-9]+', basename)
+        gcst_regex = re.search(r"GCST[0-9]+", basename)
         gcst = gcst_regex.group(0) if gcst_regex else None
         if gcst:
             logger.debug(gcst)
@@ -70,8 +70,32 @@ def sync_files(source_dir, staging_dir):
             gcst_range_dir = os.path.join(staging_dir, gcst_range)
             dest = gcst_range_dir + "/"
             make_dir(gcst_range_dir)
+            # Sync the main GCST directory
             logger.info("Sync {} --> {}".format(study, dest))
-            subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
+            subprocess.call(
+                [
+                    "rsync",
+                    "-prvh",
+                    "--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r",
+                    study,
+                    dest,
+                ]
+            )
+            # Check and sync the 'harmonised' subdirectory if it exists
+            harmonised_dir = os.path.join(study, "harmonised")
+            if os.path.exists(harmonised_dir):
+                harmonised_dest = os.path.join(dest, "harmonised/")
+                make_dir(harmonised_dest)
+                logger.info("Sync {} --> {}".format(harmonised_dir, harmonised_dest))
+                subprocess.call(
+                    [
+                        "rsync",
+                        "-prvh",
+                        "--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r",
+                        harmonised_dir,
+                        harmonised_dest,
+                    ]
+                )
             rm_dir(path=study)
 
 
