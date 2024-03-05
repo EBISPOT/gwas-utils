@@ -83,24 +83,24 @@ def sync_files(source_dir, staging_dir):
                 ]
             )
 
-            # Check and sync the 'harmonised' subdirectory if it exists
-            harmonised_dir = os.path.join(study, "harmonised")
-            logger.info(":::::::::::::::::::::::::::::::::::::::::::::::::")
-            logger.info(f"HM Case: {harmonised_dir}")
-            if os.path.exists(harmonised_dir):
-                logger.info(f"HM Case: {harmonised_dir}")
-                harmonised_dest = os.path.join(dest, "harmonised/")
-                make_dir(harmonised_dest)
-                logger.info("Sync {} --> {}".format(harmonised_dir, harmonised_dest))
-                subprocess.call(
-                    [
-                        "rsync",
-                        "-prvh",
-                        "--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r",
-                        harmonised_dir,
-                        harmonised_dest,
-                    ]
-                )
+            # # Check and sync the 'harmonised' subdirectory if it exists
+            # harmonised_dir = os.path.join(study, "harmonised")
+            # logger.info(":::::::::::::::::::::::::::::::::::::::::::::::::")
+            # logger.info(f"HM Case: {harmonised_dir}")
+            # if os.path.exists(harmonised_dir):
+            #     logger.info(f"HM Case: {harmonised_dir}")
+            #     harmonised_dest = os.path.join(dest, "harmonised/")
+            #     make_dir(harmonised_dest)
+            #     logger.info("Sync {} --> {}".format(harmonised_dir, harmonised_dest))
+            #     subprocess.call(
+            #         [
+            #             "rsync",
+            #             "-prvh",
+            #             "--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r",
+            #             harmonised_dir,
+            #             harmonised_dest,
+            #         ]
+            #     )
 
             # TODO: uncomment this line
             # rm_dir(path=study)
