@@ -160,13 +160,14 @@ class SummaryStatsSync:
         self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
         self.staging_studies = set(self.staging_studies_dict.keys())
 
-        logger.info(f"{self.get_new_and_modified_files()=}")
-        # self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
-        # self.modified_studies = set(self.modified_studies_dict.keys())
-        # logger.info("New and modified files: {}".format(self.modified_studies))
+        self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
+        self.modified_studies = set(self.modified_studies_dict.keys())
+        logger.info("New and modified files: {}".format(self.modified_studies))
 
-        # self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
-        # self.ftp_studies = set(self.ftp_studies_dict.keys())
+        self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
+        self.ftp_studies = set(self.ftp_studies_dict.keys())
+
+        logger.info(f"{self.ftp_studies_dict=}")
 
         # if get_curation_status:
         #     self.curation_published = set(self.get_curation_published_list())
