@@ -169,22 +169,22 @@ class SummaryStatsSync:
 
         logger.info(f"{self.ftp_studies_dict=}")
 
-        if get_curation_status:
-            self.curation_published = set(self.get_curation_published_list())
+        # if get_curation_status:
+        #     self.curation_published = set(self.get_curation_published_list())
         #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
-        logger.info("published: {}".format(self.studies_to_release_published))
+        # logger.info("published: {}".format(self.studies_to_release_published))
 
         #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
-        self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
+        self.to_release = self.staging_studies # ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
 
         self.remove_from_ftp = self.ftp_studies - self.curation_published
         self.missing_from_staging = self.curation_published - self.staging_studies
         self.unexpected_on_staging = self.staging_studies - self.curation_published
 
         logger.info(f"{self.to_release=}")
-        logger.info(f"{self.remove_from_ftp=}")
-        logger.info(f"{self.missing_from_staging=}")
-        logger.info(f"{self.unexpected_on_staging=}")
+        # logger.info(f"{self.remove_from_ftp=}")
+        # logger.info(f"{self.missing_from_staging=}")
+        # logger.info(f"{self.unexpected_on_staging=}")
 
         return True
 
