@@ -169,6 +169,7 @@ class SummaryStatsSync:
 
         logger.info(f"{self.ftp_studies_dict=}")
 
+        self.curation_published = set()
         # if get_curation_status:
         #     self.curation_published = set(self.get_curation_published_list())
         #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
