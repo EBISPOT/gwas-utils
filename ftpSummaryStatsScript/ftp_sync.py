@@ -304,10 +304,9 @@ class SummaryStatsSync:
             # -h - human readable output
             # --size-only - only file size is compared, timestamp is ignored
             # --delete - delete outstanding files on the target folder
-            # --exclude=harmonised - excluding harmonised folders
             # --exclude=".*" - excluding hidden files
             logger.info("Sync {} --> {}".format(source, dest))
-            subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--delete', '--exclude=harmonised', '--exclude=.*', source, dest])
+            subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--delete', '--exclude=.*', source, dest])
         except OSError as e:
             logger.error(e)
 
