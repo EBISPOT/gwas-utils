@@ -155,27 +155,29 @@ class SummaryStatsSync:
 
 
     def get_sumstats_status(self, get_curation_status=True):
-        self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
-        self.staging_studies = set(self.staging_studies_dict.keys())
+        logger.info("::::::::::::::[get_sumstats_status]:::::::::::::::::")
+        logger.info(f"{self.get_staging_contents()=}")
+        # self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
+        # self.staging_studies = set(self.staging_studies_dict.keys())
 
-        self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
-        self.modified_studies = set(self.modified_studies_dict.keys())
-        logger.info("New and modified files: {}".format(self.modified_studies))
+        # self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
+        # self.modified_studies = set(self.modified_studies_dict.keys())
+        # logger.info("New and modified files: {}".format(self.modified_studies))
 
-        self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
-        self.ftp_studies = set(self.ftp_studies_dict.keys())
+        # self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
+        # self.ftp_studies = set(self.ftp_studies_dict.keys())
 
-        if get_curation_status:
-            self.curation_published = set(self.get_curation_published_list())
-        #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
-        logger.info("published: {}".format(self.studies_to_release_published))
+        # if get_curation_status:
+        #     self.curation_published = set(self.get_curation_published_list())
+        # #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
+        # logger.info("published: {}".format(self.studies_to_release_published))
 
-        #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
-        self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
+        # #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
+        # self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
 
-        self.remove_from_ftp = self.ftp_studies - self.curation_published
-        self.missing_from_staging = self.curation_published - self.staging_studies
-        self.unexpected_on_staging = self.staging_studies - self.curation_published
+        # self.remove_from_ftp = self.ftp_studies - self.curation_published
+        # self.missing_from_staging = self.curation_published - self.staging_studies
+        # self.unexpected_on_staging = self.staging_studies - self.curation_published
         return True
 
     def get_new_and_modified_files(self):
@@ -373,25 +375,27 @@ def main():
                                      )
 
     if sumstats_sync.get_sumstats_status():
-        if not args.test:
-            logger.info("Sync with FTP...")
-            sumstats_sync.sync_to_ftp()
-            sumstats_sync.remove_unexepcted_from_ftp()
-            logger.info("This is not a test.")
-            #if harmonise_path:
-            #    sumstats_sync.release_files_for_harmonisation()
-            sumstats_sync.update_lastrun_file()
-        else:
-            logger.info("This is a test. Nothing will happen.")
-    #sumstats_sync.get_sumstats_status(get_curation_status=False)
-    logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_release)))
-    logger.info("==========================================")
-    logger.info("Missing from staging: {}".format(list(sumstats_sync.missing_from_staging)))
-    logger.info("==========================================")
-    logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
-    #logger.info("==========================================")
-    #logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies)))
-    sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
+        logger.info("This is a test. Nothing will happen.")
+
+    #     if not args.test:
+    #         logger.info("Sync with FTP...")
+    #         sumstats_sync.sync_to_ftp()
+    #         sumstats_sync.remove_unexepcted_from_ftp()
+    #         logger.info("This is not a test.")
+    #         #if harmonise_path:
+    #         #    sumstats_sync.release_files_for_harmonisation()
+    #         sumstats_sync.update_lastrun_file()
+    #     else:
+    #         logger.info("This is a test. Nothing will happen.")
+    # #sumstats_sync.get_sumstats_status(get_curation_status=False)
+    # logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_release)))
+    # logger.info("==========================================")
+    # logger.info("Missing from staging: {}".format(list(sumstats_sync.missing_from_staging)))
+    # logger.info("==========================================")
+    # logger.info("Unexpected on staging: {}".format(list(sumstats_sync.unexpected_on_staging)))
+    # #logger.info("==========================================")
+    # #logger.info("Adding to harmonisation queue: {}".format(list(sumstats_sync.modified_studies)))
+    # sendEmailReport("ftpsync.log", emailFrom=args.emailFrom, emailTo=args.emailRecipient)
 
 
 if __name__ == '__main__':
