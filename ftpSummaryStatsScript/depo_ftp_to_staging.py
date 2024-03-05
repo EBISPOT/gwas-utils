@@ -85,6 +85,8 @@ def sync_files(source_dir, staging_dir):
 
             # Check and sync the 'harmonised' subdirectory if it exists
             harmonised_dir = os.path.join(study, "harmonised")
+            logger.info(":::::::::::::::::::::::::::::::::::::::::::::::::")
+            logger.info(f"HM Case: {harmonised_dir}")
             if os.path.exists(harmonised_dir):
                 logger.info(f"HM Case: {harmonised_dir}")
                 harmonised_dest = os.path.join(dest, "harmonised/")
