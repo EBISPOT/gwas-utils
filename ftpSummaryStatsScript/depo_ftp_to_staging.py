@@ -70,6 +70,7 @@ def sync_files(source_dir, staging_dir):
             gcst_range_dir = os.path.join(staging_dir, gcst_range)
             dest = gcst_range_dir + "/"
             make_dir(gcst_range_dir)
+
             # Sync the main GCST directory
             logger.info("Sync {} --> {}".format(study, dest))
             subprocess.call(
@@ -81,9 +82,11 @@ def sync_files(source_dir, staging_dir):
                     dest,
                 ]
             )
+
             # Check and sync the 'harmonised' subdirectory if it exists
             harmonised_dir = os.path.join(study, "harmonised")
             if os.path.exists(harmonised_dir):
+                logger.info(f"HM Case: {harmonised_dir}")
                 harmonised_dest = os.path.join(dest, "harmonised/")
                 make_dir(harmonised_dest)
                 logger.info("Sync {} --> {}".format(harmonised_dir, harmonised_dest))
@@ -96,7 +99,9 @@ def sync_files(source_dir, staging_dir):
                         harmonised_dest,
                     ]
                 )
-            rm_dir(path=study)
+
+            # TODO: uncomment this line
+            # rm_dir(path=study)
 
 
 def main():
