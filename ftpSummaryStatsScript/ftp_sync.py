@@ -156,10 +156,11 @@ class SummaryStatsSync:
 
     def get_sumstats_status(self, get_curation_status=True):
         logger.info("::::::::::::::[get_sumstats_status]:::::::::::::::::")
-        logger.info(f"{self.get_staging_contents()=}")
-        # self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
-        # self.staging_studies = set(self.staging_studies_dict.keys())
+        # ['/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269516', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269881', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269883', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269896', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269906', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269907', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269910', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269911', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269912', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269913', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269914', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269915', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269916', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269917', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269918', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269922', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269926', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269927', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269928', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269929', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269930', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309819', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309820', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309823', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309824', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309825']
+        self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
+        self.staging_studies = set(self.staging_studies_dict.keys())
 
+        logger.info(f"{self.get_new_and_modified_files()=}")
         # self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
         # self.modified_studies = set(self.modified_studies_dict.keys())
         # logger.info("New and modified files: {}".format(self.modified_studies))
