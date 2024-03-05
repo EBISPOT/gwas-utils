@@ -281,6 +281,7 @@ class SummaryStatsSync:
             if pardir:
                 dest_dir = os.path.join(pardir, study + "/")
                 self.rsync_dir(source, dest_dir)
+                logger.info(f"Sync {source} --> {dest_dir}")
         logger.info("==========================================")
 
     @staticmethod
@@ -386,16 +387,16 @@ def main():
     if sumstats_sync.get_sumstats_status():
         logger.info("This is a test. Nothing will happen.")
 
-    #     if not args.test:
-    #         logger.info("Sync with FTP...")
-    #         sumstats_sync.sync_to_ftp()
-    #         sumstats_sync.remove_unexepcted_from_ftp()
-    #         logger.info("This is not a test.")
-    #         #if harmonise_path:
-    #         #    sumstats_sync.release_files_for_harmonisation()
-    #         sumstats_sync.update_lastrun_file()
-    #     else:
-    #         logger.info("This is a test. Nothing will happen.")
+        if not args.test:
+            logger.info("Sync with FTP...")
+            sumstats_sync.sync_to_ftp()
+            # sumstats_sync.remove_unexepcted_from_ftp()
+            logger.info("This is not a test.")
+            #if harmonise_path:
+            #    sumstats_sync.release_files_for_harmonisation()
+            # sumstats_sync.update_lastrun_file()
+        else:
+            logger.info("This is a test. Nothing will happen.")
 
     # #sumstats_sync.get_sumstats_status(get_curation_status=False)
     # logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_release)))
