@@ -157,7 +157,7 @@ class SummaryStatsSync:
     def get_sumstats_status(self, get_curation_status=True):
         logger.info("::::::::::::::[get_sumstats_status]:::::::::::::::::")
         # ['/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269516', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269881', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269883', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269896', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269906', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269907', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269910', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269911', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269912', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269913', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269914', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269915', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269916', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269917', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269918', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269922', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269926', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269927', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269928', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269929', '/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269930', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309819', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309820', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309823', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309824', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309825']
-        self.staging_studies_dict = self._accessions_from_dirnames(self.get_staging_contents())
+        self.staging_studies_dict = self._accessions_from_dirnames(['/homes/gwas_lsf/testdest/staging/GCST90269001-GCST90270000/GCST90269915', '/homes/gwas_lsf/testdest/staging/GCST90309001-GCST90310000/GCST90309819'])
         self.staging_studies = set(self.staging_studies_dict.keys())
 
         self.modified_studies_dict = self._accessions_from_dirnames(self.get_new_and_modified_files())
@@ -169,17 +169,23 @@ class SummaryStatsSync:
 
         logger.info(f"{self.ftp_studies_dict=}")
 
-        # if get_curation_status:
-        #     self.curation_published = set(self.get_curation_published_list())
-        # #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
-        # logger.info("published: {}".format(self.studies_to_release_published))
+        if get_curation_status:
+            self.curation_published = set(self.get_curation_published_list())
+        #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
+        logger.info("published: {}".format(self.studies_to_release_published))
 
-        # #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
-        # self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
+        #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
+        self.to_release = ((self.curation_published & self.staging_studies) - self.ftp_studies) | (self.curation_published & self.modified_studies)
 
-        # self.remove_from_ftp = self.ftp_studies - self.curation_published
-        # self.missing_from_staging = self.curation_published - self.staging_studies
-        # self.unexpected_on_staging = self.staging_studies - self.curation_published
+        self.remove_from_ftp = self.ftp_studies - self.curation_published
+        self.missing_from_staging = self.curation_published - self.staging_studies
+        self.unexpected_on_staging = self.staging_studies - self.curation_published
+
+        logger.info(f"{self.to_release=}")
+        logger.info(f"{self.remove_from_ftp=}")
+        logger.info(f"{self.missing_from_staging=}")
+        logger.info(f"{self.unexpected_on_staging=}")
+
         return True
 
     def get_new_and_modified_files(self):
@@ -389,6 +395,7 @@ def main():
     #         sumstats_sync.update_lastrun_file()
     #     else:
     #         logger.info("This is a test. Nothing will happen.")
+
     # #sumstats_sync.get_sumstats_status(get_curation_status=False)
     # logger.info("Missing from ftp: {}".format(list(sumstats_sync.to_release)))
     # logger.info("==========================================")
