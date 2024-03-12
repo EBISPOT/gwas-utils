@@ -23,7 +23,8 @@ logger = logging.getLogger(__name__)
 # in case of latency for writing the file.
 
 MOD_THRESHOLD_SEC = 3600 
-#MOD_THRESHOLD_SEC = 36 # DEV ONLY
+# DEV ONLY
+# MOD_THRESHOLD_SEC = 36
 RANGE_SIZE = 1000
 
 
