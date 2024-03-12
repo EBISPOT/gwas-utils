@@ -55,24 +55,42 @@ def rm_dir(path) -> None:
     """
     logger.info(f"Removing path: {path}")
     shutil.rmtree(path=path)
-    
+
 
 def sync_files(source_dir, staging_dir):
-    dirs_to_sync = get_dirs_to_sync(source_dir)
+    try:
+        dirs_to_sync = get_dirs_to_sync(source_dir)
+    except Exception as e:
+        logger.error(f"Error getting directories to sync: {e}")
+        return
+
     logger.debug(dirs_to_sync)
     for study in dirs_to_sync:
-        basename = os.path.basename(study)
-        gcst_regex = re.search(r'GCST[0-9]+', basename)
-        gcst = gcst_regex.group(0) if gcst_regex else None
+        try:
+            basename = os.path.basename(study)
+            gcst_regex = re.search(r'GCST[0-9]+', basename)
+            gcst = gcst_regex.group(0) if gcst_regex else None
+        except AttributeError:
+            logger.error("Regex match failed, skipping.")
+            continue
+
         if gcst:
             logger.debug(gcst)
-            gcst_range = get_gcst_range(gcst)
-            gcst_range_dir = os.path.join(staging_dir, gcst_range)
-            dest = gcst_range_dir + "/"
-            make_dir(gcst_range_dir)
-            logger.info("Sync {} --> {}".format(study, dest))
-            subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
-            rm_dir(path=study)
+            try:
+                gcst_range = get_gcst_range(gcst)
+                gcst_range_dir = os.path.join(staging_dir, gcst_range)
+                dest = gcst_range_dir + "/"
+                make_dir(gcst_range_dir)
+            except Exception as e:
+                logger.error(f"Error preparing directory {gcst_range_dir}: {e}")
+                continue
+
+            logger.info(f"Sync {study} --> {dest}")
+            try:
+                subprocess.call(['rsync', '-prvh','--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', study, dest])
+                rm_dir(path=study)
+            except Exception as e:
+                logger.error(f"Error syncing or removing {study}: {e}")
 
 
 def main():
