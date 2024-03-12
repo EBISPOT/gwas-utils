@@ -165,9 +165,9 @@ class SummaryStatsSync:
         self.ftp_studies_dict = self._accessions_from_dirnames(self.get_ftp_contents())
         self.ftp_studies = set(self.ftp_studies_dict.keys())
 
-        if get_curation_status:
-            self.curation_published = set(self.get_curation_published_list())
-        #    #self.curation_published = set(api_list.RESP) # LOCAL DEVELOPING ONLY
+        # if get_curation_status:
+        #     self.curation_published = set(self.get_curation_published_list())
+        self.curation_published = self.staging_studies
         logger.info("published: {}".format(self.studies_to_release_published))
 
         #((studies that are published and on staging) - any that already exist on FTP) + (recently modified and published)
