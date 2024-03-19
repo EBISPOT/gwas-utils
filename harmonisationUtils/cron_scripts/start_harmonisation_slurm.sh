@@ -23,7 +23,7 @@ cmd="${wrapper} ${ref} ${to_harm} ${pub_ftp} ${failed} ${version} ${logs} ${mail
 
 if [[ -d "$to_harm"  ]]; then
         mkdir -p $logs
-        sbatch --output="${logs}/nf.out" --error="${logs}/nf.err" --mem=8000 --time=02:00:00 --job-name=gwas_ss_harmo --wrap="${cmd}"
+        sbatch --output="${logs}/nf.out" --error="${logs}/nf.err" --mem=8000 --time=50:00:00 --job-name=gwas_ss_harmo --wrap="${cmd}"
 else
     	echo "Nothing to harmonise today"
 fi
