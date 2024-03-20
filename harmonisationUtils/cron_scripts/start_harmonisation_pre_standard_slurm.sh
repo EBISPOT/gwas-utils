@@ -4,7 +4,7 @@ day=$(date -d "yesterday 13:00" "+%Y%m%d")
 
 logs="/hps/nobackup/parkinso/spot/gwas/data/sumstats/harmonisation/pre_gwas_ssf/logs/${day}"
 
-wrapper="/hps/software/users/parkinso/spot/gwas/prod/scripts/gwas-utils/harmonisationUtils/harmonisation_wrapper.sh"
+wrapper="/hps/software/users/parkinso/spot/gwas/prod/scripts/gwas-utils/harmonisationUtils/harmonisation_wrapper_slurm.sh"
 ref="/hps/nobackup/parkinso/spot/gwas/data/sumstats/harmonisation/resources"
 to_harm="/hps/nobackup/parkinso/spot/gwas/data/sumstats/harmonisation/pre_gwas_ssf/toharm/${day}"
 pub_ftp="/nfs/ftp/public/databases/gwas/summary_statistics"
@@ -17,8 +17,8 @@ nf_conf="/hps/software/users/parkinso/spot/gwas/prod/scripts/cron/container_pre_
 cmd="${wrapper} ${ref} ${to_harm} ${pub_ftp} ${failed} ${version} ${logs} ${mail_add} ${file_type} ${nf_conf}"
 
 if [[ -d "$to_harm"  ]]; then
-	mkdir -p $logs
-	sbatch --output="${logs}/nf.out" --error="${logs}/nf.err" --mem=8000 --time=02:00:00 --job-name=pre_gwas_ssf_harmo --wrap="${cmd}"
+        mkdir -p $logs
+        sbatch --output="${logs}/nf.out" --error="${logs}/nf.err" --mem=8000 --time=50:00:00 --job-name=pre_gwas_ssf_harmo --wrap="${cmd}"
 else
-	echo "Nothing to harmonise today"
+    	echo "Nothing to harmonise today"
 fi
