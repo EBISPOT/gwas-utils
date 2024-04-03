@@ -303,10 +303,9 @@ class SummaryStatsSync:
             # -p - preserve permissions
             # -v - verbose
             # -h - human readable output
-            # --size-only - only file size is compared, timestamp is ignored
             # --exclude=".*" - excluding hidden files
             logger.info("Sync {} --> {}".format(source, dest))
-            subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--size-only', '--exclude=.*', source, dest])
+            subprocess.call(['rsync', '-rpvh', '--chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r', '--exclude=.*', source, dest])
         except OSError as e:
             logger.error(e)
 
