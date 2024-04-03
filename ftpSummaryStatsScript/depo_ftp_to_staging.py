@@ -22,9 +22,9 @@ logger = logging.getLogger(__name__)
 # number of seconds since modification that a file should be left alone
 # in case of latency for writing the file.
 
-# MOD_THRESHOLD_SEC = 3600 
+MOD_THRESHOLD_SEC = 3600 
 # DEV ONLY
-MOD_THRESHOLD_SEC = 36
+# MOD_THRESHOLD_SEC = 36
 RANGE_SIZE = 1000
 
 
