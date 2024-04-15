@@ -83,7 +83,7 @@ class solrWrapper(object):
                   'associationCount', 'catalogPublishDate', 'publicationDate', 'publication',
                   'traitName_s', 'mappedLabel', 'mappedUri', 'efoLink']
         
-        self.query(resourcename = 'study', fl = fl_list, rows = 100000)
+        self.query(resourcename = 'study', fl = fl_list, rows = 200000)
         
         # Generate dataframe:
         return(pd.DataFrame(self.docs))
