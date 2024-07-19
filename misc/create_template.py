@@ -10,27 +10,27 @@ df_main_study = pd.read_excel(main_study_file_path, sheet_name='study', header=1
 
 # Prepare default values template
 default_values = {
-    'Genotyping technology': 'Whole genome sequencing',
-    'Array manufacturer': '',
-    'Array information': '',
-    'Analysis Software': 'regenie_v3.2.5',
-    'Imputation': 'No',
-    'Imputation panel': '',
-    'Imputation software': '',
-    'Statistical model': 'Linear regression',
-    'Study description': 'UKB WGS association analysis of quantitative traits',
-    'Adjusted covariates': 'genetic PCs {1-20} | sex | age at baseline | sex:age | age2 | sequencing protocol',
-    'Background trait': '',
-    'Readme text': 'pre-print describing the study here: https://www.medrxiv.org/content/10.1101/2023.12.06.23299426v1',
+    'Genotyping technology': 'genotyping_tech',
+    'Array manufacturer': 'array_manufacturer',
+    'Array information': 'array_information',
+    'Analysis Software': 'analysis_sw_name',
+    'Imputation': 'imputation',
+    'Imputation panel': 'imputation_panel',
+    'Imputation software': 'imputation_sw',
+    'Statistical model': 'model_name',
+    'Study description': 'study_desc',
+    'Adjusted covariates': 'adjusted_cov',
+    'Background trait': 'background_trait',
+    'Readme text': 'readme_text',
     'Summary statistics assembly': 'GRCh38',
-    'MAF lower limit': '',
-    'Cohort(s)': 'UKBB AFR',
-    'Cohort specific reference': '',
-    'Sumstats': 'Yes',
-    'GxE': 'No',
-    'Pooled': 'No',
-    'Sex': 'combined',
-    'Coordinate system': '1-based'
+    'MAF lower limit': 'maf_li',
+    'Cohort(s)': 'cohorts',
+    'Cohort specific reference': 'cohort_specific_ref',
+    'Sumstats': 'sumstats',
+    'GxE': 'gxe',
+    'Pooled': 'pooled',
+    'Sex': 'sex',
+    'Coordinate system': 'coord_system'
 }
 
 # Loop through each row in the new data and insert into main study data
