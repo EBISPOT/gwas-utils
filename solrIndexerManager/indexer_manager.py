@@ -188,10 +188,10 @@ def main():
                              logDir=logDir, 
                              fullIndex=fullIndex,
                              nfScriptPath=nfScriptPath)
-    # db_updates = manager.get_database_updates()
-    # manager.set_database_updates(db_updates=db_updates)
-    # manager.generate_job_list_file()
-    # manager.prepare_solr()
+    db_updates = manager.get_database_updates()
+    manager.set_database_updates(db_updates=db_updates)
+    manager.generate_job_list_file()
+    manager.prepare_solr()
     manager.run_indexer()
 
 if __name__ == '__main__':
