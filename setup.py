@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 setup(
     description='A variety of utilities for activities involved in the running of the GWAS Catalog',
     name='gwasUtils',
-    version='0.1.26',
+    version='0.1.27b',
     data_files=[('r_scripts',['catalogPlots/dataReleaseTimer.R', 'catalogPlots/SumStats_plotter.R', 'catalogPlots/TA_vs_GWAS_publication.R']),
                 ('nf', ['solrIndexerManager/solr_indexing.nf'])],
     packages=['gwasAssociationFilter',
