@@ -117,16 +117,16 @@ class IndexerManager:
             print(process.stdout)
         except Exception as e:
             print(f"First attempt failed with error: {e}. Retrying with -resume option.")
-            nextflow_cmd = """
-                           nextflow -log {logs} \
-                           run {nf} \
-                           --job_map_file {jm} -resume
-                           """.format(logs=os.path.join(self.logDir, "nextflow.log"), 
-                                      nf=self.nfScriptPath, 
-                                      jm=self.job_file)
+            nextflow_cmd_resume = """
+                                  nextflow -log {logs} \
+                                  run {nf} \
+                                  --job_map_file {jm} -resume
+                                  """.format(logs=os.path.join(self.logDir, "nextflow.log"), 
+                                             nf=self.nfScriptPath, 
+                                             jm=self.job_file)
             print("Running nextflow with -resume: {}".format(nextflow_cmd_resume))
             subproc_cmd_resume = nextflow_cmd_resume.split()
-            
+
             process_resume = subprocess.run(subproc_cmd_resume, check=True)
             print(process_resume.stdout)
 
