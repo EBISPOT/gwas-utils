@@ -102,13 +102,15 @@ class IndexerManager:
         """
         Indexing is managed by a Nextflow workflow
         """
-        nextflow_cmd = """
-                       nextflow -log {logs} \
-                       run {nf} \
-                       --job_map_file {jm}
-                       """.format(logs=os.path.join(self.logDir, "nextflow.log"), 
-                                  nf=self.nfScriptPath, 
-                                  jm=self.job_file)
+        def format_nextflow_command(resume=False):
+            resume_option = "-resume" if resume else ""
+            return f"""
+                    nextflow -log {os.path.join(self.logDir, "nextflow.log")} \
+                    run {self.nfScriptPath} \
+                    --job_map_file {self.job_file} {resume_option}
+                    """
+
+        nextflow_cmd = format_nextflow_command()
         print("Running nextflow: {}".format(nextflow_cmd))
         subproc_cmd = nextflow_cmd.split()
 
@@ -117,13 +119,7 @@ class IndexerManager:
             print(process.stdout)
         except Exception as e:
             print(f"First attempt failed with error: {e}. Retrying with -resume option.")
-            nextflow_cmd_resume = """
-                                  nextflow -log {logs} \
-                                  run {nf} \
-                                  --job_map_file {jm} -resume
-                                  """.format(logs=os.path.join(self.logDir, "nextflow.log"), 
-                                             nf=self.nfScriptPath, 
-                                             jm=self.job_file)
+            nextflow_cmd_resume = format_nextflow_command(resume=True)
             print("Running nextflow with -resume: {}".format(nextflow_cmd_resume))
             subproc_cmd_resume = nextflow_cmd_resume.split()
 
