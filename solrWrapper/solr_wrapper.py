@@ -102,7 +102,7 @@ class solrWrapper(object):
         print(f"[Info] There are {rows} studies, querying them...")
         self.query(resourcename=resource_name, fl=fl_list, rows=rows)
         print("[Info] Query complete.")
-
+        print("[Info] Generating dataframe...")
         # Generate dataframe:
         return pd.DataFrame(self.docs)
 
@@ -147,7 +147,8 @@ class solrWrapper(object):
         print('[Info] Schema retrieved. Number of fields: {}'.format(len(fieldsDf)))
         return(fieldsDf)
 
-    def query(self, term = None, keyword_terms = None, rows = 100000, facet = None, fl = None, resourcename = None, wt='json'):
+    def query(self, term = None, keyword_terms = None, rows = 100000, 
+              facet = None, fl = None, resourcename = None, wt='json'):
         
         # Let's build query URL:
         URL = '{}/select?'.format(self.base_url) 
