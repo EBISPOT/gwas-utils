@@ -97,8 +97,11 @@ class solrWrapper(object):
         ]
 
         self.get_facets()
-        rows = solr.get_resource_counts(resource_name)
+        print("[Info] Facets fetched.")
+        rows = self.get_resource_counts(resource_name)
+        print(f"[Info] There are {rows} studies, querying them...")
         self.query(resourcename=resource_name, fl=fl_list, rows=rows)
+        print("[Info] Query complete.")
 
         # Generate dataframe:
         return pd.DataFrame(self.docs)
