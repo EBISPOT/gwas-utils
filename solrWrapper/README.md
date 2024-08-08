@@ -82,14 +82,15 @@ Get the schema of the given solr core in a pandas dataframe. The returned datafr
 solr.get_schema()
 ```
 
-Get document count for a particular resource:
+Get document count for a particular resource (make sure that you run `solr.get_facets()` first):
 
 ```python
 resource = 'study'
 solr.get_resource_counts(resource)
 ```
 
-Query the solr index - to get a pandas dataframe with all (<100k) studies with the most frequently used fields.
+Query the solr index - to get a pandas dataframe with all studies with the most frequently used fields.
+Note that it returns exactly the number of studies returned by `solr.get_resource_counts('study')`
 
 ```python
 study_df = solr.get_study_table()

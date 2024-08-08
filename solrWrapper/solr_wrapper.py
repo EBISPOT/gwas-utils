@@ -77,16 +77,35 @@ class solrWrapper(object):
         return len(self.docs)
     
     def get_study_table(self):
-        
+        resource_name = "study"
+
         # Field list retrieved from solr:
-        fl_list = ['pubmedId', 'title', 'author_s', 'accessionId', 'fullPvalueSet',
-                  'associationCount', 'catalogPublishDate', 'publicationDate', 'publication',
-                  'traitName_s', 'mappedLabel', 'mappedUri', 'efoLink']
-        
-        self.query(resourcename = 'study', fl = fl_list, rows = 200000)
-        
+        fl_list = [
+            "pubmedId",
+            "title",
+            "author_s",
+            "accessionId",
+            "fullPvalueSet",
+            "associationCount",
+            "catalogPublishDate",
+            "publicationDate",
+            "publication",
+            "traitName_s",
+            "mappedLabel",
+            "mappedUri",
+            "efoLink",
+        ]
+
+        self.get_facets()
+        print("[Info] Facets fetched.")
+        rows = self.get_resource_counts(resource_name)
+        print(f"[Info] There are {rows} studies, querying them...")
+        self.query(resourcename=resource_name, fl=fl_list, rows=rows)
+        print("[Info] Query complete.")
+        print("[Info] Generating dataframe...")
         # Generate dataframe:
-        return(pd.DataFrame(self.docs))
+        return pd.DataFrame(self.docs)
+
     
     def reload_core(self):
         URL = '{}:{}/solr/admin/cores?action=RELOAD&core={}'.format(self.__host, self.__port, self.__core)
