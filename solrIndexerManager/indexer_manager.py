@@ -110,21 +110,28 @@ class IndexerManager:
                     --job_map_file {self.job_file} {resume_option}
                     """
 
-        nextflow_cmd = format_nextflow_command()
-        print("Running nextflow: {}".format(nextflow_cmd))
-        subproc_cmd = nextflow_cmd.split()
+        max_attempts = 5
+        for attempt in range(1, max_attempts + 1):
+            resume = attempt > 1
+            nextflow_cmd = format_nextflow_command(resume=resume)
+            print(f"Attempt {attempt}: Running nextflow: {nextflow_cmd}")
+            subproc_cmd = nextflow_cmd.strip().split()
 
-        try:
-            process = subprocess.run(subproc_cmd, check=True)
-            print(process.stdout)
-        except Exception as e:
-            print(f"First attempt failed with error: {e}. Retrying with -resume option.")
-            nextflow_cmd_resume = format_nextflow_command(resume=True)
-            print("Running nextflow with -resume: {}".format(nextflow_cmd_resume))
-            subproc_cmd_resume = nextflow_cmd_resume.split()
+            try:
+                process = subprocess.run(subproc_cmd, check=True)
+                print(process.stdout)
+                print("Nextflow command completed successfully.")
+                break
+            except subprocess.CalledProcessError as e:
+                print(f"Attempt {attempt} failed with error: {e}")
+                if attempt == max_attempts:
+                    print("Maximum attempts reached. Exiting with failure.")
+                    raise
+                else:
+                    print("Waiting for 1 hour before retrying...")
+                    time.sleep(3600)
+                    print("Retrying with -resume option.")
 
-            process_resume = subprocess.run(subproc_cmd_resume, check=True)
-            print(process_resume.stdout)
 
 
 def main():
