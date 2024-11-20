@@ -129,7 +129,7 @@ class IndexerManager:
                     raise
                 else:
                     print("Waiting for 1 hour before retrying...")
-                    time.sleep(3600)
+                    time.sleep(300 * attempt)
                     print("Retrying with -resume option.")
 
 
