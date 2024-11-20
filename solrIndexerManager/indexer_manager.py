@@ -103,12 +103,13 @@ class IndexerManager:
         Indexing is managed by a Nextflow workflow
         """
         def format_nextflow_command(resume=False):
-            resume_option = "-resume" if resume else ""
-            return f"""
-                    nextflow -log {os.path.join(self.logDir, "nextflow.log")} \
-                    run {self.nfScriptPath} \
-                    --job_map_file {self.job_file} {resume_option}
-                    """
+            # resume_option = "-resume" if resume else ""
+            # return f"""
+            #         nextflow -log {os.path.join(self.logDir, "nextflow.log")} \
+            #         run {self.nfScriptPath} \
+            #         --job_map_file {self.job_file} {resume_option}
+            #         """
+            return False
 
         max_attempts = 5
         for attempt in range(1, max_attempts + 1):
@@ -128,7 +129,7 @@ class IndexerManager:
                     print("Maximum attempts reached. Exiting with failure.")
                     raise
                 else:
-                    print("Waiting for 1 hour before retrying...")
+                    print(f"Waiting for {300 * attempt} seconds before retrying...")
                     time.sleep(300 * attempt)
                     print("Retrying with -resume option.")
 
@@ -189,10 +190,10 @@ def main():
                              logDir=logDir, 
                              fullIndex=fullIndex,
                              nfScriptPath=nfScriptPath)
-    db_updates = manager.get_database_updates()
-    manager.set_database_updates(db_updates=db_updates)
-    manager.generate_job_list_file()
-    manager.prepare_solr()
+    # db_updates = manager.get_database_updates()
+    # manager.set_database_updates(db_updates=db_updates)
+    # manager.generate_job_list_file()
+    # manager.prepare_solr()
     manager.run_indexer()
 
 if __name__ == '__main__':
