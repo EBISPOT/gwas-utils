@@ -109,7 +109,7 @@ class IndexerManager:
             #         run {self.nfScriptPath} \
             #         --job_map_file {self.job_file} {resume_option}
             #         """
-            return False
+            return 'false'
 
         max_attempts = 5
         for attempt in range(1, max_attempts + 1):
