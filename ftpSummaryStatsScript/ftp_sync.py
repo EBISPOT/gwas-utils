@@ -264,6 +264,9 @@ class SummaryStatsSync:
     def sync_to_ftp(self):
         # api AND staging AND NOT ftp
         for study in self.to_release:
+            if study not in self.staging_studies_dict:
+                logger.warning(f"Study {study} is marked for release but not found in staging. Skipping.")
+                continue
             logger.info("{} --> FTP".format(study))
             source = self.staging_studies_dict[study]
             self._generate_md5sums_for_contents(source)
