@@ -269,11 +269,19 @@ class SummaryStatsSync:
                 continue
             logger.info("{} --> FTP".format(study))
             source = self.staging_studies_dict[study]
-            self._generate_md5sums_for_contents(source)
-            pardir = self._create_pardir_on_dest(source)
-            if pardir:
-                dest_dir = os.path.join(pardir, study + "/")
-                self.rsync_dir(source, dest_dir)
+
+            try:
+                self._generate_md5sums_for_contents(source)
+                pardir = self._create_pardir_on_dest(source)
+                if pardir:
+                    dest_dir = os.path.join(pardir, study + "/")
+                    self.rsync_dir(source, dest_dir)
+            except FileNotFoundError as e:
+                logger.error(f"Error processing the study {study}: {e}. Skipping.")
+                continue
+            except Exception as e:
+                logger.error(f"Unexpected error processing study {study}: {e}. Skipping.")
+                continue
         logger.info("==========================================")
 
     @staticmethod
